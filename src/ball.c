@@ -35,10 +35,18 @@ collision_type ball_collide_wall(ball *b, int w, int h){
   return NONE;
 }
 
+void ball_collide_walls(ball *b, SDL_Rect *rect){
+  if (b->x < rect->x || b->x > rect->w - 25){
+    invert_x_speed(b);
+  }
+  else if (b->y < rect->y || b->y > rect->h - 25){
+    invert_y_speed(b);
+  }
+}
+
 
 void ball_collide_rect(ball *b, SDL_Rect *r1){
   // print sdl version
-  SDL_version compiled;
   SDL_Rect r2 = {b->x, b->y, 24, 24};
   SDL_Rect res = {0, 0, 0, 0};
   // if the ball collides horizontally, return HORZ
@@ -50,6 +58,10 @@ void ball_collide_rect(ball *b, SDL_Rect *r1){
     }
     else if (res.w < res.h)
     {
+      invert_y_speed(b);
+    }
+    else {
+      invert_x_speed(b);
       invert_y_speed(b);
     }
   }

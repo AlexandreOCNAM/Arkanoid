@@ -68,13 +68,14 @@ void draw()
   move_ball(&_ball);
 
   // collision avec les murs
-  collision_type c = ball_collide_wall(&_ball, window_surface->w, window_surface->h);
-  if (c == HORZ)
-    invert_x_speed(&_ball);
-  if (c == VERT)
-    invert_y_speed(&_ball);
+//  collision_type c = ball_collide_wall(&_ball, window_surface->w, window_surface->h);
+//  if (c == HORZ)
+//    invert_x_speed(&_ball);
+//  if (c == VERT)
+//    invert_y_speed(&_ball);
 
-  // touche bas -> rouge
+  ball_collide_walls(&_ball, &window_surface->clip_rect);
+// touche bas -> rouge
 
   // collision of ball with the paddle
   // if ((ball.x > x_vault) && (ball.x < (x_vault + 128)) && (ball.y > (win_surf->h - 32 -24)))
