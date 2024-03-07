@@ -22,9 +22,6 @@ Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
 
-SDL_Window *pWindow = NULL;
-SDL_Surface *win_surf = NULL;
-//SDL_Surface *plancheSprites = NULL;
 
 //SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 //SDL_Rect srcBall = {0, 96, 24, 24};
@@ -78,11 +75,6 @@ void draw()
     invert_y_speed(&_ball);
 
   // touche bas -> rouge
-  if (_ball.y > (window_surface->h - 25))
-    srcBall.y = 64;
-  // touche bas -> vert
-  if (_ball.y < 1)
-    srcBall.y = 96;
 
   // collision of ball with the paddle
   // if ((ball.x > x_vault) && (ball.x < (x_vault + 128)) && (ball.y > (win_surf->h - 32 -24)))
