@@ -1,0 +1,9 @@
+cmake-build-debug-wsl/
+.vscode/
+
+# CMake files
+CMakeFiles/
+
+build/
+
+.idea/

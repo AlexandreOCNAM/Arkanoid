@@ -4,10 +4,15 @@ project(Arkanoid LANGUAGES C)
 
 find_package(SDL2 CONFIG REQUIRED)
 
+include_directories(public)
+
 
 add_executable(${PROJECT_NAME}
 		arkanoid.h
-		arkanoid.h)
+		arkanoid.h
+		includes/ball.h
+		src/ball.c
+		includes/window.h)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)
@@ -19,6 +24,6 @@ endif()
 
 
 
-file(COPY sprites.bmp
+file(COPY public/sprites.bmp
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)	
 

@@ -7,4 +7,6 @@
 
 /* fonction qui met à jour la surface de la fenetre "win_surf" */
 void draw();
+
+int ball_collide;
 #endif //ARKANOID_H
