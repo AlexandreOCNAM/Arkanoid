@@ -28,6 +28,6 @@ void move_ball(ball *b);
 
 void draw_ball(SDL_Surface *win_surf, SDL_Surface *plancheSprites, SDL_Rect srcBall, ball _ball);
 collision_type ball_collide_wall(ball *b, int w, int h);
-collision_type ball_collide_rect(ball *b, SDL_Rect *r1);
+void ball_collide_rect(ball *b, SDL_Rect *r1);
 
 #endif

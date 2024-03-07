@@ -36,7 +36,7 @@ collision_type ball_collide_wall(ball *b, int w, int h){
 }
 
 
-collision_type ball_collide_rect(ball *b, SDL_Rect *r1){
+void ball_collide_rect(ball *b, SDL_Rect *r1){
   // print sdl version
   SDL_version compiled;
   SDL_Rect r2 = {b->x, b->y, 25, 25};
@@ -46,28 +46,37 @@ collision_type ball_collide_rect(ball *b, SDL_Rect *r1){
   {
     if (res.w > res.h)
     {
-      return HORZ;
+      invert_x_speed(b);
     }
     else if (res.w < res.h)
     {
-      return VERT;
+      invert_y_speed(b);
     }
   }
-  // create a rectangle from the ball to next position
-  SDL_Rect r3 = {b->x + b->v.x, b->y + b->v.y, 25, 25};
-  if (SDL_IntersectRect(&r3, r1, &res))
-  {
-    if (res.w > res.h)
-    {
-      return HORZ;
+  else {
+
+
+    // create a rectangle from the ball to next position
+    SDL_Rect r3 = {b->x + b->v.x, b->y + b->v.y, 25, 25};
+    if (SDL_IntersectRect(&r3, r1, &res)) {
+      if (res.w > res.h) {
+        // calculate the new position of the ball
+        if (b->v.x > 0) {
+          b->x = r1->x - 25;
+        } else {
+          b->x = r1->x + r1->w;
+        }
+        invert_x_speed(b);
+      } else if (res.w < res.h) {
+        if (b->v.y > 0) {
+          b->y = r1->y - 25;
+        } else {
+          b->y = r1->y + r1->h;
+        }
+        invert_y_speed(b);
+      }
     }
-    else if (res.w < res.h)
-    {
-      return VERT;
-    }
+
   }
 
-  // if the ball doesn't collide, return NONE
-
-  return NONE;
 }
