@@ -53,7 +53,21 @@ collision_type ball_collide_rect(ball *b, SDL_Rect *r1){
       return VERT;
     }
   }
+  // create a rectangle from the ball to next position
+  SDL_Rect r3 = {b->x + b->v.x, b->y + b->v.y, 25, 25};
+  if (SDL_IntersectRect(&r3, r1, &res))
+  {
+    if (res.w > res.h)
+    {
+      return HORZ;
+    }
+    else if (res.w < res.h)
+    {
+      return VERT;
+    }
+  }
 
   // if the ball doesn't collide, return NONE
+
   return NONE;
 }
