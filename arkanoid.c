@@ -5,6 +5,7 @@
 
 #include "../includes/ball.h"
 #include "includes/window.h"
+#include "includes/paddle.h"
 
 const int FPS = 60.0;
 // struct { double x; double y; } ball_speed;
@@ -88,8 +89,9 @@ void draw()
   dest.x = x_vault;
   dest.y = window_surface->h - 32;
   SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
+//  ball_collide_rect(&_ball, &dest);
+  paddle_collide_ball(&dest, &_ball);
 
-  ball_collide_rect(&_ball, &dest);
 }
 
 int main(int argc, char **argv)
@@ -101,6 +103,15 @@ int main(int argc, char **argv)
   }
 
   init();
+
+  SDL_Rect test = {50, 50, 50, 50};
+  int x = 55;
+  int y = 45;
+  int x1 = 55;
+  int y1 = 105;
+
+  SDL_IntersectRectAndLine(&test, &x, &y, &x1, &y1);
+  printf("x = %d, y = %d, x1 = %d, y1 = %d\n", x, y, x1, y1);
 
   bool quit = false;
   while (!quit)

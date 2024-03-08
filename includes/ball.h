@@ -3,6 +3,8 @@
 
 #include <SDL_rect.h>
 #include <SDL_surface.h>
+#include <math.h>
+#include "position.h"
 
 typedef enum {
   HORZ,
