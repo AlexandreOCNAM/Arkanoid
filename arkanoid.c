@@ -87,7 +87,7 @@ void draw()
 
   // vaisseau
   dest.x = x_vault;
-  dest.y = window_surface->h - 32;
+  dest.y = window_surface->h - 16;
   SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
 //  ball_collide_rect(&_ball, &dest);
   paddle_collide_ball(&dest, &_ball);
