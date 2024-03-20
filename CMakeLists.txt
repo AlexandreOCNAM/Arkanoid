@@ -15,7 +15,8 @@ add_executable(${PROJECT_NAME}
 		src/ball.c
 		includes/window.h
 		includes/position.h
-		includes/paddle.h)
+		includes/paddle.h
+		includes/brick.h)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)
@@ -26,7 +27,8 @@ else()
 endif()
 
 
-
 file(COPY public/sprites.bmp
-	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)	
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+file(COPY public/Arkanoid_sprites.bmp
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 

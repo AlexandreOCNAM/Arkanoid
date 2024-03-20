@@ -7,7 +7,6 @@
 #include <stdbool.h>
 
 
-bool checkLineIntersection(Point p1, Point p2, Point left, Point right);
 
 void invert_x_speed(ball *b){
     b->v.x *= -1;
@@ -55,28 +54,39 @@ float max(float a, float b){
   return b;
 }
 
-
-
-
-
 void ball_collide_rect(ball *b, SDL_Rect *r1){
-  ball next = *b;
-  move_ball(&next);
+    ball next = *b;
+    move_ball(&next);
 
-  for (int i = 0; i < 8; i++){
-    Point p = {b->x + 24 + (i % 2 == 0 ? 12 : 2.5), b->y + 24 + (i < 4 ? -12 : -2.5)};
-    Point p2 = {next.x + 24 + (i % 2 == 0 ? 12 : 2.5), next.y + 24 + (i < 4 ? -12 : -2.5)};
+    const position check_pos[4] = {
+        {r1->x, r1->y},
+        {r1->x + r1->w, r1->y},
+        {r1->x, r1->y + r1->h},
+        {r1->x + r1->w, r1->y + r1->h}
+    };
 
-    if ((p.x >= r1->x && p.x <= r1->x + r1->w && p.y >= r1->y && p.y <= r1->y + r1->h) ||
-        (p2.x >= r1->x && p2.x <= r1->x + r1->w && p2.y >= r1->y && p2.y <= r1->y + r1->h)) {
-      if (i % 2 == 0){
-        invert_y_speed(b);
-      } else {
-        invert_x_speed(b);
-      }
-      return;
+    for (int i = 0; i < 4; i++){
+        const Point p1 = {check_pos[i].x, check_pos[i].y};
+        const Point p2 = {next.x + 24, next.y + 24};
+
+        if (is_point_inside_rect(p1, r1) || is_point_inside_rect(p2, r1)) {
+            const SDL_Rect r2 = {b->x, b->y, 24, 24};
+            SDL_Rect res = {0, 0, 0, 0};
+            if (SDL_IntersectRect(&r2, r1, &res)) {
+                if (res.w > res.h) {
+                    invert_y_speed(b);
+                } else {
+                    invert_x_speed(b);
+                }
+            }
+            return;
+        }
     }
-  }
+}
+
+bool is_point_inside_rect(Point p, SDL_Rect *r) {
+    return (p.x >= r->x && p.x <= r->x + r->w && p.y >= r->y && p.y <= r->y + r->h);
+}
 
 
 //  SDL_Rect r2 = {b->x, b->y, 24, 24};
@@ -109,5 +119,3 @@ void ball_collide_rect(ball *b, SDL_Rect *r1){
 //    }
 //
 //  }
-
-}

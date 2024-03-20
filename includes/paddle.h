@@ -18,27 +18,85 @@ typedef struct {
 
 void move_paddle(paddle *p);
 
-void paddle_collide_walls(paddle *p, int w, int h);
+inline void paddle_collide_walls(paddle *p, int width)
+{
+  if (p->pos.x < 0 || p->pos.x > width - p->w)
+  {
+    p->pos = (p->pos.x < 0) ? (position){0, p->pos.y} : (position){width - p->w, p->pos.y};
+  }
+}
 void paddle_collide_ball(SDL_Rect *p, ball *b);
 
-void paddle_collide_ball(SDL_Rect *p, ball *b) {
+int ball_inside_paddle(SDL_Rect *p, ball *b)
+{
+  return (b->x >= p->x && b->x <= p->x + p->w && b->y >= p->y && b->y <= p->y + p->h);
+}
+
+inline void paddle_collide_ball(SDL_Rect *p, ball *b) {
   ball next = *b;
   move_ball(&next);
 
+  position check_pos[8] = {
+      {p->x + 12, p->y},
+      {p->x + 24, p->y + 12},
+      {p->x + 12, p->y + 24},
+      {p->x, p->y + 12},
+      {p->x + 24 - 2.5, p->y + 2.5},
+      {p->x + 24 -2.5, p->y + 24 - 2.5},
+      {p->x + 2.5, p->y + 24 - 2.5},
+      {p->x + 2.5, p->y + 2.5}
+  };
+
   for (int i = 0; i < 8; i++){
-    Point p1 = {b->x + 24 + (i % 2 == 0 ? 12 : 2.5), b->y + 24 + (i < 4 ? -12 : -2.5)};
-    Point p2 = {next.x + 24 + (i % 2 == 0 ? 12 : 2.5), next.y + 24 + (i < 4 ? -12 : -2.5)};
+    Point p1 = {check_pos[i].x, check_pos[i].y};
+    Point p2 = {next.x + 24, next.y + 24};
 
     if ((p1.x >= p->x && p1.x <= p->x + p->w && p1.y >= p->y && p1.y <= p->y + p->h) ||
         (p2.x >= p->x && p2.x <= p->x + p->w && p2.y >= p->y && p2.y <= p->y + p->h)) {
-      if (i % 2 == 0){
-        invert_y_speed(b);
-      } else {
-        invert_x_speed(b);
+       // create a SDL_Rect for the ball then check if it collides with the paddle
+      SDL_Rect r2 = {b->x, b->y, 24, 24};
+      SDL_Rect res = {0, 0, 0, 0};
+      // if the ball collides horizontally invert the y speed
+      if (SDL_IntersectRect(&r2, p, &res))
+      {
+        if (res.w > res.h)
+        {
+          invert_y_speed(b);
+        }
+        else if (res.w < res.h)
+        {
+          invert_x_speed(b);
+        }
+        else {
+          invert_x_speed(b);
+          invert_y_speed(b);
+        }
+
+        // if the ball is inside the paddle, teleport it to the top of the paddle
+        if (ball_inside_paddle(p, b))
+        {
+          b->y = p->y - 25;
+        }
+
       }
       return;
     }
   }
+
+//  for (int i = 0; i < 8; i++){
+//    Point p1 = {b->x + 24 + (i % 2 == 0 ? 12 : 2.5), b->y + 24 + (i < 4 ? -12 : -2.5)};
+//    Point p2 = {next.x + 24 + (i % 2 == 0 ? 12 : 2.5), next.y + 24 + (i < 4 ? -12 : -2.5)};
+//
+//    if ((p1.x >= p->x && p1.x <= p->x + p->w && p1.y >= p->y && p1.y <= p->y + p->h) ||
+//        (p2.x >= p->x && p2.x <= p->x + p->w && p2.y >= p->y && p2.y <= p->y + p->h)) {
+//      if (i % 2 == 0){
+//        invert_y_speed(b);
+//      } else {
+//        invert_x_speed(b);
+//      }
+//      return;
+//    }
+//  }
 }
 
 

@@ -19,10 +19,15 @@ const int FPS = 60.0;
 
 ball _ball = {0};
 
+SDL_Surface *brickSprite = NULL;
+
+
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
 
+SDL_Rect dest = {0, 0, 0, 0};
+SDL_Rect tmp = {0, 0, 0, 0};
 
 //SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 //SDL_Rect srcBall = {0, 96, 24, 24};
@@ -51,12 +56,24 @@ void init()
 //  ball.v.y = 1.4;
 //
   now = SDL_GetPerformanceCounter();
+
+
+  // init the sprites of the bricks
+  brickSprite = load_image("./Arkanoid_sprites.bmp");
+  if (brickSprite == NULL)
+  {
+    perror("Error while loading the brick sprite");
+    exit(1);
+  }
+  SDL_SetColorKey(brickSprite, true, 0); // 0: 00/00/00 noir -> transparent
+
+  SDL_BlitSurface(brickSprite, &srcBrick, window_surface, &tmp);
+
 }
 
 void draw()
 {
   // remplit le fond
-  SDL_Rect dest = {0, 0, 0, 0};
   blit_background(&dest);
 
   // affiche balle
@@ -66,7 +83,6 @@ void draw()
 
   // deplacement
 
-  move_ball(&_ball);
 
   // collision avec les murs
 //  collision_type c = ball_collide_wall(&_ball, window_surface->w, window_surface->h);
@@ -75,7 +91,6 @@ void draw()
 //  if (c == VERT)
 //    invert_y_speed(&_ball);
 
-  ball_collide_walls(&_ball, &window_surface->clip_rect);
 // touche bas -> rouge
 
   // collision of ball with the paddle
@@ -90,7 +105,8 @@ void draw()
   dest.y = window_surface->h - 16;
   SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
 //  ball_collide_rect(&_ball, &dest);
-  paddle_collide_ball(&dest, &_ball);
+
+  SDL_BlitSurface(brickSprite, &srcBrick, window_surface, &tmp);
 
 }
 
@@ -104,7 +120,7 @@ int main(int argc, char **argv)
 
   init();
 
-  SDL_Rect test = {50, 50, 50, 50};
+  SDL_Rect test = {100, 100, 100, 100};
   int x = 55;
   int y = 45;
   int x1 = 55;
@@ -129,7 +145,13 @@ int main(int argc, char **argv)
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
 
+    move_ball(&_ball);
+    ball_collide_walls(&_ball, &window_surface->clip_rect);
+    ball_collide_rect(&_ball, &test);
+    ball_collide_rect(&_ball, &dest);
     draw();
+    // fill test rect with white
+    SDL_FillRect(window_surface, &test, SDL_MapRGB(window_surface->format, 255, 255, 255));
     SDL_UpdateWindowSurface(window);
     now = SDL_GetPerformanceCounter();
     delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
