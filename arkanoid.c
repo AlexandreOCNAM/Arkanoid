@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "../includes/ball.h"
+#include "../includes/extractFile.h"
 #include "includes/window.h"
 #include "includes/paddle.h"
 
