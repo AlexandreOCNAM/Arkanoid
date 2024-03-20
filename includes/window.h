@@ -72,7 +72,18 @@ void blit_background(SDL_Rect *dest){
     }
 }
 
-
+void draw_ball(ball* b)
+{
+    if (window == NULL || window_surface == NULL || plancheSprites == NULL)
+    {
+        perror("Error while drawing the ball: window, window_surface or plancheSprites is NULL");
+    }
+    else
+    {
+        SDL_Rect dstBall = {b->x, b->y, 0, 0};
+        SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &dstBall);
+    }
+}
 
 
 #endif //ARKANOID_WINDOW_H

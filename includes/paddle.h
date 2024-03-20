@@ -10,24 +10,20 @@
 #include "ball.h"
 
 typedef struct {
-  position pos;
-  double w, h;
+  SDL_Rect rect;
   speed v;
 } paddle;
 
+paddle create_paddle();
 
+
+void invert_speed(paddle* p);
 void move_paddle(paddle *p);
+void strafe_left(paddle *p);
+void strafe_right(paddle *p);
+void paddle_collide_walls(paddle *p, int width);
 
-inline void paddle_collide_walls(paddle *p, int width)
-{
-  if (p->pos.x < 0 || p->pos.x > width - p->w)
-  {
-    p->pos = (p->pos.x < 0) ? (position){0, p->pos.y} : (position){width - p->w, p->pos.y};
-  }
-}
-void paddle_collide_ball(SDL_Rect *p, ball *b);
-
-int ball_inside_paddle(SDL_Rect *p, ball *b)
+inline int ball_inside_paddle(SDL_Rect *p, ball *b)
 {
   return (b->x >= p->x && b->x <= p->x + p->w && b->y >= p->y && b->y <= p->y + p->h);
 }

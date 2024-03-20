@@ -16,7 +16,8 @@ add_executable(${PROJECT_NAME}
 		includes/window.h
 		includes/position.h
 		includes/paddle.h
-		includes/brick.h)
+		includes/brick.h
+		src/paddle.c)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)

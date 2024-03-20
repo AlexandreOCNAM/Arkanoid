@@ -21,21 +21,8 @@ void move_ball(ball *b){
     b->y += b->v.y;
 }
 
-void draw_ball(SDL_Surface *win_surf, SDL_Surface *plancheSprites, SDL_Rect srcBall, ball _ball){
-    SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
-    SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
-}
 
 
-collision_type ball_collide_wall(ball *b, int w, int h){
-  if (b->x < 0 || b->x > w - 25){
-    return HORZ;
-  }
-  else if (b->y < 0 || b->y > h - 25){
-    return VERT;
-  }
-  return NONE;
-}
 
 void ball_collide_walls(ball *b, SDL_Rect *rect){
   if (b->x < rect->x || b->x > rect->w - 25){
