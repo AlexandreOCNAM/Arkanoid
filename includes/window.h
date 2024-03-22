@@ -5,8 +5,7 @@
 #ifndef ARKANOID_WINDOW_H
 #define ARKANOID_WINDOW_H
 
-#include <stdbool.h>
-#include <SDL2/SDL.h>
+#include "./includes.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *window_surface = NULL;
@@ -34,10 +33,25 @@ SDL_Surface *load_image(const char *path)
 
 void init_window()
 {
-  window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
-  window_surface = SDL_GetWindowSurface(window);
-  plancheSprites = load_image("./sprites.bmp");
-  SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
+    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
+    if (window == NULL)
+    {
+        perror("Error while creating the window");
+        exit(1);
+    }
+    window_surface = SDL_GetWindowSurface(window);
+    if (window_surface == NULL)
+    {
+        perror("Error while getting the window's surface");
+        exit(1);
+    }
+    plancheSprites = load_image("./sprites.bmp");
+    if (plancheSprites == NULL)
+    {
+        perror("Error while loading the sprites");
+        exit(1);
+    }
+    SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
 }
 
 void destroy_window()
@@ -58,7 +72,11 @@ void blit_background(SDL_Rect *dest){
             {
                 dest->x = i;
                 dest->y = j;
-                SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest);
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                {
+                    perror("Error while blitting the background");
+                    exit(1);
+                }
             }
     } else {
         // If not, fall back to the original method
@@ -67,7 +85,11 @@ void blit_background(SDL_Rect *dest){
             {
                 dest->x = i;
                 dest->y = j;
-                SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest);
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                {
+                    perror("Error while blitting the background");
+                    exit(1);
+                }
             }
     }
 }
@@ -77,10 +99,11 @@ void draw_ball(ball* b)
     if (window == NULL || window_surface == NULL || plancheSprites == NULL)
     {
         perror("Error while drawing the ball: window, window_surface or plancheSprites is NULL");
+        exit(1);
     }
     else
     {
-        SDL_Rect dstBall = {b->x, b->y, 0, 0};
+        SDL_Rect dstBall = {b->rect.x, b->rect.y, 0, 0};
         SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &dstBall);
     }
 }

@@ -1,7 +1,4 @@
-#include <SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "includes/includes.h"
 
 #include "../includes/ball.h"
 #include "includes/window.h"
@@ -43,14 +40,14 @@ void init()
 
   init_window();
 
-  _ball = (ball){
-          window_surface->w / 2,
-          window_surface->h / 2,
-          {
-              1.0,
-              1.4
-          }
-  };
+  // _ball = (ball){
+  //         window_surface->w / 2,
+  //         window_surface->h / 2,
+  //             1.0,
+  //             1.4
+  //         }
+  // };
+  _ball = create_ball();
 //  ball.x = win_surf->w / 2;
 //  ball.y = win_surf->h / 2;
 //  ball.v.x = 1.0;
@@ -121,13 +118,6 @@ int main(int argc, char **argv)
   init();
 
   SDL_Rect test = {100, 100, 100, 100};
-  int x = 55;
-  int y = 45;
-  int x1 = 55;
-  int y1 = 105;
-
-  SDL_IntersectRectAndLine(&test, &x, &y, &x1, &y1);
-  printf("x = %d, y = %d, x1 = %d, y1 = %d\n", x, y, x1, y1);
 
   bool quit = false;
   while (!quit)
@@ -144,7 +134,9 @@ int main(int argc, char **argv)
       quit = true;
 
     move_ball(&_ball);
+    printf("move ball\n");
     paddle_collide_walls(&_paddle, window_surface->w);
+    printf("paddle collide walls\n");
     ball_collide_walls(&_ball, &window_surface->clip_rect);
     ball_collide_rect(&_ball, &test);
     ball_collide_rect(&_ball, &_paddle.rect);
