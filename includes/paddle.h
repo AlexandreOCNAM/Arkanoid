@@ -9,11 +9,13 @@
 #include "position.h"
 #include "ball.h"
 
+
 typedef struct {
   SDL_Rect rect;
   speed v;
 } paddle;
 
+static paddle* lastPos;
 paddle create_paddle();
 
 

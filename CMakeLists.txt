@@ -5,7 +5,6 @@ project(Arkanoid LANGUAGES C)
 find_package(SDL2 CONFIG REQUIRED)
 
 include_directories(public)
-
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 
 add_executable(${PROJECT_NAME}

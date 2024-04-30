@@ -134,12 +134,10 @@ int main(int argc, char **argv)
       quit = true;
 
     move_ball(&_ball);
-    printf("move ball\n");
     paddle_collide_walls(&_paddle, window_surface->w);
-    printf("paddle collide walls\n");
     ball_collide_walls(&_ball, &window_surface->clip_rect);
     ball_collide_rect(&_ball, &test);
-    ball_collide_rect(&_ball, &_paddle.rect);
+    ball_collide_paddle(&_ball, &_paddle.rect);
     draw();
     // fill test rect with white
     SDL_FillRect(window_surface, &test, SDL_MapRGB(window_surface->format, 255, 255, 255));

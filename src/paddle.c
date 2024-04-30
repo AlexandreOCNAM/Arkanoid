@@ -47,3 +47,4 @@ void paddle_collide_walls(paddle *p, const int width)
     }
   }
 }
+
