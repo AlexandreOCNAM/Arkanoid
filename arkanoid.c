@@ -1,7 +1,4 @@
-#include <SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "includes/includes.h"
 
 #include "../includes/ball.h"
 #include "../includes/extractFile.h"
@@ -30,6 +27,7 @@ int x_vault;
 SDL_Rect dest = {0, 0, 0, 0};
 SDL_Rect tmp = {0, 0, 0, 0};
 
+paddle _paddle = {0};
 //SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 //SDL_Rect srcBall = {0, 96, 24, 24};
 //SDL_Rect srcVaiss = {128, 0, 128, 32};
@@ -43,14 +41,14 @@ void init()
 
   init_window();
 
-  _ball = (ball){
-          window_surface->w / 2,
-          window_surface->h / 2,
-          {
-              1.0,
-              1.4
-          }
-  };
+  // _ball = (ball){
+  //         window_surface->w / 2,
+  //         window_surface->h / 2,
+  //             1.0,
+  //             1.4
+  //         }
+  // };
+  _ball = create_ball();
 //  ball.x = win_surf->w / 2;
 //  ball.y = win_surf->h / 2;
 //  ball.v.x = 1.0;
@@ -69,7 +67,7 @@ void init()
   SDL_SetColorKey(brickSprite, true, 0); // 0: 00/00/00 noir -> transparent
 
   SDL_BlitSurface(brickSprite, &srcBrick, window_surface, &tmp);
-
+  _paddle = create_paddle();
 }
 
 void draw()
@@ -80,8 +78,7 @@ void draw()
   // affiche balle
 //  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
 //  SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
-  draw_ball(window_surface, plancheSprites, srcBall, _ball);
-
+  draw_ball(&_ball);
   // deplacement
 
 
@@ -104,7 +101,7 @@ void draw()
   // vaisseau
   dest.x = x_vault;
   dest.y = window_surface->h - 16;
-  SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
+  SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &_paddle.rect);
 //  ball_collide_rect(&_ball, &dest);
 
   SDL_BlitSurface(brickSprite, &srcBrick, window_surface, &tmp);
@@ -122,13 +119,6 @@ int main(int argc, char **argv)
   init();
 
   SDL_Rect test = {100, 100, 100, 100};
-  int x = 55;
-  int y = 45;
-  int x1 = 55;
-  int y1 = 105;
-
-  SDL_IntersectRectAndLine(&test, &x, &y, &x1, &y1);
-  printf("x = %d, y = %d, x1 = %d, y1 = %d\n", x, y, x1, y1);
 
   bool quit = false;
   while (!quit)
@@ -137,19 +127,18 @@ int main(int argc, char **argv)
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_LEFT])
       // collision of the paddle with the left wall
-      if (x_vault > 0)
-        x_vault -= 10;
+        strafe_left(&_paddle);
     if (keys[SDL_SCANCODE_RIGHT])
       // collision of the paddle with the right wall
-      if (x_vault < (window_surface->w - 128 - 10))
-        x_vault += 10;
+        strafe_right(&_paddle);
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
 
     move_ball(&_ball);
+    paddle_collide_walls(&_paddle, window_surface->w);
     ball_collide_walls(&_ball, &window_surface->clip_rect);
     ball_collide_rect(&_ball, &test);
-    ball_collide_rect(&_ball, &dest);
+    ball_collide_paddle(&_ball, &_paddle.rect);
     draw();
     // fill test rect with white
     SDL_FillRect(window_surface, &test, SDL_MapRGB(window_surface->format, 255, 255, 255));

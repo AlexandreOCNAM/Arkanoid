@@ -5,7 +5,6 @@ project(Arkanoid LANGUAGES C)
 find_package(SDL2 CONFIG REQUIRED)
 
 include_directories(public)
-
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 
 add_executable(${PROJECT_NAME}
@@ -18,7 +17,9 @@ add_executable(${PROJECT_NAME}
 		includes/paddle.h
 		includes/brick.h
 		src/extractFile.c
-		includes/extractFile.h)
+		includes/extractFile.h
+		src/paddle.c
+		includes/includes.h)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)
