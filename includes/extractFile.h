@@ -1,18 +1,10 @@
-//
-// Created by Sebastien on 20/03/2024.
-//
+#ifndef EXTRACTFILE_H
+#define EXTRACTFILE_H
 
-#ifndef ARKANOID_EXTRACTFILE_H
-#define ARKANOID_EXTRACTFILE_H
+#include "brick.h"
+#include "includes.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <wchar.h>
+void extractFile(const char *inputFile, const char *outputFile);
+void load_level(const char *filename, Brick bricks[], int *brick_count);
 
-int extractFile();
-
-void interpretFile();
-void createLevel();
-
-#endif //ARKANOID_EXTRACTFILE_H
+#endif

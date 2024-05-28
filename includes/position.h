@@ -7,7 +7,7 @@
 
 typedef struct {
   double x, y;
-} position;
+} Position;
 
 
 typedef struct {

@@ -14,7 +14,7 @@ SDL_Surface *plancheSprites = NULL;
 SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 SDL_Rect srcBall = {0, 96, 24, 24};
 SDL_Rect srcVaiss = {128, 0, 128, 32};
-SDL_Rect srcBrick = {0, 0, 190, 62};
+SDL_Rect srcBrick = {0, 0, 32, 16};
 
 
 
@@ -33,7 +33,7 @@ SDL_Surface *load_image(const char *path)
 
 void init_window()
 {
-    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 640, SDL_WINDOW_SHOWN);
     if (window == NULL)
     {
         perror("Error while creating the window");

@@ -34,7 +34,7 @@ inline void paddle_collide_ball(SDL_Rect *p, ball *b) {
   ball next = *b;
   move_ball(&next);
 
-  position check_pos[8] = {
+  Position check_pos[8] = {
       {p->x + 12, p->y},
       {p->x + 24, p->y + 12},
       {p->x + 12, p->y + 24},
