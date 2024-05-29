@@ -6,5 +6,5 @@ CMakeFiles/
 
 build/
 
-.idea/
+.idea/*
 /cmake-build-debug/
