@@ -1,7 +1,7 @@
 #ifndef __BALL_H__
 #define __BALL_H__
 
-#include <SDL_rect.h>
+#include <SDL2/SDL_rect.h>
 #include "brick.h"
 #include "paddle.h"
 
@@ -15,6 +15,7 @@ typedef struct {
 
 ball create_ball();
 void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n);
+void apply_ball_powerup(ball *b, PowerUp *p);
 
 
 #endif

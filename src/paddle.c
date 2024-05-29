@@ -31,3 +31,15 @@ void strafe_paddle(paddle *p, int direction) {
     }
     p->x += p->vx;
 }
+
+void apply_powerup(paddle *p, int type) {
+    if (type == 0) {
+        p->w = 128;
+    }
+    else if (type == 1) {
+        p->w = 64;
+    }
+    else if (type == 2) {
+        p->w = 256;
+    }
+}

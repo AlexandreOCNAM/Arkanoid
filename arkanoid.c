@@ -3,6 +3,7 @@
 #include "src/paddle.h"
 #include "src/graphics.h"
 #include "src/collisions.h"
+#include "src/powerup.h"
 
 const int FPS = 60.0;
 // struct { double x; double y; } ball_speed;
@@ -20,7 +21,7 @@ Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
 
-SDL_Rect dest = {0, 0, 0, 0};
+SDL_Rect dest = { 0, 0, 416, 416 };
 SDL_Rect tmp = {0, 0, 0, 0};
 
 paddle _paddle = {0};
@@ -29,7 +30,9 @@ paddle _paddle = {0};
 //SDL_Rect srcVaiss = {128, 0, 128, 32};
 
 SDL_Surface *win_surf = NULL;
-const brick b = {100, 100, 20, 20, 5};
+const PowerUp powerup = {100, 100, 100, 30, 1, 0};
+PowerUp powerups[1] = {powerup};
+const brick b = {100, 100, 100, 30, 1, powerup};
 brick bricks[1] = {b};
 
 void init()
@@ -40,6 +43,8 @@ void init()
 //  SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
 
   win_surf = init_window();
+
+  // init TTF font
 
   // _ball = (ball){
   //         window_surface->w / 2,
@@ -71,6 +76,10 @@ void draw()
     draw_ball(&_ball);
     draw_paddle(&_paddle);
     draw_bricks(bricks, 1);
+    for (int i=0; i< 1; i++)
+        if (bricks[i].powerup.active){
+            draw_powerup(&powerups[i]);
+        }
     update_window();
 }
 
@@ -103,7 +112,9 @@ int main(int argc, char **argv)
         _paddle.vx = 0;
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
+
       move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, 1);
+
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();
