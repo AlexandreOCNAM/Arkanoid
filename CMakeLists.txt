@@ -8,19 +8,21 @@ include_directories(public)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 
 add_executable(${PROJECT_NAME}
-		arkanoid.h
-		arkanoid.h
-		includes/ball.h
+		arkanoid.c
 		src/ball.c
-		includes/window.h
-		includes/position.h
-		includes/paddle.h
-		includes/brick.h
+		src/ball.h
 		src/extractFile.c
-		includes/extractFile.h
+		src/extractFile.h
+		src/graphics.c
+		src/graphics.h
 		src/paddle.c
-		includes/includes.h
-		src/brick.c)
+		src/paddle.h
+		src/brick.c
+		src/brick.h
+		src/collisions.c
+		src/collisions.h
+		src/graphics.c
+)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)

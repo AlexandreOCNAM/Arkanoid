@@ -1,13 +1,19 @@
-#include "includes/includes.h"
-#include "../includes/ball.h"
-#include "../includes/extractFile.h" // Assurez-vous que ce fichier est inclus
-#include "includes/window.h"
-#include "includes/paddle.h"
-#include "includes/brick.h"
+
+#include "src/ball.h"
+#include "src/brick.h"
+#include "src/paddle.h"
+#include "src/graphics.h"
+#include "src/collisions.h"
+#include "src/extractFile.h"
 
 const int FPS = 60.0;
 
 ball _ball = {0};
+SDL_Surface *BrickSprite = NULL;
+
+SDL_Window *window = NULL;
+SDL_Surface *window_surface = NULL;
+SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
 
 Uint64 prev, now; // timers
@@ -18,51 +24,77 @@ SDL_Rect dest = {0, 0, 0, 0};
 
 
 paddle _paddle = {0};
+//SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
+//SDL_Rect srcBall = {0, 96, 24, 24};
+//SDL_Rect srcVaiss = {128, 0, 128, 32};
 
+SDL_Surface *win_surf = NULL;
 Brick bricks[100];
 int brick_count = 0;
 
 void init()
 {
-    init_window();
-    _ball = create_ball();
-    now = SDL_GetPerformanceCounter();
+//  pWindow = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
+//  win_surf = SDL_GetWindowSurface(pWindow);
+//  plancheSprites = SDL_LoadBMP("./sprites.bmp");
+//  SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
 
-    // init the sprites of the bricks
-    brickSprite = load_image("./Arkanoid_sprites.bmp");
-    if (brickSprite == NULL)
-    {
-        perror("Error while loading the brick sprite");
-        exit(1);
-    }
-    SDL_SetColorKey(brickSprite, true, 0); // 0: 00/00/00 noir -> transparent
+  win_surf = init_window();
 
-    _paddle = create_paddle();
+  // _ball = (ball){
+  //         window_surface->w / 2,
+  //         window_surface->h / 2,
+  //             1.0,
+  //             1.4
+  //         }
+  // };
+  _ball = create_ball();
+//  ball.x = win_surf->w / 2;
+//  ball.y = win_surf->h / 2;
+//  ball.v.x = 1.0;
+//  ball.v.y = 1.4;
+//
+  now = SDL_GetPerformanceCounter();
+
+
+  // init the sprites of the bricks
+  BrickSprite = load_image("./Arkanoid_sprites.bmp");
+  if (BrickSprite == NULL)
+  {
+    perror("Error while loading the brick sprite");
+    exit(1);
+  }
+  SDL_SetColorKey(BrickSprite, true, 0); // 0: 00/00/00 noir -> transparent
+
+  _paddle = create_paddle();
 }
 
 void draw()
 {
-    // remplit le fond
+  // remplit le fond
     blit_background(&dest);
-    // affiche balle
+
+  // affiche balle
+//  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
+//  SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
     draw_ball(&_ball);
-    // vaisseau
-    dest.x = x_vault;
-    dest.y = window_surface->h - 16;
-    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &_paddle.rect);
+    draw_paddle(&_paddle);
+
+    update_window();
 
     // Dessiner les briques
     for (int i = 0; i < brick_count; i++)
     {
         if (!bricks[i].destroyed)
         {
-            SDL_Rect rect = {bricks[i].pos.x, bricks[i].pos.y, bricks[i].width, bricks[i].height};
-            SDL_BlitSurface(brickSprite, &bricks[i].srcRect, window_surface, &rect);
+            draw_brick(&bricks[i]);
+            SDL_Rect rect = {bricks[i].x, bricks[i].y, bricks[i].width, bricks[i].height};
+            SDL_BlitSurface(BrickSprite, &bricks[i].srcRect, window_surface, &rect);
         }
     }
 }
 
-int main()
+int main(int argc, char **argv)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
     {
@@ -75,31 +107,34 @@ int main()
     // Charger les niveaux
     load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
-    bool quit = false;
-    while (!quit)
-    {
-        SDL_PumpEvents();
-        const Uint8 *keys = SDL_GetKeyboardState(NULL);
-        if (keys[SDL_SCANCODE_LEFT])
-            strafe_left(&_paddle);
-        if (keys[SDL_SCANCODE_RIGHT])
-            strafe_right(&_paddle);
-        if (keys[SDL_SCANCODE_ESCAPE])
-            quit = true;
+  bool quit = false;
+  while (!quit)
+  {
+      SDL_PumpEvents();
+      const Uint8 *keys = SDL_GetKeyboardState(NULL);
+      if (keys[SDL_SCANCODE_LEFT]) {
+          // collision of the paddle with the left wall
+          strafe_paddle(&_paddle, 0);
+      }
+      else if (keys[SDL_SCANCODE_RIGHT]){
+          // collision of the paddle with the right wall
+          strafe_paddle(&_paddle, 1);
+      }
+      else
+          _paddle.vx = 0;
+      if (keys[SDL_SCANCODE_ESCAPE])
+          quit = true;
+      move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, 1);
+    draw();
 
-        move_ball(&_ball);
-        paddle_collide_walls(&_paddle, window_surface->w);
-        ball_collide_walls(&_ball, &window_surface->clip_rect);
-        ball_collide_paddle(&_ball, &_paddle.rect);
-        draw();
-        SDL_UpdateWindowSurface(window);
-        now = SDL_GetPerformanceCounter();
-        delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
-        prev = now;
-        if (delta_t > 0)
-            SDL_Delay((Uint32)(delta_t * 1000));
-        prev = SDL_GetPerformanceCounter();
-    }
+    now = SDL_GetPerformanceCounter();
+    delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
+    prev = now;
+    if (delta_t > 0)
+      SDL_Delay((Uint32)(delta_t * 1000));
+    // printf("dt = %lf\n",delta_t*1000);
+    prev = SDL_GetPerformanceCounter();
+  }
 
     SDL_Quit();
     return 0;

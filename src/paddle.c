@@ -2,49 +2,33 @@
 // Created by OfferleA on 3/20/2024.
 //
 
-#include "../includes/paddle.h"
+#include "paddle.h"
 
-paddle create_paddle()
-{
-  const paddle p = {
-    {128, 640-16, 128, 32},
-    {10, 0}
-  };
-  return p;
+paddle create_paddle() {
+    paddle result = {
+            128, 600-16, 128, 32, 5, 0
+    };
+    return result;
 }
 
-void invert_speed(paddle* p)
-{
-  p->v.x = -p->v.x;
+void move_paddle(paddle *p) {
+    p->x += p->vx;
 }
 
-void move_paddle(paddle *p)
-{
-  p->rect.x += p->v.x;
+void invert_paddle_velocity(paddle *p) {
+    p->vx = -p->vx;
 }
 
-void strafe_left(paddle* p)
-{
-  p->rect.x -= p->v.x;
-}
-
-void strafe_right(paddle* p)
-{
-  p->rect.x += p->v.x;
-}
-
-void paddle_collide_walls(paddle *p, const int width)
-{
-  if (p->rect.x <= 0 || p->rect.x > width - p->rect.w)
-  {
-    if (p->rect.x <= 0)
-    {
-      p->rect.x = 0;
+void strafe_paddle(paddle *p, int direction) {
+    if (direction == 0) {
+        p->vx = -5;
     }
-    else
-    {
-      p->rect.x = width - p->rect.w;
+    else if (direction == 1) {
+        p->vx = 5;
     }
-  }
+    else {
+        p->vx = 0;
+    }
+    p->x += p->vx;
 }
 

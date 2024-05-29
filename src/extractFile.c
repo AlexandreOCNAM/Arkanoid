@@ -1,7 +1,7 @@
 //
 // Created by Sebastien on 20/03/2024.
 //
-#include "../includes/extractFile.h"
+#include "extractFile.h"
 
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 16
@@ -81,7 +81,7 @@ void load_level(const char *filename, Brick bricks[], int *brick_count) {
                 SDL_Rect srcRect = get_brick_src_rect(line[x]);
                 if (srcRect.w > 0 && srcRect.h > 0) {
                     Brick *brick = &bricks[*brick_count];
-                    brick_init(brick, x * 32, y * 16, 32, 16); // Positionne et dimensionne la brique
+                    create_brick(brick, x * 32, y * 16, 32, 16, 2); // Positionne et dimensionne la brique
                     brick->destroyed = false;
                     //brick->pv =
                     brick->srcRect = srcRect; // Définit le rectangle source basé sur le caractère

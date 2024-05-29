@@ -1,17 +1,21 @@
-#include "../includes/brick.h"
+#include "brick.h"
 
-void brick_init(Brick *brick, int x, int y, int width, int height) {
-    brick->pos.x = x;
-    brick->pos.y = y;
+void create_brick(Brick *brick, int x, int y, int width, int height, int health) {
+    brick->x = x;
+    brick->y = y;
     brick->width = width;
     brick->height = height;
+    brick->health = health;
     brick->destroyed = false;
 }
 
 void brick_draw(Brick *brick, SDL_Renderer *renderer) {
     if (!brick->destroyed) {
-        SDL_Rect rect = {brick->pos.x, brick->pos.y, brick->width, brick->height};
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_Rect rect = {brick->x, brick->y, brick->width, brick->height};
         SDL_RenderFillRect(renderer, &rect);
     }
+}
+
+void damage_brick(Brick *b) {
+    b->health--;
 }
