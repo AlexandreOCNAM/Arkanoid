@@ -73,15 +73,16 @@ void init()
 void draw()
 {
   // remplit le fond
-    blit_background(&dest);
+
+    //blit_background(&dest);
 
   // affiche balle
 //  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
 //  SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
     draw_ball(&_ball);
     draw_paddle(&_paddle);
-
     draw_bricks(bricks, brick_count);
+
     update_window();
 }
 
@@ -97,7 +98,7 @@ int main(int argc, char **argv)
     init();
 
     // Charger les niveaux
-    load_level("../Levels/niveau4.txt", bricks, &brick_count);
+    load_level("../Levels/test.txt", bricks, &brick_count);
 
   bool quit = false;
   while (!quit)
@@ -117,6 +118,7 @@ int main(int argc, char **argv)
       if (keys[SDL_SCANCODE_ESCAPE])
           quit = true;
       move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, 1);
+
     draw();
 
     now = SDL_GetPerformanceCounter();

@@ -73,6 +73,12 @@ void draw_bricks(Brick *b, int n) {
         if (b[i].health > 0) {
             draw_brick(&b[i]);
         }
+        else if(b[i].health < 0){
+            //printf("Brick is supposed to be there (%d,%d), %d",b[i].x, b[i].y, b[i].health );
+        }
+        else{
+            printf("Brick at (%d, %d) is %s\n", b[i].x, b[i].y, b[i].health == 0 ? "destroyed" : "not destroyed");
+        }
     }
 }
 

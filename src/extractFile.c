@@ -1,54 +1,55 @@
-//
-// Created by Sebastien on 20/03/2024.
-//
 #include "extractFile.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 16
+#define BRICKS_PER_ROW 13
 
-SDL_Rect get_brick_src_rect(int brick_type) {
+SDL_Rect get_brick_src_rect(int brick_number) {
     SDL_Rect srcRect;
-    switch (brick_type) {
-        case 'w':
+    switch (brick_number) {
+        case 1:
             srcRect = (SDL_Rect){0, 0, 32, 16}; // Brique blanche
             break;
-        case 'o':
+        case 2:
             srcRect = (SDL_Rect){32, 0, 32, 16}; // Brique orange
             break;
-        case 'c':
+        case 3:
             srcRect = (SDL_Rect){64, 0, 32, 16}; // Brique cyan
             break;
-        case 'g':
+        case 4:
             srcRect = (SDL_Rect){96, 0, 32, 16}; // Brique vert clair
             break;
-        case 'B':
+        case 5:
             srcRect = (SDL_Rect){128, 0, 32, 16}; // Brique bleu foncé
             break;
-        case 'G':
+        case 6:
             srcRect = (SDL_Rect){160, 0, 32, 16}; // Brique vert foncé
             break;
-        case 'r':
+        case 7:
             srcRect = (SDL_Rect){0, 16, 32, 16}; // Brique rouge clair
             break;
-        case 'b':
+        case 8:
             srcRect = (SDL_Rect){32, 16, 32, 16}; // Brique bleu
             break;
-        case 'p':
+        case 9:
             srcRect = (SDL_Rect){64, 16, 32, 16}; // Brique rose
             break;
-        case 'y':
+        case 10:
             srcRect = (SDL_Rect){96, 16, 32, 16}; // Brique vert clair
             break;
-        case 'R':
+        case 11:
             srcRect = (SDL_Rect){128, 16, 32, 16}; // Brique rouge foncé
             break;
-        case 'C':
+        case 12:
             srcRect = (SDL_Rect){160, 16, 32, 16}; // Brique cyan foncé
             break;
-        case 'A':
+        case 20:
             srcRect = (SDL_Rect){0, 32, 32, 16}; // Brique argent
             break;
-        case 'O':
+        case 30:
             srcRect = (SDL_Rect){0, 48, 32, 16}; // Brique or
             break;
         default:
@@ -67,29 +68,48 @@ void load_level(const char *filename, Brick bricks[], int *brick_count) {
 
     char line[256];
     int y = 0;
+    int x = 0;
     *brick_count = 0;
 
     while (fgets(line, sizeof(line), file)) {
-        int len = strlen(line);
-        if (line[len - 1] == '\n') {
-            line[len - 1] = '\0';
-            len--;
+        if (line[0] == '\n') {
+            x++;
+            if (x >= BRICKS_PER_ROW) {
+                x = 0;
+                y++;
+            }
+            continue; // Ignore les lignes vides
         }
 
-        for (int x = 0; x < len; x++) {
-            if (line[x] != ' ' && line[x] != '\n') {
-                SDL_Rect srcRect = get_brick_src_rect(line[x]);
-                if (srcRect.w > 0 && srcRect.h > 0) {
-                    Brick *brick = &bricks[*brick_count];
-                    create_brick(brick, x * 32, y * 16, 32, 16, 2); // Positionne et dimensionne la brique
-                    brick->srcRect = srcRect; // Définit le rectangle source basé sur le caractère
-                    (*brick_count)++;
-                    printf("Placed brick of type '%c' at (%d, %d)\n", line[x], x * 32, y * 16); // Message de débogage
+        int brick_type;
+        int brick_number;
+        if (sscanf(line, "%dx%d", &brick_type, &brick_number) == 2) {
+            SDL_Rect srcRect = get_brick_src_rect(brick_number);
+            int brick_health;
+            if(brick_type == 0){
+                brick_health = 1;
+            }
+            else if(brick_type == 1){
+                brick_health = 2;
+            }
+            else{
+                brick_health = 999999;
+            }
 
-                }
+            if (srcRect.w > 0 && srcRect.h > 0) {
+                Brick *brick = &bricks[*brick_count];
+                create_brick(brick, x * BRICK_WIDTH, y * BRICK_HEIGHT, BRICK_WIDTH, BRICK_HEIGHT, brick_health);
+                brick->srcRect = srcRect; // Définit le rectangle source basé sur le numéro
+                (*brick_count)++;
+                printf("Placed brick of type '%dx%d' at (%d, %d)\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT); // Message de débogage
             }
         }
-        y++;
+
+        x++;
+        if (x >= BRICKS_PER_ROW) {
+            x = 0;
+            y++;
+        }
     }
 
     fclose(file);
