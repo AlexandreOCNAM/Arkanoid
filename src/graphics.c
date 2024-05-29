@@ -17,6 +17,9 @@ SDL_Surface *load_image(const char *path)
         optimizedImage = SDL_ConvertSurface(loadedImage, window_surface->format, 0);
         SDL_FreeSurface(loadedImage);
     }
+    else{
+        perror("Error while loading the sprites");
+    }
     return optimizedImage;
 }
 
@@ -50,6 +53,7 @@ SDL_Surface* init_window()
     return SDL_GetWindowSurface(window);
 }
 
+
 void draw_ball(ball *b) {
     SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
@@ -60,9 +64,8 @@ void draw_paddle(paddle *p) {
 }
 
 void draw_brick(Brick *b) {
-    SDL_Rect dest = {b->x, b->y, 0, 0};
-    // print the brick with random color
-    SDL_FillRect(window_surface, &dest, SDL_MapRGB(window_surface->format, rand() % 255, rand() % 255, rand() % 255));
+    SDL_Rect dest = {b->x, b->y, b->width, b->height};
+    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &dest);
 }
 
 void draw_bricks(Brick *b, int n) {

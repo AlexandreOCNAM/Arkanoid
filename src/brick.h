@@ -13,7 +13,6 @@ typedef struct {
     int y;
     int width;
     int height;
-    bool destroyed;
     SDL_Rect srcRect;
     int health;
 }Brick;

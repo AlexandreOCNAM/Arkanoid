@@ -20,7 +20,7 @@ Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
 
-SDL_Rect dest = {0, 0, 0, 0};
+SDL_Rect dest = {0, 0, 100, 100};
 
 
 paddle _paddle = {0};
@@ -34,11 +34,12 @@ int brick_count = 0;
 
 void init()
 {
+
+
 //  pWindow = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
 //  win_surf = SDL_GetWindowSurface(pWindow);
 //  plancheSprites = SDL_LoadBMP("./sprites.bmp");
 //  SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
-
   win_surf = init_window();
 
   // _ball = (ball){
@@ -80,22 +81,13 @@ void draw()
     draw_ball(&_ball);
     draw_paddle(&_paddle);
 
+    draw_bricks(bricks, brick_count);
     update_window();
-
-    // Dessiner les briques
-    for (int i = 0; i < brick_count; i++)
-    {
-        if (!bricks[i].destroyed)
-        {
-            draw_brick(&bricks[i]);
-            SDL_Rect rect = {bricks[i].x, bricks[i].y, bricks[i].width, bricks[i].height};
-            SDL_BlitSurface(BrickSprite, &bricks[i].srcRect, window_surface, &rect);
-        }
-    }
 }
 
 int main(int argc, char **argv)
 {
+
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
     {
         perror("Error while initializing SDL");

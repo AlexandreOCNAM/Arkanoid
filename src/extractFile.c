@@ -82,10 +82,10 @@ void load_level(const char *filename, Brick bricks[], int *brick_count) {
                 if (srcRect.w > 0 && srcRect.h > 0) {
                     Brick *brick = &bricks[*brick_count];
                     create_brick(brick, x * 32, y * 16, 32, 16, 2); // Positionne et dimensionne la brique
-                    brick->destroyed = false;
-                    //brick->pv =
                     brick->srcRect = srcRect; // Définit le rectangle source basé sur le caractère
                     (*brick_count)++;
+                    printf("Placed brick of type '%c' at (%d, %d)\n", line[x], x * 32, y * 16); // Message de débogage
+
                 }
             }
         }
