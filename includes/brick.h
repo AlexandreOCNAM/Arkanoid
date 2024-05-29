@@ -11,6 +11,7 @@ typedef struct {
     int height;
     bool destroyed;
     SDL_Rect srcRect;
+    int pv;
 } Brick;
 
 void brick_draw(Brick *brick, SDL_Renderer *renderer);

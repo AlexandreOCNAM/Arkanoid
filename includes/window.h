@@ -33,7 +33,7 @@ SDL_Surface *load_image(const char *path)
 
 void init_window()
 {
-    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 640, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 416, 640, SDL_WINDOW_SHOWN);
     if (window == NULL)
     {
         perror("Error while creating the window");

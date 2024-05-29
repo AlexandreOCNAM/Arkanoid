@@ -73,7 +73,7 @@ int main()
     init();
 
     // Charger les niveaux
-    load_level("../Levels/niveautest.txt", bricks, &brick_count);
+    load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
     bool quit = false;
     while (!quit)

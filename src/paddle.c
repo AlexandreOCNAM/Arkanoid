@@ -7,7 +7,7 @@
 paddle create_paddle()
 {
   const paddle p = {
-    {128, 600-16, 128, 32},
+    {128, 640-16, 128, 32},
     {10, 0}
   };
   return p;
