@@ -1,5 +1,6 @@
 cmake-build-debug-wsl/
 .vscode/
+.DS_Store
 
 # CMake files
 CMakeFiles/
