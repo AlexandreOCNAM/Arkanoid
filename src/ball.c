@@ -2,7 +2,7 @@
 #include "collisions.h"
 #include "constant.h"
 
-#define MAX_SPEED 12
+#define MAX_SPEED 7
 
 ball create_ball() {
     ball result = {
@@ -31,40 +31,33 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
         b->vy = -b->vy;
     }
 
-    for (int step = 0; step < steps; step++) {
+    if (b->x < p->x + p->w &&
+        b->x + b->w > p->x &&
+        b->y < p->y + p->h &&
+        b->y + b->h > p->y) {
 
-        // collision avec le paddle, si le paddle est en mouvement vers la balle, inverse la direction en X et Y de la balle
-        // sinon, inverse seulement la direction en Y
-        // collision avec le paddle, si le paddle est en mouvement vers la balle, inverse la direction en X et Y de la balle
-        // sinon, inverse seulement la direction en Y
-        if (b->x < p->x + p->w &&
-            b->x + b->w > p->x &&
-            b->y < p->y + p->h &&
-            b->y + b->h > p->y) {
+        float top = fabs(b->y + b->h - p->y);
+        float bottom = fabs(p->y + p->h - b->y);
+        float left = fabs(b->x + b->w - p->x);
+        float right = fabs(p->x + p->w - b->x);
 
-            // Calculate the distances between the ball's edges and the paddle's edges
-            float left = fabs(b->x + b->w - p->x);
-            float right = fabs(p->x + p->w - b->x);
-            float top = fabs(b->y + b->h - p->y);
-            float bottom = fabs(p->y + p->h - b->y);
+        float min = fmin(fmin(fmin(top, bottom), left), right);
 
-            // Find the smallest distance
-            float min = fmin(fmin(fmin(left, right), top), bottom);
-
-            // Invert the ball's velocity based on the smallest distance
-            if (min == left || min == right) {
-                b->vx = -b->vx;
-            } else {
-                b->vy = -b->vy;
-            }
-
-            // Adjust the direction based on the paddle's movement
-            if ((p->vx < 0 && b->vx > 0) || (p->vx > 0 && b->vx < 0)) {
-                b->vx = -b->vx;
-            }
+        if (min == top || min == bottom) {
+            b->vy = -b->vy;
+        } else {
+            b->vx = -b->vx;
         }
+        // Adjust the direction based on the paddle's movement
+        if ((p->vx < 0 && b->vx > 0) || (p->vx > 0 && b->vx < 0)) {
+            b->vx = -b->vx;
+        }
+        b->x += b->vx;
+        b->y += b->vy;
+        return;
+    }
 
-
+    for (int step = 0; step < steps; step++) {
         int collision;
         do {
             collision = 0;
@@ -89,9 +82,8 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
                         } else {
                             b->vy = -b->vy;
                         }
-
                         damage_brick(&bricks[i]);
-                        collision += 1;
+                        collision =1;
                         break;
                     }
                 }
@@ -102,10 +94,6 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
             b->y += b->vy / steps;
 
         } while (collision);
-
-        if (b->rect->y < screen->y || b->rect->y > screen->h - b->h) {
-            b->vy = -b->vy;
-        }
     }
 }
 
