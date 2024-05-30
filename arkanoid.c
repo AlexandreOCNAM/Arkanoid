@@ -114,18 +114,18 @@ int main(int argc, char **argv)
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_LEFT]) {
         // collision of the paddle with the left wall
-        strafe_paddle(&_paddle, 0, win_surf->clip_rect.w);
+        strafe_paddle(&_paddle, 0);
     }
     else if (keys[SDL_SCANCODE_RIGHT]){
       // collision of the paddle with the right wall
-        strafe_paddle(&_paddle, 1, win_surf->clip_rect.w);
+        strafe_paddle(&_paddle, 1);
     }
     else
         _paddle.vx = 0;
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
 
-      move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, brick_count);
+    move_ball(&_ball, &_paddle, bricks, brick_count);
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();

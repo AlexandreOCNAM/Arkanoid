@@ -88,7 +88,7 @@ void ball_collision_bricks(ball *b, brick *bricks, int n) {
         } while (collision);
     }
 }
-void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
 
     if (b->x < 0 || b->x > SCREEN_WIDTH - b->w) {

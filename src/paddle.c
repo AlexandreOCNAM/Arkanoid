@@ -20,7 +20,7 @@ void invert_paddle_velocity(paddle *p) {
     p->vx = -p->vx;
 }
 
-void strafe_paddle(paddle *p, int direction, int screen_width) {
+void strafe_paddle(paddle *p, int direction) {
     if (direction == 0) {
         p->vx = -5;
     }
@@ -33,8 +33,8 @@ void strafe_paddle(paddle *p, int direction, int screen_width) {
     if (p->x < 0) {
         p->x = 0;
     }
-    if (p->x + p->w > screen_width) {
-        p->x = screen_width - p->w;
+    if (p->x + p->w > SCREEN_WIDTH) {
+        p->x = SCREEN_WIDTH - p->w;
     }
     p->x += p->vx;
 }
