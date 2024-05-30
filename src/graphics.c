@@ -43,13 +43,14 @@ SDL_Surface* init_window()
         perror("Error while loading the sprites");
         exit(1);
     }
-    brickSprite = load_image("./Arkanoid_sprites.bmp");
+    brickSprite = load_image("../public/Arkanoid_sprites.bmp");
     if (brickSprite == NULL)
     {
         perror("Error while loading the brick sprite");
         exit(1);
     }
     SDL_SetColorKey(plancheSprites, 1, 0); // 0: 00/00/00 noir -> transparent
+    SDL_SetColorKey(brickSprite, 1, 0); // 0: 00/00/00 noir -> transparent
     return SDL_GetWindowSurface(window);
 }
 
