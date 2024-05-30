@@ -3,7 +3,6 @@
 #include "src/brick.h"
 #include "src/paddle.h"
 #include "src/graphics.h"
-#include "src/collisions.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
 
@@ -38,7 +37,7 @@ paddle _paddle = {0};
 //SDL_Rect srcVaiss = {128, 0, 128, 32};
 
 SDL_Surface *win_surf = NULL;
-Brick bricks[500];
+brick bricks[500];
 int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
 PowerUp powerups[1] = {powerup};
@@ -115,18 +114,18 @@ int main(int argc, char **argv)
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_LEFT]) {
         // collision of the paddle with the left wall
-        strafe_paddle(&_paddle, 0);
+        strafe_paddle(&_paddle, 0, win_surf->clip_rect.w);
     }
     else if (keys[SDL_SCANCODE_RIGHT]){
       // collision of the paddle with the right wall
-        strafe_paddle(&_paddle, 1);
+        strafe_paddle(&_paddle, 1, win_surf->clip_rect.w);
     }
     else
         _paddle.vx = 0;
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
 
-      move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, 1);
+      move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, brick_count);
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();

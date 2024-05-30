@@ -12,7 +12,7 @@ typedef struct {
 } paddle;
 
 paddle create_paddle();
-void strafe_paddle(paddle *p, int direction);
+void strafe_paddle(paddle *p, int direction, int screen_width);
 void invert_paddle_velocity(paddle *p);
 void move_paddle(paddle *p);
 void apply_powerup(paddle *p, int type);

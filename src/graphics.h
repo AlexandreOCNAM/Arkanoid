@@ -10,6 +10,10 @@
 #include "paddle.h"
 #include "brick.h"
 
+extern SDL_Window *window;
+extern SDL_Surface *window_surface;
+extern SDL_Surface *plancheSprites;
+extern SDL_Surface *brickSprite;
 
 
 SDL_Surface *load_image(const char *path);
