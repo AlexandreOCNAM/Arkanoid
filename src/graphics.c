@@ -1,7 +1,15 @@
+//
+// Created by OfferleA on 5/28/2024.
+//
 
 #include "graphics.h"
+#include "constant.h"
 
 
+SDL_Window *window = NULL;
+SDL_Surface *window_surface = NULL;
+SDL_Surface *plancheSprites = NULL;
+SDL_Surface *brickSprite = NULL;
 
 SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 SDL_Rect srcBall = {0, 96, 24, 24};
@@ -53,7 +61,6 @@ SDL_Surface* init_window()
     return SDL_GetWindowSurface(window);
 }
 
-
 void draw_ball(ball *b) {
     SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
@@ -63,20 +70,15 @@ void draw_paddle(paddle *p) {
     SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
 }
 
-void draw_brick(Brick *b) {
-    SDL_Rect dest = {b->x, b->y, b->width, b->height};
+void draw_brick(brick *b) {
+    SDL_Rect dest = {b->x, b->y, b->w, b->h};
     SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &dest);
 }
 
-void draw_bricks(Brick *b, int n) {
+void draw_bricks(brick *b, int n) {
     for (int i = 0; i < n; i++) {
         if (b[i].health > 0) {
             draw_brick(&b[i]);
-            //if(i == 100)
-            //printf("Drew brick at (%d,%d), health %d",b[i].x, b[i].y, b[i].health);
-        }
-        else{
-            printf("Brick is supposed to be there (%d,%d), %d",b[i].x, b[i].y, b[i].health );
         }
     }
 }
@@ -119,4 +121,17 @@ void blit_background(SDL_Rect *dest) {
 
 void update_window() {
     SDL_UpdateWindowSurface(window);
+}
+
+void draw_powerup(PowerUp *p) {
+    SDL_Rect dest = {p->x, p->y, p->w, p->h};
+    SDL_FillRect(window_surface, &dest, SDL_MapRGB(window_surface->format, 255,255,p->type * (255/2)));
+}
+
+void draw_powerups(PowerUp *p, int n) {
+    for (int i = 0; i < n; i++) {
+        if (p[i].active) {
+            draw_powerup(&p[i]);
+        }
+    }
 }

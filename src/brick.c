@@ -1,3 +1,7 @@
+//
+// Created by OfferleA on 5/28/2024.
+//
+
 #include "brick.h"
 
 void create_brick(Brick *brick, int x, int y, int width, int height, int health) {
@@ -12,8 +16,4 @@ void create_brick(Brick *brick, int x, int y, int width, int height, int health)
 
 void damage_brick(Brick *b) {
     b->health--;
-    printf("Brick at (%d, %d) damaged, health now %d\n", b->x, b->y, b->health);
-    if (b->health <= 0) {
-        printf("Brick at (%d, %d) destroyed\n", b->x, b->y);
-    }
 }

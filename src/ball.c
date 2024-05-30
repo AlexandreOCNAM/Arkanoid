@@ -1,10 +1,11 @@
 #include "ball.h"
 #include "collisions.h"
+#include "constant.h"
 
 ball create_ball() {
     ball result = {
-        .x = 100,
-        .y = 550,
+        .x = 0,
+        .y = 96,
         .w = 24,
         .h = 24,
         .vx = 5,
@@ -18,11 +19,11 @@ ball create_ball() {
     return result;
 }
 
-void move_ball(ball *b, SDL_Rect *screen, paddle *p, Brick *bricks, int n) {
-    if (b->x < 0 || b->x > 600 - b->w) {
+void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
+    if (b->x < 0 || b->x > SCREEN_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < 0 || b->y > 600 - b->h) {
+    if (b->y < 0 || b->y > SCREEN_HEIGHT - b->h) {
         b->vy = -b->vy;
     }
 
@@ -32,13 +33,59 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, Brick *bricks, int n) {
         b->x + b->w > p->x &&
         b->y < p->y + p->h &&
         b->y + b->h > p->y) {
-        // Adjust the ball's y-coordinate to be just above the paddle
-        b->y = p->y - b->h;
-        // Invert the ball's y-velocity to make it bounce
-        b->vy = -b->vy;
-        // Depending on the paddle's movement, invert the x-velocity
+        // Calculate the distances between the ball's edges and the paddle's edges
+        float left = fabs(b->x + b->w - p->x);
+        float right = fabs(p->x + p->w - b->x);
+        float top = fabs(b->y + b->h - p->y);
+        float bottom = fabs(p->y + p->h - b->y);
+
+        // Find the smallest distance
+        float min = fmin(fmin(fmin(left, right), top), bottom);
+
+        // Invert the ball's velocity based on the smallest distance
+        if (min == left || min == right) {
+            b->vx = -b->vx;
+        } else {
+            b->vy = -b->vy;
+        }
         if ((p->vx < 0 && b->vx > 0) || (p->vx > 0 && b->vx < 0)) {
             b->vx = -b->vx;
+        }
+    }
+
+
+    for (int i = 0; i < n; i++) {
+        if (bricks[i].health > 0) {
+            if (b->x < bricks[i].x + bricks[i].w &&
+                b->x + b->w > bricks[i].x &&
+                b->y < bricks[i].y + bricks[i].h &&
+                b->y + b->h > bricks[i].y) {
+                // Calculate the distances between the ball's edges and the brick's edges
+                float left = fabs(b->x + b->w - bricks[i].x);
+                float right = fabs(bricks[i].x + bricks[i].w - b->x);
+                float top = fabs(b->y + b->h - bricks[i].y);
+                float bottom = fabs(bricks[i].y + bricks[i].h - b->y);
+
+                // Find the smallest distance
+                float min = fmin(fmin(fmin(left, right), top), bottom);
+
+                // Invert the ball's velocity based on the smallest distance
+                if (min == left || min == right) {
+                    b->vx = -b->vx;
+                } else {
+                    b->vy = -b->vy;
+                }
+                if (left == bottom || right == top) {
+                    b->vx = -b->vx;
+                    b->vy = -b->vy;
+                }
+                if (left == top || right == bottom) {
+                    b->vx = -b->vx;
+                    b->vy = -b->vy;
+                }
+
+                damage_brick(&bricks[i]);
+            }
         }
     }
 
@@ -46,22 +93,21 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, Brick *bricks, int n) {
         b->vy = -b->vy;
     }
 
-    // collision avec les briques
-    for (int i = 0; i < n; i++) {
-        if (bricks[i].health > 0) {
-            if (b->x < bricks[i].x + bricks[i].width &&
-                b->x + b->w > bricks[i].x &&
-                b->y < bricks[i].y + bricks[i].height &&
-                b->y + b->h > bricks[i].y) {
-                printf("Ball collided with brick at (%d, %d). Brick health: %d\n", bricks[i].x, bricks[i].y, bricks[i].health); // Message de débogage
-                //damage_brick(&bricks[i]);
-                b->vy = -b->vy;
-            }
-        }
-    }
-
     // Déplace la balle
     b->x += b->vx;
     b->y += b->vy;
 
+}
+
+void apply_ball_powerup(ball *b, PowerUp *p) {
+    switch (p->type) {
+        case 0:
+            b->vx = 5;
+            b->vy = 5;
+            break;
+        case 1:
+            b->vx = 10;
+            b->vy = 10;
+            break;
+    }
 }
