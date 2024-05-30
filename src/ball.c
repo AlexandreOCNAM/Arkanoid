@@ -9,12 +9,12 @@
 
 ball create_ball() {
     ball result = {
-        .x = 0,
-        .y = 96,
+        .x = 128 + 64,
+        .y = SCREEN_HEIGHT - 16 - 24,
         .w = 24,
         .h = 24,
-        .vx = 5,
-        .vy = 5,
+        .vx = 0,
+        .vy = 0,
         .rect = malloc(sizeof(SDL_Rect))
     };
     result.rect->x = result.x;
@@ -43,7 +43,9 @@ void ball_collision_bricks(ball *b, brick *bricks, int n) {
 
             for (int i = 0; i < n; i++) {
                 // Check if the brick is in the same zone as the ball
-                if (bricks[i].health > 0 && bricks[i].x / (SCREEN_WIDTH / 2) == zone_x && bricks[i].y / (SCREEN_HEIGHT / 2) == zone_y) {
+                    if (bricks[i].health == -1 || bricks[i].health > 0
+                        && bricks[i].x / (SCREEN_WIDTH / 2) == zone_x
+                        && bricks[i].y / (SCREEN_HEIGHT / 2) == zone_y) {
                     SDL_Rect brick_rect = {bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h};
                     if (SDL_HasIntersection(&future_ball_rect, &brick_rect)) {
                         // Calculate the distance from the ball to the brick
@@ -80,6 +82,7 @@ void ball_collision_bricks(ball *b, brick *bricks, int n) {
 
                 damage_brick(&bricks[closest_brick_index]);
                 collision = 1;
+                break;
             }
 
             // Move the ball
@@ -137,4 +140,15 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
             b->vy = 10;
             break;
     }
+}
+
+void reset_ball(ball *b) {
+    b->x = 128 + 64;
+    b->y = SCREEN_HEIGHT - 16 - 24;
+    b->vx = 0;
+    b->vy = 0;
+}
+
+void launch_ball(ball *b) {
+    b->vy = -BALL_MAX_SPEED;
 }

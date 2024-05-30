@@ -60,24 +60,24 @@ void draw_ball(ball *b) {
 }
 
 void draw_paddle(paddle *p) {
-    SDL_Rect dest = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
+    SDL_Rect rect = {p->x, p->y, p->w, p->h};
+    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &rect);
 }
 
 void draw_brick(brick *b) {
-    SDL_Rect dest = {b->x, b->y, b->w, b->h};
-    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &dest);
+    SDL_Rect rect = {b->x, b->y, b->w, b->h};
+    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &rect);
 }
 
 void draw_bricks(brick *b, int n) {
     for (int i = 0; i < n; i++) {
-        if (b[i].health > 0) {
+        if (!is_brick_dead(&b[i])) {
             draw_brick(&b[i]);
         }
     }
 }
 
-void blit_background(SDL_Rect *dest) {
+void blit_background() {
     const int bg_width = srcBg.w;
     const int bg_height = srcBg.h;
     const int window_width = window_surface->w;
@@ -88,9 +88,9 @@ void blit_background(SDL_Rect *dest) {
         for (int j = 0; j < window_height; j += bg_height)
             for (int i = 0; i < window_width; i += bg_width)
             {
-                dest->x = i;
-                dest->y = j;
-                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                dest.x = i;
+                dest.y = j;
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, &dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);
@@ -101,9 +101,9 @@ void blit_background(SDL_Rect *dest) {
         for (int j = 0; j < window_height; j += bg_height)
             for (int i = 0; i < window_width; i += bg_width)
             {
-                dest->x = i;
-                dest->y = j;
-                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                dest.x = i;
+                dest.y = j;
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, &dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);

@@ -15,11 +15,13 @@ extern SDL_Surface *window_surface;
 extern SDL_Surface *plancheSprites;
 extern SDL_Surface *brickSprite;
 
+static SDL_Rect dest = {0, 0, 100, 100};
+
 
 SDL_Surface *load_image(const char *path);
 
 SDL_Surface* init_window();
-void blit_background(SDL_Rect *dest);
+void blit_background();
 void draw_ball(ball *b);
 void draw_paddle(paddle *p);
 void draw_brick(brick *b);

@@ -15,5 +15,16 @@ void create_brick(brick *brick, int x, int y, int width, int height, int health)
 
 
 void damage_brick(brick *b) {
-    b->health--;
+    if (b->health == -1) {
+        return;
+    }
+    b->health = fmax(0, b->health - 1);
+}
+
+int is_brick_dead(brick *b) {
+    return b->health == 0;
+}
+
+int is_brick_breakable(brick *b) {
+    return b->health == -1;
 }

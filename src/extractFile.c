@@ -93,7 +93,7 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
                 brick_health = 2;
             }
             else{
-                brick_health = 999999;
+                brick_health = -1;
             }
 
             if (srcRect.w > 0 && srcRect.h > 0) {

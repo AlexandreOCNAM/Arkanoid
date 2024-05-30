@@ -50,3 +50,12 @@ void apply_powerup(paddle *p, int type) {
         p->w = 256;
     }
 }
+
+void reset_paddle(paddle *p) {
+    p->x = 128;
+    p->y = SCREEN_HEIGHT - 16;
+    p->w = 128;
+    p->h = 32;
+    p->vx = 5;
+    p->vy = 0;
+}
