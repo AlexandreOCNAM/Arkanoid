@@ -11,15 +11,18 @@
 #include "brick.h"
 
 
-
+extern SDL_Window *window;
+extern SDL_Surface *window_surface;
+extern SDL_Surface *plancheSprites;
+extern SDL_Surface *brickSprite;
 SDL_Surface *load_image(const char *path);
 
 SDL_Surface* init_window();
 void blit_background(SDL_Rect *dest);
 void draw_ball(ball *b);
 void draw_paddle(paddle *p);
-void draw_brick(brick *b);
-void draw_bricks(brick *b, int n);
+void draw_brick(Brick *b);
+void draw_bricks(Brick *b, int n);
 void update_window();
 
 #endif //ARKANOID_GRAPHICS_H

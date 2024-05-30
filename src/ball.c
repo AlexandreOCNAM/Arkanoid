@@ -3,8 +3,8 @@
 
 ball create_ball() {
     ball result = {
-        .x = 0,
-        .y = 96,
+        .x = 100,
+        .y = 550,
         .w = 24,
         .h = 24,
         .vx = 5,
@@ -18,7 +18,7 @@ ball create_ball() {
     return result;
 }
 
-void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, SDL_Rect *screen, paddle *p, Brick *bricks, int n) {
     if (b->x < 0 || b->x > 600 - b->w) {
         b->vx = -b->vx;
     }
@@ -42,19 +42,6 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
         }
     }
 
-
-    for (int i = 0; i < n; i++) {
-        if (bricks[i].health > 0) {
-            if (b->x < bricks[i].x + bricks[i].w &&
-                b->x + b->w > bricks[i].x &&
-                b->y < bricks[i].y + bricks[i].h &&
-                b->y + b->h > bricks[i].y) {
-                bricks[i].health--;
-                b->vy = -b->vy;
-            }
-        }
-    }
-
     if (b->rect->y < screen->y || b->rect->y > screen->h - b->h) {
         b->vy = -b->vy;
     }
@@ -62,11 +49,12 @@ void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n) {
     // collision avec les briques
     for (int i = 0; i < n; i++) {
         if (bricks[i].health > 0) {
-            if (b->x < bricks[i].x + bricks[i].w &&
+            if (b->x < bricks[i].x + bricks[i].width &&
                 b->x + b->w > bricks[i].x &&
-                b->y < bricks[i].y + bricks[i].h &&
+                b->y < bricks[i].y + bricks[i].height &&
                 b->y + b->h > bricks[i].y) {
-                bricks[i].health--;
+                printf("Ball collided with brick at (%d, %d). Brick health: %d\n", bricks[i].x, bricks[i].y, bricks[i].health); // Message de débogage
+                //damage_brick(&bricks[i]);
                 b->vy = -b->vy;
             }
         }

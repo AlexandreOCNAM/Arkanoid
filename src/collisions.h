@@ -10,7 +10,7 @@
 #include "brick.h"
 
 void ball_paddle_collision(ball *b, paddle *p);
-void ball_brick_collision(ball *b, brick *bricks, int n);
+void ball_brick_collision(ball *b, Brick *bricks, int n);
 void ball_wall_collision(ball *b);
 
 void paddle_wall_collision(paddle *p);

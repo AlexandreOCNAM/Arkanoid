@@ -1,12 +1,13 @@
 cmake-build-debug-wsl/
 .vscode/
+.DS_Store
 
 # CMake files
 CMakeFiles/
 
 build/
 
-.idea/
+.idea/*
 /cmake-build-debug/
 ### CLion+iml template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

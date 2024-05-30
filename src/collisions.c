@@ -15,12 +15,12 @@ void ball_wall_collision(ball *b) {
 //    move_ball(b);
 }
 
-void ball_brick_collision(ball *b, brick *bricks, int n) {
+void ball_brick_collision(ball *b, Brick *bricks, int n) {
     for (int i = 0; i < n; i++) {
         if (bricks[i].health > 0) {
-            if (b->x < bricks[i].x + bricks[i].w &&
+            if (b->x < bricks[i].x + bricks[i].width &&
                 b->x + b->w > bricks[i].x &&
-                b->y < bricks[i].y + bricks[i].h &&
+                b->y < bricks[i].y + bricks[i].height &&
                 b->y + b->h > bricks[i].y) {
                 damage_brick(&bricks[i]);
 //                move_ball(b);

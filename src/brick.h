@@ -5,13 +5,19 @@
 #ifndef ARKANOID_BRICK_H
 #define ARKANOID_BRICK_H
 
-typedef struct {
-    int x, y;
-    int w, h;
-    int health;
-} brick;
+#include <SDL2/SDL.h>
+#include <stdbool.h>
 
-brick create_brick(int x, int y, int w, int h, int health);
-void damage_brick(brick *b);
+typedef struct {
+    int x;
+    int y;
+    int width;
+    int height;
+    SDL_Rect srcRect;
+    int health;
+}Brick;
+
+void create_brick(Brick *brick, int x, int y, int w, int h, int health);
+void damage_brick(Brick *b);
 
 #endif //ARKANOID_BRICK_H

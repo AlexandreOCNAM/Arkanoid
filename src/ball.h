@@ -14,7 +14,7 @@ typedef struct {
 } ball;
 
 ball create_ball();
-void move_ball(ball *b, SDL_Rect *screen, paddle *p, brick *bricks, int n);
+void move_ball(ball *b, SDL_Rect *screen, paddle *p, Brick *bricks, int n);
 
 
 #endif
