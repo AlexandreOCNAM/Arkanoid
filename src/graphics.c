@@ -72,12 +72,11 @@ void draw_bricks(Brick *b, int n) {
     for (int i = 0; i < n; i++) {
         if (b[i].health > 0) {
             draw_brick(&b[i]);
-        }
-        else if(b[i].health < 0){
-            //printf("Brick is supposed to be there (%d,%d), %d",b[i].x, b[i].y, b[i].health );
+            //if(i == 100)
+            //printf("Drew brick at (%d,%d), health %d",b[i].x, b[i].y, b[i].health);
         }
         else{
-            printf("Brick at (%d, %d) is %s\n", b[i].x, b[i].y, b[i].health == 0 ? "destroyed" : "not destroyed");
+            printf("Brick is supposed to be there (%d,%d), %d",b[i].x, b[i].y, b[i].health );
         }
     }
 }

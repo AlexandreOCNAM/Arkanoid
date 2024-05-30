@@ -29,7 +29,7 @@ paddle _paddle = {0};
 //SDL_Rect srcVaiss = {128, 0, 128, 32};
 
 SDL_Surface *win_surf = NULL;
-Brick bricks[100];
+Brick bricks[500];
 int brick_count = 0;
 
 void init()
@@ -74,11 +74,12 @@ void draw()
 {
   // remplit le fond
 
-    //blit_background(&dest);
+    blit_background(&dest);
 
   // affiche balle
 //  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
 //  SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
+
     draw_ball(&_ball);
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
     init();
 
     // Charger les niveaux
-    load_level("../Levels/test.txt", bricks, &brick_count);
+    load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
   bool quit = false;
   while (!quit)

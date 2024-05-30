@@ -38,7 +38,7 @@ SDL_Rect get_brick_src_rect(int brick_number) {
             srcRect = (SDL_Rect){64, 16, 32, 16}; // Brique rose
             break;
         case 10:
-            srcRect = (SDL_Rect){96, 16, 32, 16}; // Brique vert clair
+            srcRect = (SDL_Rect){96, 16, 32, 16}; // Brique jaune
             break;
         case 11:
             srcRect = (SDL_Rect){128, 16, 32, 16}; // Brique rouge foncé
@@ -101,7 +101,7 @@ void load_level(const char *filename, Brick bricks[], int *brick_count) {
                 create_brick(brick, x * BRICK_WIDTH, y * BRICK_HEIGHT, BRICK_WIDTH, BRICK_HEIGHT, brick_health);
                 brick->srcRect = srcRect; // Définit le rectangle source basé sur le numéro
                 (*brick_count)++;
-                printf("Placed brick of type '%dx%d' at (%d, %d)\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT); // Message de débogage
+                printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
             }
         }
 
