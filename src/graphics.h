@@ -13,9 +13,8 @@
 
 
 SDL_Surface *load_image(const char *path);
+
 SDL_Surface* init_window();
-
-
 void blit_background(SDL_Rect *dest);
 void draw_ball(ball *b);
 void draw_paddle(paddle *p);

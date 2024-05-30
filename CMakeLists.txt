@@ -11,15 +11,16 @@ add_executable(${PROJECT_NAME}
 		src/ball.c
 		src/paddle.c
 		src/ball.h
+		src/extractFile.c
+		src/extractFile.h
 		src/graphics.c
 		src/graphics.h
 		src/paddle.c
 		src/paddle.h
 		src/brick.c
 		src/brick.h
-		src/brick.h
-		src/paddle.h
-		src/graphics.c
+		src/collisions.c
+		src/collisions.h
 		src/graphics.c
 		src/collisions.c
 		src/collisions.h

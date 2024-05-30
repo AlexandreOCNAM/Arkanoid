@@ -6,15 +6,17 @@
 #define ARKANOID_BRICK_H
 
 #include "powerup.h"
+#include <SDL2/SDL.h>
 
 typedef struct {
     int x, y;
     int w, h;
+    SDL_Rect srcRect;
     int health;
     PowerUp powerup;
 } brick;
 
-brick create_brick(int x, int y, int w, int h, int health);
+void create_brick(brick *brick, int x, int y, int w, int h, int health);
 void damage_brick(brick *b);
 
 #endif //ARKANOID_BRICK_H

@@ -1,8 +1,10 @@
 #include <stdbool.h>
 #include "src/ball.h"
+#include "src/brick.h"
 #include "src/paddle.h"
 #include "src/graphics.h"
 #include "src/collisions.h"
+#include "src/extractFile.h"
 #include "src/powerup.h"
 
 const int FPS = 60.0;
@@ -16,13 +18,19 @@ const int FPS = 60.0;
 //} ball;
 
 ball _ball = {0};
+SDL_Surface *BrickSprite = NULL;
+
+SDL_Window *window = NULL;
+SDL_Surface *window_surface = NULL;
+SDL_Surface *plancheSprites = NULL;
+SDL_Surface *brickSprite = NULL;
 
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
 
-SDL_Rect dest = { 0, 0, 416, 416 };
-SDL_Rect tmp = {0, 0, 0, 0};
+SDL_Rect dest = {0, 0, 100, 100};
+
 
 paddle _paddle = {0};
 //SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
@@ -30,10 +38,10 @@ paddle _paddle = {0};
 //SDL_Rect srcVaiss = {128, 0, 128, 32};
 
 SDL_Surface *win_surf = NULL;
+Brick bricks[500];
+int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
 PowerUp powerups[1] = {powerup};
-const brick b = {100, 100, 100, 30, 1, powerup};
-brick bricks[1] = {b};
 
 void init()
 {
@@ -43,8 +51,6 @@ void init()
 //  SDL_SetColorKey(plancheSprites, true, 0); // 0: 00/00/00 noir -> transparent
 
   win_surf = init_window();
-
-  // init TTF font
 
   // _ball = (ball){
   //         window_surface->w / 2,
@@ -62,6 +68,15 @@ void init()
   now = SDL_GetPerformanceCounter();
 
 
+  // init the sprites of the bricks
+  BrickSprite = load_image("./Arkanoid_sprites.bmp");
+  if (BrickSprite == NULL)
+  {
+    perror("Error while loading the brick sprite");
+    exit(1);
+  }
+  SDL_SetColorKey(BrickSprite, true, 0); // 0: 00/00/00 noir -> transparent
+
   _paddle = create_paddle();
 }
 
@@ -75,11 +90,8 @@ void draw()
 //  SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
     draw_ball(&_ball);
     draw_paddle(&_paddle);
-    draw_bricks(bricks, 1);
-    for (int i=0; i< 1; i++)
-        if (bricks[i].powerup.active){
-            draw_powerup(&powerups[i]);
-        }
+    draw_bricks(bricks, brick_count);
+
     update_window();
 }
 
@@ -93,7 +105,8 @@ int main(int argc, char **argv)
 
   init();
 
-  SDL_Rect test = {100, 100, 100, 100};
+    // Charger les niveaux
+    load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
   bool quit = false;
   while (!quit)
@@ -114,7 +127,6 @@ int main(int argc, char **argv)
       quit = true;
 
       move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, 1);
-
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();

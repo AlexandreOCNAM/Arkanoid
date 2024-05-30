@@ -14,7 +14,7 @@ SDL_Surface *brickSprite = NULL;
 SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
 SDL_Rect srcBall = {0, 96, 24, 24};
 SDL_Rect srcVaiss = {128, 0, 128, 32};
-SDL_Rect srcBrick = {0, 0, 190, 62};
+SDL_Rect srcBrick = {0, 0, 32, 16};
 
 SDL_Surface *load_image(const char *path)
 {
@@ -25,12 +25,15 @@ SDL_Surface *load_image(const char *path)
         optimizedImage = SDL_ConvertSurface(loadedImage, window_surface->format, 0);
         SDL_FreeSurface(loadedImage);
     }
+    else{
+        perror("Error while loading the sprites");
+    }
     return optimizedImage;
 }
 
 SDL_Surface* init_window()
 {
-    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Arkanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
     if (window == NULL)
     {
         perror("Error while creating the window");
@@ -69,8 +72,7 @@ void draw_paddle(paddle *p) {
 
 void draw_brick(brick *b) {
     SDL_Rect dest = {b->x, b->y, b->w, b->h};
-    SDL_FillRect(window_surface, &dest, SDL_MapRGB(window_surface->format, 255,255,255));
-
+    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &dest);
 }
 
 void draw_bricks(brick *b, int n) {
@@ -82,15 +84,39 @@ void draw_bricks(brick *b, int n) {
 }
 
 void blit_background(SDL_Rect *dest) {
-    for (int x = 0; x < window_surface->w; x += srcBg.w)
-    {
-        for (int y = 0; y < window_surface->h; y += srcBg.h)
-        {
-            dest->x = x;
-            dest->y = y;
-            SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest);
-        }
+    const int bg_width = srcBg.w;
+    const int bg_height = srcBg.h;
+    const int window_width = window_surface->w;
+    const int window_height = window_surface->h;
+
+    // Check if the window's width and height are multiples of the background image's width and height
+    if (window_width % bg_width == 0 && window_height % bg_height == 0) {
+        for (int j = 0; j < window_height; j += bg_height)
+            for (int i = 0; i < window_width; i += bg_width)
+            {
+                dest->x = i;
+                dest->y = j;
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                {
+                    perror("Error while blitting the background");
+                    exit(1);
+                }
+            }
+    } else {
+        // If not, fall back to the original method
+        for (int j = 0; j < window_height; j += bg_height)
+            for (int i = 0; i < window_width; i += bg_width)
+            {
+                dest->x = i;
+                dest->y = j;
+                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                {
+                    perror("Error while blitting the background");
+                    exit(1);
+                }
+            }
     }
+
 }
 
 void update_window() {
