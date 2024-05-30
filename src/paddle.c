@@ -1,5 +1,5 @@
 //
-// Created by OfferleA on 3/20/2024.
+// Created by OfferleA on 5/28/2024.
 //
 
 #include "paddle.h"
@@ -32,3 +32,14 @@ void strafe_paddle(paddle *p, int direction) {
     p->x += p->vx;
 }
 
+void apply_powerup(paddle *p, int type) {
+    if (type == 0) {
+        p->w = 128;
+    }
+    else if (type == 1) {
+        p->w = 64;
+    }
+    else if (type == 2) {
+        p->w = 256;
+    }
+}
