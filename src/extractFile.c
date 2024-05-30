@@ -59,7 +59,7 @@ SDL_Rect get_brick_src_rect(int brick_number) {
     return srcRect;
 }
 
-void load_level(const char *filename, Brick bricks[], int *brick_count) {
+void load_level(const char *filename, brick bricks[], int *brick_count) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "Failed to open level file\n");
@@ -97,7 +97,7 @@ void load_level(const char *filename, Brick bricks[], int *brick_count) {
             }
 
             if (srcRect.w > 0 && srcRect.h > 0) {
-                Brick *brick = &bricks[*brick_count];
+                brick *brick = &bricks[*brick_count];
                 create_brick(brick, x * BRICK_WIDTH, y * BRICK_HEIGHT, BRICK_WIDTH, BRICK_HEIGHT, brick_health);
                 brick->srcRect = srcRect; // Définit le rectangle source basé sur le numéro
                 (*brick_count)++;

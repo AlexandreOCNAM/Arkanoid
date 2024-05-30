@@ -40,8 +40,7 @@ void ball_paddle_collision(ball *b, paddle *p) {
             b->y + b->h > p->y) {
 //            move_ball(b);
         }
-    }
-    else {
+    } else {
         if (b->x < p->x + p->w &&
             b->x + b->w > p->x &&
             b->y < p->y + p->h &&
@@ -49,6 +48,7 @@ void ball_paddle_collision(ball *b, paddle *p) {
 //            move_ball(b);
         }
     }
+}
 
 void paddle_powerup_collision(paddle *p, PowerUp *pu) {
     if (p->x + p->w >= pu->x && p->x <= pu->x + pu->w && p->y + p->h >= pu->y && p->y <= pu->y + pu->h) {

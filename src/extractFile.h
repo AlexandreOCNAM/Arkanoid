@@ -5,6 +5,6 @@
 
 
 void extractFile(const char *inputFile, const char *outputFile);
-void load_level(const char *filename, Brick bricks[], int *brick_count);
+void load_level(const char *filename, brick bricks[], int *brick_count);
 
 #endif
