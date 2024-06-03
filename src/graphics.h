@@ -9,6 +9,10 @@
 #include "ball.h"
 #include "paddle.h"
 #include "brick.h"
+#include "spriteConstant.h"
+#include "constant.h"
+#include "extractFile.h"
+
 
 extern SDL_Window *window;
 extern SDL_Surface *window_surface;
@@ -27,5 +31,6 @@ void draw_bricks(brick *b, int n);
 void draw_powerup(PowerUp *p);
 void draw_powerups(PowerUp *p, int n);
 void update_window();
+
 
 #endif //ARKANOID_GRAPHICS_H

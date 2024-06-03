@@ -26,7 +26,10 @@ add_executable(${PROJECT_NAME}
 		src/collisions.h
 		src/constant.h
 		src/powerup.c
-		src/powerup.h)
+		src/powerup.h
+        src/spriteConstant.h
+		src/spriteConstant.c
+)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)

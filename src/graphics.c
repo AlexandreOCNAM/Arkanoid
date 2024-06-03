@@ -3,12 +3,6 @@
 //
 
 #include "graphics.h"
-#include "constant.h"
-
-SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
-SDL_Rect srcBall = {0, 96, 24, 24};
-SDL_Rect srcVaiss = {128, 0, 128, 32};
-SDL_Rect srcBrick = {0, 0, 32, 16};
 
 SDL_Surface *load_image(const char *path)
 {
@@ -79,9 +73,9 @@ void draw_bricks(brick *b, int n) {
 }
 
 void blit_background(SDL_Rect *dest) {
-    const int bg_width = srcBg.w;
-    const int bg_height = srcBg.h;
-    const int window_width = window_surface->w;
+    const int bg_width = defaultBackground.w;
+    const int bg_height = defaultBackground.h;
+    const int window_width = PLAYABLE_ZONE_WIDTH;
     const int window_height = window_surface->h;
 
     // Check if the window's width and height are multiples of the background image's width and height
@@ -91,7 +85,7 @@ void blit_background(SDL_Rect *dest) {
             {
                 dest->x = i;
                 dest->y = j;
-                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                if (SDL_BlitSurface(brickSprite, &defaultBackground, window_surface, dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);
@@ -104,7 +98,7 @@ void blit_background(SDL_Rect *dest) {
             {
                 dest->x = i;
                 dest->y = j;
-                if (SDL_BlitSurface(plancheSprites, &srcBg, window_surface, dest) != 0)
+                if (SDL_BlitSurface(brickSprite, &defaultBackground, window_surface, dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);

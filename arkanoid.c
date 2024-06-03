@@ -5,6 +5,7 @@
 #include "src/graphics.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
+#include "src/spriteConstant.h"
 
 const int FPS = 60.0;
 // struct { double x; double y; } ball_speed;
@@ -40,7 +41,7 @@ SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[1] = {powerup};
+PowerUp powerups[0] = {powerup};
 
 void init()
 {
