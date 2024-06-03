@@ -3,10 +3,11 @@
 //
 
 #include "paddle.h"
+#include "constant.h"
 
 paddle create_paddle() {
     paddle result = {
-            128, 600-16, 128, 32, 5, 0
+            128, SCREEN_HEIGHT -16, 128, 32, 5, 0
     };
     return result;
 }
@@ -28,6 +29,12 @@ void strafe_paddle(paddle *p, int direction) {
     }
     else {
         p->vx = 0;
+    }
+    if (p->x < 0) {
+        p->x = 0;
+    }
+    if (p->x + p->w > SCREEN_WIDTH) {
+        p->x = SCREEN_WIDTH - p->w;
     }
     p->x += p->vx;
 }

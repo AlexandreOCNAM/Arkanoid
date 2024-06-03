@@ -3,7 +3,6 @@
 #include "src/brick.h"
 #include "src/paddle.h"
 #include "src/graphics.h"
-#include "src/collisions.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
 
@@ -19,6 +18,11 @@ const int FPS = 60.0;
 
 ball _ball = {0};
 SDL_Surface *BrickSprite = NULL;
+
+SDL_Window *window = NULL;
+SDL_Surface *window_surface = NULL;
+SDL_Surface *plancheSprites = NULL;
+SDL_Surface *brickSprite = NULL;
 
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
@@ -36,7 +40,7 @@ SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[0] = {powerup};
+PowerUp powerups[1] = {powerup};
 
 void init()
 {
@@ -121,7 +125,7 @@ int main(int argc, char **argv)
     if (keys[SDL_SCANCODE_ESCAPE])
       quit = true;
 
-      move_ball(&_ball, &win_surf->clip_rect, &_paddle, bricks, brick_count);
+    move_ball(&_ball, &_paddle, bricks, brick_count);
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();
