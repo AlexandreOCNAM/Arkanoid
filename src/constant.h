@@ -10,6 +10,7 @@
 #define SCREEN_HEIGHT 640
 #define PLAYABLE_ZONE_WIDTH 416
 #define PLAYABLE_ZONE_HEIGHT 640
+double delta_t;   // durée frame en ms
 
 
 #define MAX_POWERUPS 10

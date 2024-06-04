@@ -18,15 +18,15 @@ const int FPS = 60.0;
 //} ball;
 
 ball _ball = {0};
-SDL_Surface *BrickSprite = NULL;
 
 SDL_Window *window = NULL;
 SDL_Surface *window_surface = NULL;
 SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
+SDL_Surface *textSprite = NULL;
 
 Uint64 prev, now; // timers
-double delta_t;   // durée frame en ms
+
 int x_vault;
 
 SDL_Rect dest = {0, 0, 100, 100};
@@ -66,17 +66,6 @@ void init()
 //  ball.v.y = 1.4;
 //
   now = SDL_GetPerformanceCounter();
-
-
-  // init the sprites of the bricks
-  BrickSprite = load_image("./Arkanoid_sprites.bmp");
-  if (BrickSprite == NULL)
-  {
-    perror("Error while loading the brick sprite");
-    exit(1);
-  }
-  SDL_SetColorKey(BrickSprite, true, 0); // 0: 00/00/00 noir -> transparent
-
   _paddle = create_paddle();
 }
 
@@ -91,7 +80,7 @@ void draw()
     draw_ball(&_ball);
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
-
+    write_score(1234);
     update_window();
 }
 

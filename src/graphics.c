@@ -45,8 +45,15 @@ SDL_Surface* init_window()
         perror("Error while loading the brick sprite");
         exit(1);
     }
+    textSprite = load_image("../public/Arkanoid_ascii.bmp");
+    if (brickSprite == NULL)
+    {
+        perror("Error while loading the brick sprite");
+        exit(1);
+    }
     SDL_SetColorKey(plancheSprites, 1, 0); // 0: 00/00/00 noir -> transparent
     SDL_SetColorKey(brickSprite, 1, 0); // 0: 00/00/00 noir -> transparent
+    SDL_SetColorKey(textSprite, 1, 0); // 0: 00/00/00 noir -> transparent
     return SDL_GetWindowSurface(window);
 }
 
@@ -69,6 +76,58 @@ void draw_bricks(brick *b, int n) {
         if (b[i].health > 0) {
             draw_brick(&b[i]);
         }
+    }
+}
+
+void write_score(int score){
+    SDL_Rect destRect;
+    destRect.x = 500;
+    destRect.y = 50;
+    destRect.w = 32;
+    destRect.h = 32;
+
+    SDL_BlitSurface(textSprite, &S, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &C, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &O, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &R, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &E, window_surface, &destRect);
+
+    // Convertir le score en chaîne de caractères
+    char scoreStr[10];
+    sprintf(scoreStr, "%d", score);
+
+    // Position initiale pour blit
+    int posX = 500;
+
+    // Pour chaque caractère dans la chaîne de score
+    for (int i = 0; scoreStr[i] != '\0'; ++i) {
+        SDL_Rect srcRect;
+        // Sélectionner le rectangle source correspondant au chiffre
+        switch (scoreStr[i]) {
+            case '0': srcRect = _0; break;
+            case '1': srcRect = _1; break;
+            case '2': srcRect = _2; break;
+            case '3': srcRect = _3; break;
+            case '4': srcRect = _4; break;
+            case '5': srcRect = _5; break;
+            case '6': srcRect = _6; break;
+            case '7': srcRect = _7; break;
+            case '8': srcRect = _8; break;
+            case '9': srcRect = _9; break;
+        }
+
+        // Définir le rectangle de destination
+        SDL_Rect destRect = {posX, 100, 32, 32};
+
+        // Blit le chiffre sur la surface de l'écran
+        SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRect);
+
+        // Avancer la position en x pour le prochain chiffre
+        posX += 20;
     }
 }
 
