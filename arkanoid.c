@@ -80,6 +80,7 @@ void draw()
     draw_ball(&_ball);
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
+
     write_score(1234);
     update_window();
 }
@@ -116,14 +117,18 @@ int main(int argc, char **argv)
       quit = true;
 
     move_ball(&_ball, &_paddle, bricks, brick_count);
+    animateBricks(delta_t);
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();
     delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
+
     prev = now;
+
+
     if (delta_t > 0)
       SDL_Delay((Uint32)(delta_t * 1000));
-    // printf("dt = %lf\n",delta_t*1000);
+
     prev = SDL_GetPerformanceCounter();
   }
 

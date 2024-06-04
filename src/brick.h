@@ -18,5 +18,7 @@ typedef struct {
 
 void create_brick(brick *brick, int x, int y, int w, int h, int health);
 void damage_brick(brick *b);
+void animateBricks(double delta_t);
+SDL_Rect getBrickSrcRect(brick *b);
 
 #endif //ARKANOID_BRICK_H

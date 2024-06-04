@@ -4,6 +4,8 @@
 
 #include "graphics.h"
 
+
+
 SDL_Surface *load_image(const char *path)
 {
     SDL_Surface *optimizedImage = NULL;
@@ -67,8 +69,9 @@ void draw_paddle(paddle *p) {
 }
 
 void draw_brick(brick *b) {
+    SDL_Rect srcRect = getBrickSrcRect(b);
     SDL_Rect dest = {b->x, b->y, b->w, b->h};
-    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &dest);
+    SDL_BlitSurface(brickSprite, &srcRect, window_surface, &dest);
 }
 
 void draw_bricks(brick *b, int n) {
@@ -121,10 +124,10 @@ void write_score(int score){
         }
 
         // Définir le rectangle de destination
-        SDL_Rect destRect = {posX, 100, 32, 32};
+        SDL_Rect destRectScore = {posX, 100, 32, 32};
 
         // Blit le chiffre sur la surface de l'écran
-        SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRect);
+        SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
 
         // Avancer la position en x pour le prochain chiffre
         posX += 20;

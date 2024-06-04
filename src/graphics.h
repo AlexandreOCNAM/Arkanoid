@@ -33,6 +33,7 @@ void write_score(int score);
 void draw_powerup(PowerUp *p);
 void draw_powerups(PowerUp *p, int n);
 void update_window();
+void animateBricks(double delta_t);
 
 
 #endif //ARKANOID_GRAPHICS_H

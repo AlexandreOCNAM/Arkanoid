@@ -48,10 +48,10 @@ SDL_Rect get_brick_src_rect(int brick_number) {
             srcRect = darkCyanBrick;
             break;
         case 20:
-            srcRect = silverBrick1;
+            srcRect = silverBrickStates[1];
             break;
         case 30:
-            srcRect = goldenBrick1;
+            srcRect = goldenBrickStates[1];
             break;
         default:
             srcRect = defaultBrick;

@@ -22,22 +22,23 @@ SDL_Rect darkRedBrick = {128, 16, 32, 16};
 SDL_Rect darkCyanBrick = {160, 16, 32, 16};
 SDL_Rect defaultBrick = {0, 0, 0, 0};
 
-//Gold brick states
-SDL_Rect goldenBrick1 = {0, 48, 32, 16};
-SDL_Rect goldenBrick2 = {32, 48, 32, 16};
-SDL_Rect goldenBrick3 = {64, 48, 32, 16};
-SDL_Rect goldenBrick4 = {96, 48, 32, 16};
-SDL_Rect goldenBrick5 = {128, 48, 32, 16};
-SDL_Rect goldenBrick6 = {160, 48, 32, 16};
+SDL_Rect goldenBrickStates[6] = {
+        {0, 48, 32, 16},
+        {32, 48, 32, 16},
+        {64, 48, 32, 16},
+        {96, 48, 32, 16},
+        {128, 48, 32, 16},
+        {160, 48, 32, 16}
+};
 
-
-//Silver brick states
-SDL_Rect silverBrick1 = {0, 32, 32, 16};
-SDL_Rect silverBrick2 = {32, 32, 32, 16};
-SDL_Rect silverBrick3 = {64, 32, 32, 16};
-SDL_Rect silverBrick4 = {96, 32, 32, 16};
-SDL_Rect silverBrick5 = {128, 32, 32, 16};
-SDL_Rect silverBrick6 = {160, 32, 32, 16};
+SDL_Rect silverBrickStates[6] = {
+        {0, 32, 32, 16},
+        {32, 32, 32, 16},
+        {64, 32, 32, 16},
+        {96, 32, 32, 16},
+        {128, 32, 32, 16},
+        {160, 32, 32, 16}
+};
 
 //Backgrounds
 SDL_Rect defaultBackground = {0, 128, 48, 64};

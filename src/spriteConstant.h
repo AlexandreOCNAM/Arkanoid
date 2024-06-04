@@ -22,20 +22,9 @@ extern SDL_Rect pinkBrick;
 extern SDL_Rect yellowBrick;
 extern SDL_Rect darkRedBrick;
 extern SDL_Rect darkCyanBrick;
-extern SDL_Rect silverBrick1;
-extern SDL_Rect goldenBrick1;
-extern SDL_Rect goldenBrick2;
-extern SDL_Rect goldenBrick3;
-extern SDL_Rect goldenBrick4;
-extern SDL_Rect goldenBrick5;
-extern SDL_Rect goldenBrick6;
+extern SDL_Rect goldenBrickStates[6];
+extern SDL_Rect silverBrickStates[6];
 extern SDL_Rect defaultBrick;
-extern SDL_Rect silverBrick2;
-extern SDL_Rect silverBrick3;
-extern SDL_Rect silverBrick4;
-extern SDL_Rect silverBrick5;
-extern SDL_Rect silverBrick6;
-
 //Backgrounds
 extern SDL_Rect defaultBackground;
 extern SDL_Rect defaultBackgroundDark;
