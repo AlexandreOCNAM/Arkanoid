@@ -139,6 +139,7 @@ void blit_background(SDL_Rect *dest) {
     const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
     const int window_height = window_surface->h;
+    SDL_Rect tube = {192, 0, 8, 23};
 
     // Check if the window's width and height are multiples of the background image's width and height
     if (window_width % bg_width == 0 && window_height % bg_height == 0) {
@@ -167,7 +168,17 @@ void blit_background(SDL_Rect *dest) {
                 }
             }
     }
+    SDL_Rect blackRect = {416, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
 
+    // Dessiner un rectangle noir
+    SDL_FillRect(window_surface, &blackRect, SDL_MapRGB(window_surface->format, 0, 0, 0));
+
+/*
+    for(int k = 0; k < window_height; k+= tube.h){
+        dest->x = 416;
+        dest->y = k;
+        SDL_BlitSurface(brickSprite, &tube, window_surface, dest);
+    }*/
 }
 
 void update_window() {

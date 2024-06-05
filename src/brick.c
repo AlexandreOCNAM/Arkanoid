@@ -18,12 +18,6 @@ void create_brick(brick *brick, int x, int y, int width, int height, int health)
     brick->h = height;
     brick->health = health;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);
-    // Initialiser srcRect pour les briques dorées et argentées
-    if (health > 100) {  // Exemple: 2 pour dorée, ajustez selon votre logique
-        brick->srcRect = goldenBrickStates[0];
-    } else if (health >= 2) {  // Exemple: 1 pour argentée, ajustez selon votre logique
-        brick->srcRect = silverBrickStates[0];
-    }
 }
 
 
@@ -58,9 +52,9 @@ void animateBricks(double delta_t) {
 }
 
 SDL_Rect getBrickSrcRect(brick *b) {
-    if (b->health > 100) {  // Exemple: 2 pour dorée, ajustez selon votre logique
+    if (b->gold) {  // Exemple: 2 pour dorée, ajustez selon votre logique
         return goldenBrickStates[goldenBrickCurrentState];
-    } else if (b->health >= 2) {  // Exemple: 1 pour argentée, ajustez selon votre logique
+    } else if (b->silver) {  // Exemple: 1 pour argentée, ajustez selon votre logique
         return silverBrickStates[silverBrickCurrentState];
     } else {
         return b->srcRect;  // Autres types de briques

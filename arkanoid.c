@@ -96,7 +96,7 @@ int main(int argc, char **argv)
   init();
 
     // Charger les niveaux
-    load_level("../Levels/niveau2.txt", bricks, &brick_count);
+    load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
   bool quit = false;
   while (!quit)

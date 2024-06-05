@@ -27,22 +27,6 @@ extern SDL_Rect silverBrickStates[6];
 extern SDL_Rect defaultBrick;
 //Backgrounds
 extern SDL_Rect backgrounds[12];
-extern SDL_Rect defaultBackgroundDark;
-
-extern SDL_Rect blueBackground;
-extern SDL_Rect blueBackgroundDark;
-
-extern SDL_Rect greenBackground;
-extern SDL_Rect greenBackgroundDark;
-
-extern SDL_Rect redBackground ;
-extern SDL_Rect redBackgroundDark;
-
-extern SDL_Rect orangeBackground;
-extern SDL_Rect orangeBackgroundDark;
-
-extern SDL_Rect purpleBackground;
-extern SDL_Rect purpleBackgroundDark;
 
 // Lettres de l'alphabet
 extern SDL_Rect A;

@@ -48,10 +48,10 @@ SDL_Rect get_brick_src_rect(int brick_number) {
             srcRect = darkCyanBrick;
             break;
         case 20:
-            srcRect = silverBrickStates[1];
+            srcRect = silverBrickStates[0];
             break;
         case 30:
-            srcRect = goldenBrickStates[1];
+            srcRect = goldenBrickStates[0];
             break;
         default:
             srcRect = defaultBrick;
@@ -107,6 +107,16 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
                 brick *brick = &bricks[*brick_count];
                 create_brick(brick, x * BRICK_WIDTH, y * BRICK_HEIGHT, BRICK_WIDTH, BRICK_HEIGHT, brick_health);
                 brick->srcRect = srcRect; // Définit le rectangle source basé sur le numéro
+                if(brick_number == 20){
+                    brick->silver = true;
+                }
+                else if (brick_number == 30){
+                    brick->gold = true;
+                }
+                else{
+                    brick->silver = false;
+                    brick->gold = false;
+                }
                 (*brick_count)++;
                 // printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
             }
