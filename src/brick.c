@@ -11,24 +11,25 @@ static double timeAccumulator;
 static int goldenBrickCurrentState = 0;
 static int silverBrickCurrentState = 0;
 
-void create_brick(brick *brick, int x, int y, int width, int height, int health) {
+void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x;
     brick->y = y;
     brick->w = width;
     brick->h = height;
     brick->health = health;
+    brick->points = points;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);
 }
 
 
 void damage_brick(brick *b) {
     b->health--;
+    if(b->health == 0)
+        score += b->points;
 }
 
 
 void animateBricks(double delta_t) {
-    printf("dt = %lf\n",delta_t*1000);
-    printf("Time accumulator: %f ms\n", timeAccumulator);
     if(delta_t > 0)
         timeAccumulator += delta_t*1000;
 
