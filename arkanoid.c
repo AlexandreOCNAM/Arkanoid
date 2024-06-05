@@ -25,6 +25,7 @@ SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
 SDL_Surface *textSprite = NULL;
 
+
 Uint64 prev, now; // timers
 
 int x_vault;
@@ -81,7 +82,7 @@ void draw()
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
 
-    write_score(1234);
+    write_score(score);
     update_window();
 }
 
