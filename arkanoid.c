@@ -5,6 +5,7 @@
 #include "src/graphics.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
+#include "src/spriteConstant.h"
 
 const int FPS = 60.0;
 // struct { double x; double y; } ball_speed;
@@ -17,15 +18,15 @@ const int FPS = 60.0;
 //} ball;
 
 ball _ball = {0};
-SDL_Surface *BrickSprite = NULL;
 
 SDL_Window *window = NULL;
 SDL_Surface *window_surface = NULL;
 SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
+SDL_Surface *textSprite = NULL;
 
 Uint64 prev, now; // timers
-double delta_t;   // durée frame en ms
+
 int x_vault;
 
 SDL_Rect dest = {0, 0, 100, 100};
@@ -40,7 +41,7 @@ SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[1] = {powerup};
+PowerUp powerups[0] = {powerup};
 
 void init()
 {
@@ -65,17 +66,6 @@ void init()
 //  ball.v.y = 1.4;
 //
   now = SDL_GetPerformanceCounter();
-
-
-  // init the sprites of the bricks
-  BrickSprite = load_image("./Arkanoid_sprites.bmp");
-  if (BrickSprite == NULL)
-  {
-    perror("Error while loading the brick sprite");
-    exit(1);
-  }
-  SDL_SetColorKey(BrickSprite, true, 0); // 0: 00/00/00 noir -> transparent
-
   _paddle = create_paddle();
 }
 
@@ -91,6 +81,7 @@ void draw()
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
 
+    write_score(1234);
     update_window();
 }
 
@@ -126,14 +117,18 @@ int main(int argc, char **argv)
       quit = true;
 
     move_ball(&_ball, &_paddle, bricks, brick_count);
+    animateBricks(delta_t);
     draw();
     // fill test rect with white
     now = SDL_GetPerformanceCounter();
     delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
+
     prev = now;
+
+
     if (delta_t > 0)
       SDL_Delay((Uint32)(delta_t * 1000));
-    // printf("dt = %lf\n",delta_t*1000);
+
     prev = SDL_GetPerformanceCounter();
   }
 

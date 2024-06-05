@@ -1,6 +1,7 @@
 #ifndef EXTRACTFILE_H
 #define EXTRACTFILE_H
 
+#include "spriteConstant.h"
 #include "brick.h"
 
 

@@ -1,6 +1,6 @@
 #include "ball.h"
-#include "collisions.h"
 #include "constant.h"
+
 
 #define MAX_SPEED 7
 #define ZONE_SIZE SCREEN_HEIGHT / 4
@@ -35,15 +35,15 @@ void ball_collision_bricks(ball *b, brick *bricks, int n) {
             int closest_brick_index = -1;
 
             // Determine the zone of the ball
-            int zone_x = b->x / (SCREEN_WIDTH / 2);
-            int zone_y = b->y / (SCREEN_HEIGHT / 2);
+            int zone_x = b->x / (PLAYABLE_ZONE_WIDTH / 2);
+            int zone_y = b->y / (PLAYABLE_ZONE_HEIGHT / 2);
 
             // Predict the ball's future position
             SDL_Rect future_ball_rect = {b->x + b->vx / steps, b->y + b->vy / steps, b->w, b->h};
 
             for (int i = 0; i < n; i++) {
                 // Check if the brick is in the same zone as the ball
-                if (bricks[i].health > 0 && bricks[i].x / (SCREEN_WIDTH / 2) == zone_x && bricks[i].y / (SCREEN_HEIGHT / 2) == zone_y) {
+                if (bricks[i].health > 0 && bricks[i].x / (PLAYABLE_ZONE_WIDTH / 2) == zone_x && bricks[i].y / (PLAYABLE_ZONE_HEIGHT / 2) == zone_y) {
                     SDL_Rect brick_rect = {bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h};
                     if (SDL_HasIntersection(&future_ball_rect, &brick_rect)) {
                         // Calculate the distance from the ball to the brick
@@ -91,10 +91,10 @@ void ball_collision_bricks(ball *b, brick *bricks, int n) {
 void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
 
-    if (b->x < 0 || b->x > SCREEN_WIDTH - b->w) {
+    if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < 0 || b->y > SCREEN_HEIGHT - b->h) {
+    if (b->y < 0 || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
         b->vy = -b->vy;
     }
 
