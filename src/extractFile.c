@@ -72,6 +72,14 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
     int x = 0;
     *brick_count = 0;
 
+    // Lire la première ligne pour obtenir le numéro de background
+    if (fgets(line, sizeof(line), file)) {
+        sscanf(line, "%d", &background);
+    } else {
+        fprintf(stderr, "Failed to read background number\n");
+        exit(1);
+    }
+
     while (fgets(line, sizeof(line), file)) {
         if (line[0] == '\n') {
             x++;
@@ -87,13 +95,11 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
         if (sscanf(line, "%dx%d", &brick_type, &brick_number) == 2) {
             SDL_Rect srcRect = get_brick_src_rect(brick_number);
             int brick_health;
-            if(brick_type == 0){
+            if (brick_type == 0) {
                 brick_health = 1;
-            }
-            else if(brick_type == 1){
+            } else if (brick_type == 1) {
                 brick_health = 2;
-            }
-            else{
+            } else {
                 brick_health = 999999;
             }
 
@@ -102,7 +108,7 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
                 create_brick(brick, x * BRICK_WIDTH, y * BRICK_HEIGHT, BRICK_WIDTH, BRICK_HEIGHT, brick_health);
                 brick->srcRect = srcRect; // Définit le rectangle source basé sur le numéro
                 (*brick_count)++;
-                //printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
+                // printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
             }
         }
 

@@ -135,8 +135,8 @@ void write_score(int score){
 }
 
 void blit_background(SDL_Rect *dest) {
-    const int bg_width = defaultBackground.w;
-    const int bg_height = defaultBackground.h;
+    const int bg_width = backgrounds[background].w;
+    const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
     const int window_height = window_surface->h;
 
@@ -147,7 +147,7 @@ void blit_background(SDL_Rect *dest) {
             {
                 dest->x = i;
                 dest->y = j;
-                if (SDL_BlitSurface(brickSprite, &defaultBackground, window_surface, dest) != 0)
+                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);
@@ -160,7 +160,7 @@ void blit_background(SDL_Rect *dest) {
             {
                 dest->x = i;
                 dest->y = j;
-                if (SDL_BlitSurface(brickSprite, &defaultBackground, window_surface, dest) != 0)
+                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, dest) != 0)
                 {
                     perror("Error while blitting the background");
                     exit(1);

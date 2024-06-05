@@ -26,7 +26,7 @@ extern SDL_Rect goldenBrickStates[6];
 extern SDL_Rect silverBrickStates[6];
 extern SDL_Rect defaultBrick;
 //Backgrounds
-extern SDL_Rect defaultBackground;
+extern SDL_Rect backgrounds[12];
 extern SDL_Rect defaultBackgroundDark;
 
 extern SDL_Rect blueBackground;

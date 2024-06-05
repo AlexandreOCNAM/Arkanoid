@@ -41,24 +41,20 @@ SDL_Rect silverBrickStates[6] = {
 };
 
 //Backgrounds
-SDL_Rect defaultBackground = {0, 128, 48, 64};
-SDL_Rect defaultBackgroundDark = {0, 192, 48, 64};
-
-SDL_Rect blueBackground = {64, 128, 64, 64};
-SDL_Rect blueBackgroundDark = {64, 192, 64, 64};
-
-SDL_Rect greenBackground = {128, 128, 64, 64};
-SDL_Rect greenBackgroundDark = {128, 192, 64, 64};
-
-SDL_Rect redBackground = {256, 128, 64, 64};
-SDL_Rect redBackgroundDark = {256, 192, 64, 64};
-
-SDL_Rect orangeBackground = {320, 128, 64, 64};
-SDL_Rect orangeBackgroundDark = {320, 192, 64, 64};
-
-SDL_Rect purpleBackground = {384, 128, 64, 64};
-SDL_Rect purpleBackgroundDark = {384, 192, 64, 64};
-
+SDL_Rect backgrounds[12] = {
+        {0, 128, 48, 64}, //default
+        {0, 192, 48, 64}, //default dark
+        {64, 128, 64, 64}, //blue
+        {64, 192, 64, 64}, //blue dark
+        {128, 128, 64, 64}, //green
+        {128, 192, 64, 64}, //green dark
+        {256, 128, 64, 64}, //red
+        {256, 192, 64, 64}, //red dark
+        {320, 128, 64, 64}, //orange
+        {320, 192, 64, 64}, //orange dark
+        {384, 128, 64, 64}, //purple
+        {384, 192, 64, 64} //purple dark
+};
 
 SDL_Rect _0 = {0, 32, 32, 32};
 SDL_Rect _1 = {32, 32, 32, 32};
