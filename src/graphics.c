@@ -56,6 +56,13 @@ SDL_Surface* init_window()
 }
 
 void draw_ball(ball *b) {
+    if (b->vy == 0){
+        // draw 3 rectangles to represent the ball's trajectory on X axis
+        for (int i = 0; i < 3; i++) {
+            SDL_Rect rect = {(b->x + b->w/2) + b->vx * i *10 ,b->y - i* BALL_MAX_SPEED*10, 3, 3};
+            SDL_FillRect(window_surface, &rect, SDL_MapRGB(window_surface->format, 255, 255, 255));
+        }
+    }
     SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
 

@@ -59,10 +59,17 @@ void handle_input(game* g) {
     }
     if (g->l->is_started == 0) {
         if (keys[SDL_SCANCODE_LEFT]) {
-            g->gc->b.vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->b.vx, BALL_MAX_SPEED));
+            g->gc->b.vx--;
         }
         else if (keys[SDL_SCANCODE_RIGHT]){
-            g->gc->b.vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->b.vx, BALL_MAX_SPEED));
+            g->gc->b.vx++;
+        }
+        // limit the X speed of the ball to BALL_MAX_SPEED
+        if (g->gc->b.vx > BALL_MAX_SPEED) {
+            g->gc->b.vx = BALL_MAX_SPEED;
+        }
+        else if (g->gc->b.vx < -BALL_MAX_SPEED) {
+            g->gc->b.vx = -BALL_MAX_SPEED;
         }
     }
     else {

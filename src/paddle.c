@@ -7,7 +7,7 @@
 
 paddle create_paddle() {
     paddle result = {
-            128, SCREEN_HEIGHT -16, 128, 32, 5, 0
+            128, SCREEN_HEIGHT -16, 128, 32, 10, 0
     };
     return result;
 }
