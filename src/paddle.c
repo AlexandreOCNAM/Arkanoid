@@ -33,8 +33,8 @@ void strafe_paddle(paddle *p, int direction) {
     if (p->x < 0) {
         p->x = 0;
     }
-    if (p->x + p->w > SCREEN_WIDTH) {
-        p->x = SCREEN_WIDTH - p->w;
+    if (p->x + p->w > PLAYABLE_ZONE_WIDTH) {
+        p->x = PLAYABLE_ZONE_WIDTH - p->w;
     }
     p->x += p->vx;
 }

@@ -27,6 +27,9 @@ add_executable(${PROJECT_NAME}
 		src/constant.h
 		src/powerup.c
 		src/powerup.h
+        src/spriteConstant.h
+		src/spriteConstant.c
+		src/powerup.h
 		src/game.c
 		src/game.h
 		src/level.c

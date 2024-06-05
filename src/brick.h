@@ -7,6 +7,8 @@
 
 #include "powerup.h"
 #include <SDL2/SDL.h>
+#include "constant.h"
+#include <stdbool.h>
 
 typedef struct {
     int x, y;
@@ -14,10 +16,15 @@ typedef struct {
     SDL_Rect srcRect;
     int health;
     PowerUp powerup;
+    bool silver;
+    bool gold;
+    int points;
 } brick;
 
-void create_brick(brick *brick, int x, int y, int w, int h, int health);
+void create_brick(brick *brick, int x, int y, int w, int h, int health, int points);
 void damage_brick(brick *b);
+void animateBricks(double delta_t);
+SDL_Rect getBrickSrcRect(brick *b);
 int is_brick_dead(brick *b);
 int is_brick_breakable(brick *b);
 

@@ -5,6 +5,7 @@
 #include "src/graphics.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
+#include "src/spriteConstant.h"
 #include "src/game.h"
 
 const int FPS = 60.0;
@@ -18,16 +19,19 @@ const int FPS = 60.0;
 //} ball;
 
 ball _ball = {0};
-SDL_Surface *BrickSprite = NULL;
 
 SDL_Window *window = NULL;
 SDL_Surface *window_surface = NULL;
 SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
+SDL_Surface *textSprite = NULL;
+
 
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
+
+SDL_Rect dest = {0, 0, 100, 100};
 
 
 paddle _paddle = {0};
@@ -74,6 +78,7 @@ void init()
 void draw()
 {
   // remplit le fond
+    blit_background(&dest);
 
   // affiche balle
 //  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
@@ -82,6 +87,7 @@ void draw()
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
 
+    write_score(score);
     update_window();
 }
 
@@ -101,6 +107,7 @@ int main(int argc, char **argv)
 
     // Charger les niveaux
 //    load_level("../Levels/niveau4.txt", bricks, &brick_count);
+    animateBricks(delta_t);
 
 //  bool quit = false;
 //  while (!quit)
