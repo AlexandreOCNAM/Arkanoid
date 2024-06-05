@@ -30,8 +30,6 @@ void damage_brick(brick *b) {
 
 
 void animateBricks(double delta_t) {
-    printf("dt = %lf\n",delta_t*1000);
-    printf("Time accumulator: %f ms\n", timeAccumulator);
     if(delta_t > 0)
         timeAccumulator += delta_t*1000;
 
