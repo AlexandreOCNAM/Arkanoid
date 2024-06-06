@@ -83,6 +83,7 @@ void update(game *g) {
     if (g->l->is_started) {
         if (is_level_over(g->l)) {
             g->level_number += 1;
+
             reset_level(g->l);
             reset_game(g);
             create_level(g->l, g->level_number);
