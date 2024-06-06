@@ -50,7 +50,7 @@ void ball_paddle_collision(ball *b, paddle *p) {
     }
 }
 
-void paddle_powerup_collision(paddle *p, PowerUp *pu){
+void paddle_powerup_collision(paddle *p, PowerUp *pu) {
     if (p->x + p->w >= pu->x && p->x <= pu->x + pu->w && p->y + p->h >= pu->y && p->y <= pu->y + pu->h) {
         pu->active = 0;
         apply_powerup(p, pu->type);

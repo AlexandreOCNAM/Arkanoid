@@ -5,7 +5,7 @@
 #include "src/graphics.h"
 #include "src/extractFile.h"
 #include "src/powerup.h"
-#include "src/spriteConstant.h"
+#include "src/game.h"
 
 const int FPS = 60.0;
 // struct { double x; double y; } ball_speed;
@@ -18,19 +18,18 @@ const int FPS = 60.0;
 //} ball;
 
 ball _ball = {0};
+SDL_Surface *BrickSprite = NULL;
 
 SDL_Window *window = NULL;
 SDL_Surface *window_surface = NULL;
 SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
-SDL_Surface *textSprite = NULL;
+
 
 
 Uint64 prev, now; // timers
-
+double delta_t;   // durée frame en ms
 int x_vault;
-
-SDL_Rect dest = {0, 0, 100, 100};
 
 
 paddle _paddle = {0};
@@ -42,7 +41,7 @@ SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
 const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[0] = {powerup};
+PowerUp powerups[1] = {powerup};
 
 void init()
 {
@@ -67,13 +66,16 @@ void init()
 //  ball.v.y = 1.4;
 //
   now = SDL_GetPerformanceCounter();
+
+
+  // init the sprites of the bricks
+
   _paddle = create_paddle();
 }
 
 void draw()
 {
   // remplit le fond
-    blit_background(&dest);
 
   // affiche balle
 //  SDL_Rect dstBall = {_ball.x, _ball.y, 0, 0};
@@ -82,57 +84,56 @@ void draw()
     draw_paddle(&_paddle);
     draw_bricks(bricks, brick_count);
 
-    write_score(score);
     update_window();
 }
 
 int main(int argc, char **argv)
 {
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
-  {
-    perror("Error while initializing SDL");
-    return 1;
-  }
+//  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
+//  {
+//    perror("Error while initializing SDL");
+//    return 1;
+//  }
 
-  init();
+    game *g = malloc(sizeof(game));
+    init_game(g);
+    play_game(g);
+
+//  init();
 
     // Charger les niveaux
-    load_level("../Levels/niveau4.txt", bricks, &brick_count);
+//    load_level("../Levels/niveau4.txt", bricks, &brick_count);
 
-  bool quit = false;
-  while (!quit)
-  {
-    SDL_PumpEvents();
-    const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    if (keys[SDL_SCANCODE_LEFT]) {
-        // collision of the paddle with the left wall
-        strafe_paddle(&_paddle, 0);
-    }
-    else if (keys[SDL_SCANCODE_RIGHT]){
-      // collision of the paddle with the right wall
-        strafe_paddle(&_paddle, 1);
-    }
-    else
-        _paddle.vx = 0;
-    if (keys[SDL_SCANCODE_ESCAPE])
-      quit = true;
-
-    move_ball(&_ball, &_paddle, bricks, brick_count);
-    animateBricks(delta_t);
-    draw();
-    // fill test rect with white
-    now = SDL_GetPerformanceCounter();
-    delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
-
-    prev = now;
-
-
-    if (delta_t > 0)
-      SDL_Delay((Uint32)(delta_t * 1000));
-
-    prev = SDL_GetPerformanceCounter();
-  }
-
-  SDL_Quit();
+//  bool quit = false;
+//  while (!quit)
+//  {
+//    SDL_PumpEvents();
+//    const Uint8 *keys = SDL_GetKeyboardState(NULL);
+//    if (keys[SDL_SCANCODE_LEFT]) {
+//        // collision of the paddle with the left wall
+//        strafe_paddle(&_paddle, 0);
+//    }
+//    else if (keys[SDL_SCANCODE_RIGHT]){
+//      // collision of the paddle with the right wall
+//        strafe_paddle(&_paddle, 1);
+//    }
+//    else
+//        _paddle.vx = 0;
+//    if (keys[SDL_SCANCODE_ESCAPE])
+//      quit = true;
+//
+//    move_ball(&_ball, &_paddle, bricks, brick_count);
+//    draw();
+//    // fill test rect with white
+//    now = SDL_GetPerformanceCounter();
+//    delta_t = 1.0 / FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
+//    prev = now;
+//    if (delta_t > 0)
+//      SDL_Delay((Uint32)(delta_t * 1000));
+//    // printf("dt = %lf\n",delta_t*1000);
+//    prev = SDL_GetPerformanceCounter();
+//  }
+//
+//  SDL_Quit();
   return 0;
 }

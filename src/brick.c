@@ -3,13 +3,10 @@
 //
 
 #include "brick.h"
-#include "spriteConstant.h"
-#include <SDL2/SDL.h>
 
-
-static double timeAccumulator;
-static int goldenBrickCurrentState = 0;
-static int silverBrickCurrentState = 0;
+static int timeAccumulator = 0;
+static int goldenBrickState = 0;
+static int silverBrickState = 0;
 
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x;
@@ -22,14 +19,25 @@ void create_brick(brick *brick, int x, int y, int width, int height, int health,
 }
 
 
-void damage_brick(brick *b) {
-    b->health--;
-    if(b->health == 0)
-        score += b->points;
+int damage_brick(brick *b) {
+    if (b->health == -1) {
+        return -1;
+    }
+    b->health = fmax(0, b->health - 1);
+    if (b->health == 0) {
+        return b->points;
+    }
 }
 
+int is_brick_dead(brick *b) {
+    return b->health == 0;
+}
 
-void animateBricks(double delta_t) {
+int is_brick_breakable(brick *b) {
+    return b->health == -1;
+}
+
+void update_bricks(double delta_t) {
     if(delta_t > 0)
         timeAccumulator += delta_t*1000;
 
@@ -38,26 +46,26 @@ void animateBricks(double delta_t) {
     if (timeAccumulator >= 5000) {
         int frame = (int)((timeAccumulator - 5000) / 100) % 6;  // 6 états, changer toutes les 200 ms
 
-        goldenBrickCurrentState = frame;
-        silverBrickCurrentState = frame;
+        goldenBrickState = frame;
+        silverBrickState = frame;
 
         if (timeAccumulator >= 5500) {  // Réinitialiser après 6 secondes
             timeAccumulator = 0;
-            goldenBrickCurrentState = 0;
-            silverBrickCurrentState = 0;
+            goldenBrickState = 0;
+            silverBrickState = 0;
         }
         // Impression de débogage
-        printf("Animating bricks: frame %d, timeAccumulator: %f\n", frame, timeAccumulator);
+//        printf("Animating bricks: frame %d, timeAccumulator: %f\n", frame, timeAccumulator);
     }
 
 }
 
-SDL_Rect getBrickSrcRect(brick *b) {
-    if (b->gold) {  // Exemple: 2 pour dorée, ajustez selon votre logique
-        return goldenBrickStates[goldenBrickCurrentState];
-    } else if (b->silver) {  // Exemple: 1 pour argentée, ajustez selon votre logique
-        return silverBrickStates[silverBrickCurrentState];
-    } else {
-        return b->srcRect;  // Autres types de briques
+SDL_Rect get_brick_rect(brick *b) {
+    if (b->isGold) {
+        return goldenBrickStates[goldenBrickState];
     }
+    if (b->isSilver) {
+        return silverBrickStates[silverBrickState];
+    }
+    return b->srcRect;
 }
