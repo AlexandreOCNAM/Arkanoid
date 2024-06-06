@@ -17,7 +17,7 @@ void init_game(game* g) {
         perror("Error while initializing SDL");
         exit(1);
     }
-    init_level(g, 3);
+    init_level(g, 1);
     init_window();
 }
 
@@ -85,7 +85,7 @@ void update(game *g) {
             g->level_number += 1;
             reset_level(g->l);
             reset_game(g);
-            create_level(g->l, ++g->level_number);
+            create_level(g->l, g->level_number);
         }
         else {
             move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks, &g->l->score);

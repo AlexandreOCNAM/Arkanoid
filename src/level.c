@@ -12,7 +12,7 @@ void create_level(level *l, int level_number) {
     l->bricks = calloc(sizeof(brick), 256);
 
     char path[50] = {0};
-    sprintf(path, "./Levels/niveau%d.txt", level_number);
+    sprintf(path, "../Levels/niveau%d.txt", level_number);
     printf("Loading level from %s\n", path);
     load_level(path, l->bricks, &l->num_bricks);
 }

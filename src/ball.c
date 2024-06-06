@@ -37,7 +37,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score) {
     }
     // Check for collision with bricks
     for (int i = 0; i < n; i++) {
-        if (bricks[i].health > 0) {
+        if (bricks[i].health > 0 || bricks[i].health == -1) {
             if (b->x < bricks[i].x + bricks[i].w &&
                 b->x + b->w > bricks[i].x &&
                 b->y < bricks[i].y + bricks[i].h &&
