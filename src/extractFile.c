@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "graphics.h"
+
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 16
 #define BRICKS_PER_ROW 13
@@ -100,6 +102,14 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
     int y = 0;
     int x = 0;
     *brick_count = 0;
+
+    if(fgets(line, sizeof(line), file)){
+        sscanf(line, "%d", &background);
+    }
+    else{
+        perror("Error while reading background color");
+        exit(1);
+    }
 
     while (fgets(line, sizeof(line), file)) {
         if (line[0] == '\n') {
