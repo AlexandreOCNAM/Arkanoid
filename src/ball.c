@@ -1,6 +1,6 @@
 #include "ball.h"
 #include "collisions.h"
-#include "constant.h"
+#include "game.h"
 
 #define MAX_SPEED 7
 #define ZONE_SIZE SCREEN_HEIGHT / 4
@@ -26,7 +26,7 @@ ball create_ball() {
 
 
 
-void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
 
     if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
@@ -58,7 +58,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score) {
                 }
 
                 // Reduce the brick's health
-                *score += fmax(damage_brick(&bricks[i]), 0);
+                score += fmax(damage_brick(&bricks[i]), 0);
                 break;
             }
         }

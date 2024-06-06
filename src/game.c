@@ -5,9 +5,11 @@
 #include "game.h"
 #include "extractFile.h"
 #include "graphics.h"
+#include "constant.h"
 
 
 #define FPS 60
+
 
 void reset_game_components(game_components *gc);
 
@@ -89,7 +91,7 @@ void update(game *g) {
             create_level(g->l, g->level_number);
         }
         else {
-            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks, &g->l->score);
+            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks);
         }
     }
 }
@@ -104,7 +106,7 @@ void render(game *g) {
     draw_ball(&g->gc->b);
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
-    write_score(g->l->score);
+    write_score(score);
     update_window();
 }
 

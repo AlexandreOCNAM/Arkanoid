@@ -7,7 +7,7 @@
 
 paddle create_paddle() {
     paddle result = {
-            128, SCREEN_HEIGHT -16, 128, 32, 5, 0
+            128, PLAYABLE_ZONE_HEIGHT -16, 128, 32, 5, 0
     };
     return result;
 }
@@ -33,8 +33,8 @@ void strafe_paddle(paddle *p, int direction) {
     if (p->x < 0) {
         p->x = 0;
     }
-    if (p->x + p->w > SCREEN_WIDTH) {
-        p->x = SCREEN_WIDTH - p->w;
+    if (p->x + p->w > PLAYABLE_ZONE_WIDTH) {
+        p->x = PLAYABLE_ZONE_WIDTH - p->w;
     }
     p->x += p->vx;
 }
@@ -53,7 +53,7 @@ void apply_powerup(paddle *p, int type) {
 
 void reset_paddle(paddle *p) {
     p->x = 128;
-    p->y = SCREEN_HEIGHT - 16;
+    p->y = PLAYABLE_ZONE_HEIGHT - 16;
     p->w = 128;
     p->h = 32;
     p->vx = 5;

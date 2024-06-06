@@ -6,7 +6,6 @@
 #include "extractFile.h"
 
 void create_level(level *l, int level_number) {
-    l->score = 0;
     l->lives = 3;
     l->is_started = 0;
     l->bricks = calloc(sizeof(brick), 256);

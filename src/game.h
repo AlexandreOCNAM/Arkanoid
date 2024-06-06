@@ -11,6 +11,8 @@
 #include "ball.h"
 #include "level.h"
 
+int score;
+
 typedef struct {
     ball b;
     paddle p;

@@ -9,7 +9,6 @@
 #include "brick.h"
 
 typedef struct {
-    int score;
     int lives;
     int is_started;
     brick *bricks;
