@@ -6,13 +6,12 @@
 #include "extractFile.h"
 
 void create_level(level *l, int level_number) {
-    l->score = 0;
     l->lives = 3;
     l->is_started = 0;
     l->bricks = calloc(sizeof(brick), 256);
 
     char path[50] = {0};
-    sprintf(path, "./Levels/niveau%d.txt", level_number);
+    sprintf(path, "../Levels/niveau%d.txt", level_number);
     printf("Loading level from %s\n", path);
     load_level(path, l->bricks, &l->num_bricks);
 }

@@ -15,7 +15,7 @@ extern SDL_Surface *window_surface;
 extern SDL_Surface *plancheSprites;
 extern SDL_Surface *brickSprite;
 
-
+extern int background;
 static SDL_Rect dest = {0, 0, 100, 100};
 
 SDL_Surface *load_image(const char *path);

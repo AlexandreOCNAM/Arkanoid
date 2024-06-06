@@ -12,7 +12,7 @@ SDL_Rect srcBrick = {0, 0, 32, 16};
 
 SDL_Surface *textSprite;
 
-static int background = 0;
+int background = 0;
 SDL_Rect backgrounds[12] = {
         {0, 128, 48, 64}, //default
         {0, 192, 48, 64}, //default dark
