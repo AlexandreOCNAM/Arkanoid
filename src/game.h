@@ -6,6 +6,7 @@
 #define ARKANOID_GAME_H
 
 #include <stdbool.h>
+#include <time.h>
 #include "brick.h"
 #include "ball.h"
 #include "level.h"

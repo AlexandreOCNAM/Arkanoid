@@ -17,7 +17,7 @@ void init_game(game* g) {
         perror("Error while initializing SDL");
         exit(1);
     }
-    init_level(g, 1);
+    init_level(g, 3);
     init_window();
 }
 
@@ -35,9 +35,10 @@ _Noreturn void play_game(game* g) {
     while (1) {
         handle_input(g);
         update(g);
-        render(g);
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
+        update_bricks(delta_t);
+        render(g);
         prev = now;
         if (delta_t > 0) {
             SDL_Delay(delta_t * 1000);
@@ -87,7 +88,7 @@ void update(game *g) {
             create_level(g->l, ++g->level_number);
         }
         else {
-            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks);
+            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks, &g->l->score);
         }
     }
 }
@@ -102,6 +103,7 @@ void render(game *g) {
     draw_ball(&g->gc->b);
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
+    write_score(g->l->score);
     update_window();
 }
 

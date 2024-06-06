@@ -30,7 +30,8 @@ add_executable(${PROJECT_NAME}
 		src/game.c
 		src/game.h
 		src/level.c
-		src/level.h)
+		src/level.h
+)
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 
 if (TARGET SDL2::SDL2)
@@ -45,4 +46,5 @@ file(COPY public/sprites.bmp
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 file(COPY public/Arkanoid_sprites.bmp
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
-
+file(COPY public/Arkanoid_ascii.bmp
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)

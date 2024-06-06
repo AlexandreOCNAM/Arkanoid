@@ -16,7 +16,7 @@ typedef struct {
 } ball;
 
 ball create_ball();
-void move_ball(ball *b, paddle *p, brick *bricks, int n);
+void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score);
 void apply_ball_powerup(ball *b, PowerUp *p);
 int is_colliding(ball *b, SDL_Rect *r);
 void handle_paddle_collision(ball *b, paddle *p);

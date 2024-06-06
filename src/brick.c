@@ -4,21 +4,29 @@
 
 #include "brick.h"
 
-void create_brick(brick *brick, int x, int y, int width, int height, int health) {
+static int timeAccumulator = 0;
+static int goldenBrickState = 0;
+static int silverBrickState = 0;
+
+void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x;
     brick->y = y;
     brick->w = width;
     brick->h = height;
     brick->health = health;
+    brick->points = points;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);
 }
 
 
-void damage_brick(brick *b) {
+int damage_brick(brick *b) {
     if (b->health == -1) {
-        return;
+        return -1;
     }
     b->health = fmax(0, b->health - 1);
+    if (b->health == 0) {
+        return b->points;
+    }
 }
 
 int is_brick_dead(brick *b) {
@@ -27,4 +35,37 @@ int is_brick_dead(brick *b) {
 
 int is_brick_breakable(brick *b) {
     return b->health == -1;
+}
+
+void update_bricks(double delta_t) {
+    if(delta_t > 0)
+        timeAccumulator += delta_t*1000;
+
+
+    // Animer toutes les 5 secondes
+    if (timeAccumulator >= 5000) {
+        int frame = (int)((timeAccumulator - 5000) / 100) % 6;  // 6 états, changer toutes les 200 ms
+
+        goldenBrickState = frame;
+        silverBrickState = frame;
+
+        if (timeAccumulator >= 5500) {  // Réinitialiser après 6 secondes
+            timeAccumulator = 0;
+            goldenBrickState = 0;
+            silverBrickState = 0;
+        }
+        // Impression de débogage
+//        printf("Animating bricks: frame %d, timeAccumulator: %f\n", frame, timeAccumulator);
+    }
+
+}
+
+SDL_Rect get_brick_rect(brick *b) {
+    if (b->isGold) {
+        return goldenBrickStates[goldenBrickState];
+    }
+    if (b->isSilver) {
+        return silverBrickStates[silverBrickState];
+    }
+    return b->srcRect;
 }

@@ -25,6 +25,8 @@ SDL_Surface *window_surface = NULL;
 SDL_Surface *plancheSprites = NULL;
 SDL_Surface *brickSprite = NULL;
 
+
+
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
