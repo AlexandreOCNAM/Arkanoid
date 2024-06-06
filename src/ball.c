@@ -1,5 +1,9 @@
 #include "ball.h"
+#include "collisions.h"
 #include "constant.h"
+
+#define MAX_SPEED 7
+#define ZONE_SIZE SCREEN_HEIGHT / 4
 
 
 
@@ -20,28 +24,28 @@ ball create_ball() {
     return result;
 }
 
-int ball_collision_bricks(ball *b, brick *bricks, int n) {
+void ball_collision_bricks(ball *b, brick *bricks, int n) {
     int steps = fmax(abs(b->vx), abs(b->vy));
-    float fx = (float)b->x;
-    float fy = (float)b->y;
 
     for (int step = 0; step < steps; step++) {
-        int collision = 0;
-        float min_distance = INFINITY;
-        int closest_brick_index = -1;
+        int collision;
+        do {
+            collision = 0;
+            float min_distance = INFINITY;
+            int closest_brick_index = -1;
 
             // Determine the zone of the ball
-            int zone_x = b->x / (PLAYABLE_ZONE_WIDTH / 2);
-            int zone_y = b->y / (PLAYABLE_ZONE_HEIGHT / 2);
+            int zone_x = b->x / (SCREEN_WIDTH / 2);
+            int zone_y = b->y / (SCREEN_HEIGHT / 2);
 
             // Predict the ball's future position
             SDL_Rect future_ball_rect = {b->x + b->vx / steps, b->y + b->vy / steps, b->w, b->h};
-        // Predict the ball's future position
-        SDL_Rect future_ball_rect = {(int)(fx + b->vx / steps), (int)(fy + b->vy / steps), b->w, b->h};
 
             for (int i = 0; i < n; i++) {
                 // Check if the brick is in the same zone as the ball
-                if (bricks[i].health > 0 && bricks[i].x / (PLAYABLE_ZONE_WIDTH / 2) == zone_x && bricks[i].y / (PLAYABLE_ZONE_HEIGHT / 2) == zone_y) {
+                    if (bricks[i].health == -1 || bricks[i].health > 0
+                        && bricks[i].x / (SCREEN_WIDTH / 2) == zone_x
+                        && bricks[i].y / (SCREEN_HEIGHT / 2) == zone_y) {
                     SDL_Rect brick_rect = {bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h};
                     if (SDL_HasIntersection(&future_ball_rect, &brick_rect)) {
                         // Calculate the distance from the ball to the brick
@@ -49,51 +53,51 @@ int ball_collision_bricks(ball *b, brick *bricks, int n) {
                         float dy = b->y + b->h / 2 - (bricks[i].y + bricks[i].h / 2);
                         float distance = sqrt(dx * dx + dy * dy);
 
-                // If this brick is closer than the current closest brick, update the closest brick
-                if (distance < min_distance) {
-                    min_distance = distance;
-                    closest_brick_index = i;
+                        // If this brick is closer than the current closest brick, update the closest brick
+                        if (distance < min_distance) {
+                            min_distance = distance;
+                            closest_brick_index = i;
+                        }
+                    }
                 }
             }
-        }
 
-        if (closest_brick_index != -1) {
-            // Determine the collision edge and adjust the ball's velocity
-            SDL_Rect intersect_rect;
-            SDL_IntersectRect(&future_ball_rect, &(SDL_Rect){bricks[closest_brick_index].x, bricks[closest_brick_index].y, bricks[closest_brick_index].w, bricks[closest_brick_index].h}, &intersect_rect);
-            if (intersect_rect.w >= intersect_rect.h) {
-                // Collision on vertical edge
-                b->vy = -b->vy;
-            } else {
-                // Collision on horizontal edge
-                b->vx = -b->vx;
+            if (closest_brick_index != -1) {
+                // Determine the collision point
+                float collisionX = b->x + b->w / 2;
+                float collisionY = b->y + b->h / 2;
+
+                // Determine the collision edge
+                if (collisionX <= bricks[closest_brick_index].x || collisionX >= bricks[closest_brick_index].x + bricks[closest_brick_index].w) {
+                    // Collision on vertical edge
+                    b->vx = -b->vx;
+                } else if (collisionY <= bricks[closest_brick_index].y || collisionY >= bricks[closest_brick_index].y + bricks[closest_brick_index].h) {
+                    // Collision on horizontal edge
+                    b->vy = -b->vy;
+                } else {
+                    // Collision at corner
+                    b->vx = -b->vx;
+                    b->vy = -b->vy;
+                }
+
+                damage_brick(&bricks[closest_brick_index]);
+                collision = 1;
+                break;
             }
 
-            damage_brick(&bricks[closest_brick_index]);
-            collision = 1;
-        }
-
-        // Move the ball
-        fx += (float)b->vx / steps;
-        fy += (float)b->vy / steps;
-
-        if (collision) {
-            break;
-        }
+            // Move the ball
+            b->x += b->vx / steps;
+            b->y += b->vy / steps;
+        } while (collision);
     }
-
-    b->x = (int)roundf(fx);
-    b->y = (int)roundf(fy);
-
-    return 0;
 }
 void move_ball(ball *b, paddle *p, brick *bricks, int n) {
-    ball new_ball = *b;
 
-    if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
+
+    if (b->x < 0 || b->x > SCREEN_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < 0 || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+    if (b->y < 0 || b->y > SCREEN_HEIGHT - b->h) {
         b->vy = -b->vy;
     }
 

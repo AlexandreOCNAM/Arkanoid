@@ -3,8 +3,12 @@
 //
 
 #include "graphics.h"
+#include "constant.h"
 
-
+SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
+SDL_Rect srcBall = {0, 96, 24, 24};
+SDL_Rect srcVaiss = {128, 0, 128, 32};
+SDL_Rect srcBrick = {0, 0, 32, 16};
 
 SDL_Surface *load_image(const char *path)
 {
@@ -41,44 +45,28 @@ SDL_Surface* init_window()
         perror("Error while loading the sprites");
         exit(1);
     }
-    brickSprite = load_image("../public/Arkanoid_sprites.bmp");
-    if (brickSprite == NULL)
-    {
-        perror("Error while loading the brick sprite");
-        exit(1);
-    }
-    textSprite = load_image("../public/Arkanoid_ascii.bmp");
+    brickSprite = load_image("./Arkanoid_sprites.bmp");
     if (brickSprite == NULL)
     {
         perror("Error while loading the brick sprite");
         exit(1);
     }
     SDL_SetColorKey(plancheSprites, 1, 0); // 0: 00/00/00 noir -> transparent
-    SDL_SetColorKey(brickSprite, 1, 0); // 0: 00/00/00 noir -> transparent
-    SDL_SetColorKey(textSprite, 1, 0); // 0: 00/00/00 noir -> transparent
     return SDL_GetWindowSurface(window);
 }
 
 void draw_ball(ball *b) {
-    if (b->vy == 0){
-        // draw 3 rectangles to represent the ball's trajectory on X axis
-        for (int i = 0; i < 3; i++) {
-            SDL_Rect rect = {(b->x + b->w/2) + b->vx * i *10 ,b->y - i* BALL_MAX_SPEED*10, 3, 3};
-            SDL_FillRect(window_surface, &rect, SDL_MapRGB(window_surface->format, 255, 255, 255));
-        }
-    }
     SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
 
 void draw_paddle(paddle *p) {
-    SDL_Rect dest = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &dest);
+    SDL_Rect rect = {p->x, p->y, p->w, p->h};
+    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &rect);
 }
 
 void draw_brick(brick *b) {
-    SDL_Rect srcRect = getBrickSrcRect(b);
-    SDL_Rect dest = {b->x, b->y, b->w, b->h};
-    SDL_BlitSurface(brickSprite, &srcRect, window_surface, &dest);
+    SDL_Rect rect = {b->x, b->y, b->w, b->h};
+    SDL_BlitSurface(brickSprite, &b->srcRect, window_surface, &rect);
 }
 
 void draw_bricks(brick *b, int n) {
@@ -89,64 +77,11 @@ void draw_bricks(brick *b, int n) {
     }
 }
 
-void write_score(int score){
-    SDL_Rect destRect;
-    destRect.x = 500;
-    destRect.y = 50;
-    destRect.w = 32;
-    destRect.h = 32;
-
-    SDL_BlitSurface(textSprite, &S, window_surface, &destRect);
-    destRect.x += 20;
-    SDL_BlitSurface(textSprite, &C, window_surface, &destRect);
-    destRect.x += 20;
-    SDL_BlitSurface(textSprite, &O, window_surface, &destRect);
-    destRect.x += 20;
-    SDL_BlitSurface(textSprite, &R, window_surface, &destRect);
-    destRect.x += 20;
-    SDL_BlitSurface(textSprite, &E, window_surface, &destRect);
-
-    // Convertir le score en chaîne de caractères
-    char scoreStr[10];
-    sprintf(scoreStr, "%d", score);
-
-    // Position initiale pour blit
-    int posX = 500;
-
-    // Pour chaque caractère dans la chaîne de score
-    for (int i = 0; scoreStr[i] != '\0'; ++i) {
-        SDL_Rect srcRect;
-        // Sélectionner le rectangle source correspondant au chiffre
-        switch (scoreStr[i]) {
-            case '0': srcRect = _0; break;
-            case '1': srcRect = _1; break;
-            case '2': srcRect = _2; break;
-            case '3': srcRect = _3; break;
-            case '4': srcRect = _4; break;
-            case '5': srcRect = _5; break;
-            case '6': srcRect = _6; break;
-            case '7': srcRect = _7; break;
-            case '8': srcRect = _8; break;
-            case '9': srcRect = _9; break;
-        }
-
-        // Définir le rectangle de destination
-        SDL_Rect destRectScore = {posX, 100, 32, 32};
-
-        // Blit le chiffre sur la surface de l'écran
-        SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
-
-        // Avancer la position en x pour le prochain chiffre
-        posX += 20;
-    }
-}
-
 void blit_background() {
-    const int bg_width = backgrounds[background].w;
-    const int bg_height = backgrounds[background].h;
-    const int window_width = PLAYABLE_ZONE_WIDTH;
+    const int bg_width = srcBg.w;
+    const int bg_height = srcBg.h;
+    const int window_width = window_surface->w;
     const int window_height = window_surface->h;
-    SDL_Rect tube = {192, 0, 8, 23};
 
     // Check if the window's width and height are multiples of the background image's width and height
     if (window_width % bg_width == 0 && window_height % bg_height == 0) {
@@ -175,17 +110,7 @@ void blit_background() {
                 }
             }
     }
-    SDL_Rect blackRect = {416, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
 
-    // Dessiner un rectangle noir
-    SDL_FillRect(window_surface, &blackRect, SDL_MapRGB(window_surface->format, 0, 0, 0));
-
-/*
-    for(int k = 0; k < window_height; k+= tube.h){
-        dest->x = 416;
-        dest->y = k;
-        SDL_BlitSurface(brickSprite, &tube, window_surface, dest);
-    }*/
 }
 
 void update_window() {
