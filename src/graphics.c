@@ -57,16 +57,17 @@ SDL_Surface* init_window()
         exit(1);
     }
     SDL_SetColorKey(plancheSprites, 1, 0); // 0: 00/00/00 noir -> transparent
+    SDL_SetColorKey(brickSprite, 1, 0); // 0: 00/00/00 noir -> transparent
     return SDL_GetWindowSurface(window);
 }
 
 void draw_ball(ball *b) {
-    SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
+    SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
 
 void draw_paddle(paddle *p) {
     SDL_Rect rect = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &rect);
+    SDL_BlitSurface(brickSprite, &srcVaiss, window_surface, &rect);
 }
 
 void draw_brick(brick *b) {

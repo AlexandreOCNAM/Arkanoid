@@ -11,7 +11,7 @@ typedef struct {
     int vx, vy;
 } paddle;
 
-paddle create_paddle();
+paddle create_paddle(int paddle_width);
 void strafe_paddle(paddle *p, int direction);
 void invert_paddle_velocity(paddle *p);
 void move_paddle(paddle *p);

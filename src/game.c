@@ -9,7 +9,7 @@
 
 
 #define FPS 60
-
+int default_paddle_width = 64;
 
 void reset_game_components(game_components *gc);
 
@@ -19,7 +19,7 @@ void init_game(game* g) {
         perror("Error while initializing SDL");
         exit(1);
     }
-    init_level(g, 11);
+    init_level(g, 1);
     init_window();
 }
 
@@ -29,7 +29,9 @@ void init_level(game *g, int level_nu) {
     g->level_number = level_nu;
     g->gc = malloc(sizeof(game_components));
     g->gc->b = create_ball();
-    g->gc->p = create_paddle();
+    if(level_nu ==1)
+        g->gc->p.w = default_paddle_width;
+    g->gc->p = create_paddle(g->gc->p.w);
 }
 
 _Noreturn void play_game(game* g) {

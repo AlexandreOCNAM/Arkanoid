@@ -5,9 +5,9 @@
 #include "paddle.h"
 #include "constant.h"
 
-paddle create_paddle() {
+paddle create_paddle(int paddle_width) {
     paddle result = {
-            128, PLAYABLE_ZONE_HEIGHT -16, 128, 32, 5, 0
+            (PLAYABLE_ZONE_WIDTH-paddle_width)/2, PLAYABLE_ZONE_HEIGHT -32, paddle_width, 16, 7, 0
     };
     return result;
 }

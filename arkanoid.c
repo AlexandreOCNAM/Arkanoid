@@ -70,7 +70,7 @@ void init()
 
   // init the sprites of the bricks
 
-  _paddle = create_paddle();
+  _paddle = create_paddle(64);
 }
 
 void draw()

@@ -4,8 +4,8 @@
 #include "spriteConstant.h"
 
 SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
-SDL_Rect srcBall = {0, 96, 24, 24};
-SDL_Rect srcVaiss = {128, 0, 128, 32};
+SDL_Rect srcBall = {4, 68, 8, 8};
+SDL_Rect srcVaiss = {384, 128, 64, 16};
 
 //Bricks
 SDL_Rect whiteBrick = {0, 0, 32, 16};

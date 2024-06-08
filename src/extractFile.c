@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #include "graphics.h"
-#include "game.h"
 
 
 #define BRICK_WIDTH 32

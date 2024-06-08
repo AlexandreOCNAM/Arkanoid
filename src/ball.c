@@ -9,10 +9,10 @@
 
 ball create_ball() {
     ball result = {
-        .x = 128 + 64,
-        .y = PLAYABLE_ZONE_HEIGHT - 16 - 24,
-        .w = 24,
-        .h = 24,
+        .x = (PLAYABLE_ZONE_WIDTH-8)/2,
+        .y = PLAYABLE_ZONE_HEIGHT - 32 - 8,
+        .w = 8,
+        .h = 8,
         .vx = 0,
         .vy = 0,
         .rect = malloc(sizeof(SDL_Rect))
