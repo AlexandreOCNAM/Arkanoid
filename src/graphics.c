@@ -5,68 +5,9 @@
 #include "graphics.h"
 #include "constant.h"
 
-SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
-SDL_Rect srcBall = {0, 96, 24, 24};
-SDL_Rect srcVaiss = {128, 0, 128, 32};
-SDL_Rect srcBrick = {0, 0, 32, 16};
-
 SDL_Surface *textSprite;
 
 int background = 0;
-SDL_Rect backgrounds[12] = {
-        {0, 128, 48, 64}, //default
-        {0, 192, 48, 64}, //default dark
-        {64, 128, 64, 64}, //blue
-        {64, 192, 64, 64}, //blue dark
-        {128, 128, 64, 64}, //green
-        {128, 192, 64, 64}, //green dark
-        {256, 128, 64, 64}, //red
-        {256, 192, 64, 64}, //red dark
-        {320, 128, 64, 64}, //orange
-        {320, 192, 64, 64}, //orange dark
-        {384, 128, 64, 64}, //purple
-        {384, 192, 64, 64} //purple dark
-};
-
-
-SDL_Rect _0 = {0, 32, 32, 32};
-SDL_Rect _1 = {32, 32, 32, 32};
-SDL_Rect _2 = {64, 32, 32, 32};
-SDL_Rect _3 = {96, 32, 32, 32};
-SDL_Rect _4 = {128, 32, 32, 32};
-SDL_Rect _5 = {160, 32, 32, 32};
-SDL_Rect _6 = {192, 32, 32, 32};
-SDL_Rect _7 = {224, 32, 32, 32};
-SDL_Rect _8 = {256, 32, 32, 32};
-SDL_Rect _9 = {288, 32, 32, 32};
-
-// Définitions des lettres avec positions et dimensions spécifiées
-SDL_Rect A = {32, 64, 32, 32};
-SDL_Rect B = {64, 64, 32, 32};
-SDL_Rect C = {96, 64, 32, 32};
-SDL_Rect D = {128, 64, 32, 32};
-SDL_Rect E = {160, 64, 32, 32};
-SDL_Rect F = {192, 64, 32, 32};
-SDL_Rect G = {224, 64, 32, 32};
-SDL_Rect H = {256, 64, 32, 32};
-SDL_Rect I = {288, 64, 32, 32};
-SDL_Rect J = {320, 64, 32, 32};
-SDL_Rect K = {352, 64, 32, 32};
-SDL_Rect L = {384, 64, 32, 32};
-SDL_Rect M = {416, 64, 32, 32};
-SDL_Rect N = {448, 64, 32, 32};
-SDL_Rect O = {480, 64, 32, 32};
-SDL_Rect P = {0, 96, 32, 32};
-SDL_Rect Q = {32, 96, 32, 32};
-SDL_Rect R = {64, 96, 32, 32};
-SDL_Rect S = {96, 96, 32, 32};
-SDL_Rect T = {128, 96, 32, 32};
-SDL_Rect U = {160, 96, 32, 32};
-SDL_Rect V = {192, 96, 32, 32};
-SDL_Rect W = {224, 96, 32, 32};
-SDL_Rect X = {256, 96, 32, 32};
-SDL_Rect Y = {288, 96, 32, 32};
-SDL_Rect Z = {320, 96, 32, 32};
 
 SDL_Surface *load_image(const char *path)
 {

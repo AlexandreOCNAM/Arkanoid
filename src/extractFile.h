@@ -2,7 +2,7 @@
 #define EXTRACTFILE_H
 
 #include "brick.h"
-
+#include "spriteConstant.h"
 
 
 void extractFile(const char *inputFile, const char *outputFile);

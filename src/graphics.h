@@ -9,6 +9,8 @@
 #include "ball.h"
 #include "paddle.h"
 #include "brick.h"
+#include "constant.h"
+#include "spriteConstant.h"
 
 extern SDL_Window *window;
 extern SDL_Surface *window_surface;

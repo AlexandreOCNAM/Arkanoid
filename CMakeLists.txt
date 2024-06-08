@@ -31,6 +31,7 @@ add_executable(${PROJECT_NAME}
 		src/game.h
 		src/level.c
 		src/level.h
+        src/spriteConstant.c
 )
 target_sources(${PROJECT_NAME} PRIVATE arkanoid.c)
 

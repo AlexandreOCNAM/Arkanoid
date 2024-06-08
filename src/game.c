@@ -19,7 +19,7 @@ void init_game(game* g) {
         perror("Error while initializing SDL");
         exit(1);
     }
-    init_level(g, 1);
+    init_level(g, 14);
     init_window();
 }
 

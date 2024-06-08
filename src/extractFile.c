@@ -5,26 +5,12 @@
 
 #include "graphics.h"
 
+
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 16
 #define BRICKS_PER_ROW 13
 
 int brick_points;
-
-//Bricks
-SDL_Rect whiteBrick = {0, 0, 32, 16};
-SDL_Rect orangeBrick = {32, 0, 32, 16};
-SDL_Rect cyanBrick = {64, 0, 32, 16};
-SDL_Rect lightGreenBrick = {96, 0, 32, 16};
-SDL_Rect darkBlueBrick = {128, 0, 32, 16};
-SDL_Rect darkGreenBrick = {160, 0, 32, 16};
-SDL_Rect lightRedBrick = {0, 16, 32, 16};
-SDL_Rect blueBrick = {32, 16, 32, 16};
-SDL_Rect pinkBrick = {64, 16, 32, 16};
-SDL_Rect yellowBrick = {96, 16, 32, 16};
-SDL_Rect darkRedBrick = {128, 16, 32, 16};
-SDL_Rect darkCyanBrick = {160, 16, 32, 16};
-SDL_Rect defaultBrick = {0, 0, 0, 0};
 
 SDL_Rect get_brick_src_rect(int brick_number) {
     SDL_Rect srcRect;
