@@ -44,7 +44,7 @@ SDL_Surface* init_window()
         perror("Error while loading the sprites");
         exit(1);
     }
-    brickSprite = load_image("Arkanoid_sprites.bmp");
+    brickSprite = load_image("../public/Arkanoid_sprites.bmp");
     if (brickSprite == NULL)
     {
         perror("Error while loading the brick sprite");
@@ -87,40 +87,66 @@ void blit_background() {
     const int bg_width = backgrounds[background].w;
     const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
-    const int window_height = window_surface->h;
-    SDL_Rect tube = {192, 0, 8, 23};
+    const int window_height =  PLAYABLE_ZONE_HEIGHT;
 
-    // Check if the window's width and height are multiples of the background image's width and height
-    if (window_width % bg_width == 0 && window_height % bg_height == 0) {
-        for (int j = 0; j < window_height; j += bg_height)
-            for (int i = 0; i < window_width; i += bg_width)
-            {
-                dest.x = i;
-                dest.y = j;
-                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
-                {
-                    perror("Error while blitting the background");
-                    exit(1);
-                }
-            }
-    } else {
-        // If not, fall back to the original method
-        for (int j = 0; j < window_height; j += bg_height)
-            for (int i = 0; i < window_width; i += bg_width)
-            {
-                dest.x = i;
-                dest.y = j;
-                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
-                {
-                    perror("Error while blitting the background");
-                    exit(1);
-                }
-            }
-    }
-    SDL_Rect blackRect = {416, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
 
-    // Dessiner un rectangle noir
+    for (int j = PLAYABLE_ZONE_HEIGHT_START; j < window_height; j += bg_height)
+        for (int i = PLAYABLE_ZONE_WIDTH_START; i < window_width; i += bg_width)
+        {
+            dest.x = i;
+            dest.y = j;
+            if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
+            {
+                perror("Error while blitting the background");
+                exit(1);
+            }
+        }
+
+    SDL_Rect blackRect = {PLAYABLE_ZONE_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
     SDL_FillRect(window_surface, &blackRect, SDL_MapRGB(window_surface->format, 0, 0, 0));
+    draw_outer();
+}
+
+void draw_outer(){
+    dest.x = 0;
+    dest.y = 0;
+    SDL_BlitSurface(brickSprite, &corner_top_left, window_surface, &dest);
+    dest.x = 0;
+    dest.y = PLAYABLE_ZONE_HEIGHT;
+    SDL_BlitSurface(brickSprite, &corner_bottom_left, window_surface, &dest);
+    dest.x = PLAYABLE_ZONE_WIDTH;
+    dest.y = 0;
+    SDL_BlitSurface(brickSprite, &corner_top_right, window_surface, &dest);
+    dest.x = PLAYABLE_ZONE_WIDTH;
+    dest.y = PLAYABLE_ZONE_HEIGHT;
+    SDL_BlitSurface(brickSprite, &corner_bottom_right, window_surface, &dest);
+    for(int y = PLAYABLE_ZONE_HEIGHT_START; y < PLAYABLE_ZONE_HEIGHT; y += 48+32){
+        dest.x = 0;
+        dest.y = y;
+        SDL_BlitSurface(brickSprite, &big_tube_v, window_surface, &dest);
+        dest.x = PLAYABLE_ZONE_WIDTH;
+        SDL_BlitSurface(brickSprite, &big_tube_v, window_surface, &dest);
+
+        dest.x = 0;
+        dest.y = y+48;
+        if(dest.y < PLAYABLE_ZONE_HEIGHT) {
+            SDL_BlitSurface(brickSprite, &tube_v, window_surface, &dest);
+            dest.x = PLAYABLE_ZONE_WIDTH;
+            SDL_BlitSurface(brickSprite, &tube_v, window_surface, &dest);
+        }
+    }
+    for(int x = PLAYABLE_ZONE_WIDTH_START; x < PLAYABLE_ZONE_WIDTH; x += 32){
+        dest.x = x;
+        dest.y = 0;
+
+        if(x == PLAYABLE_ZONE_WIDTH_START+64 || x == PLAYABLE_ZONE_WIDTH_START+32*7+48) {
+            SDL_BlitSurface(brickSprite, &big_tube_h, window_surface, &dest);
+            x += 16;
+        }
+        else{
+            SDL_BlitSurface(brickSprite, &tube_h, window_surface, &dest);
+        }
+    }
 }
 
 void update_window() {

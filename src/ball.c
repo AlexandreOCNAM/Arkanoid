@@ -9,7 +9,7 @@
 
 ball create_ball() {
     ball result = {
-        .x = (PLAYABLE_ZONE_WIDTH-8)/2,
+        .x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
         .y = PLAYABLE_ZONE_HEIGHT - 32 - 8,
         .w = 8,
         .h = 8,
@@ -27,12 +27,10 @@ ball create_ball() {
 
 
 void move_ball(ball *b, paddle *p, brick *bricks, int n) {
-
-
-    if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
+    if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < 0 || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+    if (b->y < PLAYABLE_ZONE_HEIGHT_START || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
         b->vy = -b->vy;
     }
     // Check for collision with bricks
@@ -113,8 +111,8 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
 }
 
 void reset_ball(ball *b) {
-    b->x = 128 + 64;
-    b->y = PLAYABLE_ZONE_HEIGHT - 16 - 24;
+    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
+    b->y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
     b->vx = 0;
     b->vy = 0;
 }

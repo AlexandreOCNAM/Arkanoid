@@ -56,6 +56,15 @@ SDL_Rect backgrounds[12] = {
         {320, 192, 64, 64} //purple dark
 };
 
+SDL_Rect tube_v = {192, 48, 16, 32};
+SDL_Rect tube_h = {208, 16, 32, 16};
+SDL_Rect big_tube_v = {192, 0, 16, 48};
+SDL_Rect big_tube_h = {208, 32, 48, 16};
+SDL_Rect corner_top_left = {208,0,16,16};
+SDL_Rect corner_top_right = {224,0,16,16};
+SDL_Rect corner_bottom_right = {224,48,16,16};
+SDL_Rect corner_bottom_left = {208,48,16,16};
+
 SDL_Rect _0 = {0, 32, 32, 32};
 SDL_Rect _1 = {32, 32, 32, 32};
 SDL_Rect _2 = {64, 32, 32, 32};

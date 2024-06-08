@@ -24,6 +24,7 @@ SDL_Surface *load_image(const char *path);
 
 SDL_Surface* init_window();
 void blit_background();
+void draw_outer();
 void draw_ball(ball *b);
 void draw_paddle(paddle *p);
 void draw_brick(brick *b);

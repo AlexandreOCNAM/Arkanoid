@@ -10,8 +10,8 @@ static int goldenBrickState = 0;
 static int silverBrickState = 0;
 
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
-    brick->x = x;
-    brick->y = y;
+    brick->x = x + PLAYABLE_ZONE_WIDTH_START;
+    brick->y = y + PLAYABLE_ZONE_HEIGHT_START;
     brick->w = width;
     brick->h = height;
     brick->health = health;
