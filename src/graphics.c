@@ -5,68 +5,9 @@
 #include "graphics.h"
 #include "constant.h"
 
-SDL_Rect srcBg = {0, 128, 96, 128}; // x,y, w,h (0,0) en haut a gauche
-SDL_Rect srcBall = {0, 96, 24, 24};
-SDL_Rect srcVaiss = {128, 0, 128, 32};
-SDL_Rect srcBrick = {0, 0, 32, 16};
-
 SDL_Surface *textSprite;
 
 int background = 0;
-SDL_Rect backgrounds[12] = {
-        {0, 128, 48, 64}, //default
-        {0, 192, 48, 64}, //default dark
-        {64, 128, 64, 64}, //blue
-        {64, 192, 64, 64}, //blue dark
-        {128, 128, 64, 64}, //green
-        {128, 192, 64, 64}, //green dark
-        {256, 128, 64, 64}, //red
-        {256, 192, 64, 64}, //red dark
-        {320, 128, 64, 64}, //orange
-        {320, 192, 64, 64}, //orange dark
-        {384, 128, 64, 64}, //purple
-        {384, 192, 64, 64} //purple dark
-};
-
-
-SDL_Rect _0 = {0, 32, 32, 32};
-SDL_Rect _1 = {32, 32, 32, 32};
-SDL_Rect _2 = {64, 32, 32, 32};
-SDL_Rect _3 = {96, 32, 32, 32};
-SDL_Rect _4 = {128, 32, 32, 32};
-SDL_Rect _5 = {160, 32, 32, 32};
-SDL_Rect _6 = {192, 32, 32, 32};
-SDL_Rect _7 = {224, 32, 32, 32};
-SDL_Rect _8 = {256, 32, 32, 32};
-SDL_Rect _9 = {288, 32, 32, 32};
-
-// Définitions des lettres avec positions et dimensions spécifiées
-SDL_Rect A = {32, 64, 32, 32};
-SDL_Rect B = {64, 64, 32, 32};
-SDL_Rect C = {96, 64, 32, 32};
-SDL_Rect D = {128, 64, 32, 32};
-SDL_Rect E = {160, 64, 32, 32};
-SDL_Rect F = {192, 64, 32, 32};
-SDL_Rect G = {224, 64, 32, 32};
-SDL_Rect H = {256, 64, 32, 32};
-SDL_Rect I = {288, 64, 32, 32};
-SDL_Rect J = {320, 64, 32, 32};
-SDL_Rect K = {352, 64, 32, 32};
-SDL_Rect L = {384, 64, 32, 32};
-SDL_Rect M = {416, 64, 32, 32};
-SDL_Rect N = {448, 64, 32, 32};
-SDL_Rect O = {480, 64, 32, 32};
-SDL_Rect P = {0, 96, 32, 32};
-SDL_Rect Q = {32, 96, 32, 32};
-SDL_Rect R = {64, 96, 32, 32};
-SDL_Rect S = {96, 96, 32, 32};
-SDL_Rect T = {128, 96, 32, 32};
-SDL_Rect U = {160, 96, 32, 32};
-SDL_Rect V = {192, 96, 32, 32};
-SDL_Rect W = {224, 96, 32, 32};
-SDL_Rect X = {256, 96, 32, 32};
-SDL_Rect Y = {288, 96, 32, 32};
-SDL_Rect Z = {320, 96, 32, 32};
 
 SDL_Surface *load_image(const char *path)
 {
@@ -103,7 +44,7 @@ SDL_Surface* init_window()
         perror("Error while loading the sprites");
         exit(1);
     }
-    brickSprite = load_image("Arkanoid_sprites.bmp");
+    brickSprite = load_image("../public/Arkanoid_sprites.bmp");
     if (brickSprite == NULL)
     {
         perror("Error while loading the brick sprite");
@@ -116,16 +57,17 @@ SDL_Surface* init_window()
         exit(1);
     }
     SDL_SetColorKey(plancheSprites, 1, 0); // 0: 00/00/00 noir -> transparent
+    SDL_SetColorKey(brickSprite, 1, 0); // 0: 00/00/00 noir -> transparent
     return SDL_GetWindowSurface(window);
 }
 
 void draw_ball(ball *b) {
-    SDL_BlitSurface(plancheSprites, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
+    SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
 
 void draw_paddle(paddle *p) {
     SDL_Rect rect = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(plancheSprites, &srcVaiss, window_surface, &rect);
+    SDL_BlitSurface(brickSprite, &srcVaiss, window_surface, &rect);
 }
 
 void draw_brick(brick *b) {
@@ -145,40 +87,66 @@ void blit_background() {
     const int bg_width = backgrounds[background].w;
     const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
-    const int window_height = window_surface->h;
-    SDL_Rect tube = {192, 0, 8, 23};
+    const int window_height =  PLAYABLE_ZONE_HEIGHT;
 
-    // Check if the window's width and height are multiples of the background image's width and height
-    if (window_width % bg_width == 0 && window_height % bg_height == 0) {
-        for (int j = 0; j < window_height; j += bg_height)
-            for (int i = 0; i < window_width; i += bg_width)
-            {
-                dest.x = i;
-                dest.y = j;
-                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
-                {
-                    perror("Error while blitting the background");
-                    exit(1);
-                }
-            }
-    } else {
-        // If not, fall back to the original method
-        for (int j = 0; j < window_height; j += bg_height)
-            for (int i = 0; i < window_width; i += bg_width)
-            {
-                dest.x = i;
-                dest.y = j;
-                if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
-                {
-                    perror("Error while blitting the background");
-                    exit(1);
-                }
-            }
-    }
-    SDL_Rect blackRect = {416, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
 
-    // Dessiner un rectangle noir
+    for (int j = PLAYABLE_ZONE_HEIGHT_START; j < window_height; j += bg_height)
+        for (int i = PLAYABLE_ZONE_WIDTH_START; i < window_width; i += bg_width)
+        {
+            dest.x = i;
+            dest.y = j;
+            if (SDL_BlitSurface(brickSprite, &backgrounds[background], window_surface, &dest) != 0)
+            {
+                perror("Error while blitting the background");
+                exit(1);
+            }
+        }
+
+    SDL_Rect blackRect = {PLAYABLE_ZONE_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
     SDL_FillRect(window_surface, &blackRect, SDL_MapRGB(window_surface->format, 0, 0, 0));
+    draw_outer();
+}
+
+void draw_outer(){
+    dest.x = 0;
+    dest.y = 0;
+    SDL_BlitSurface(brickSprite, &corner_top_left, window_surface, &dest);
+    dest.x = 0;
+    dest.y = PLAYABLE_ZONE_HEIGHT;
+    SDL_BlitSurface(brickSprite, &corner_bottom_left, window_surface, &dest);
+    dest.x = PLAYABLE_ZONE_WIDTH;
+    dest.y = 0;
+    SDL_BlitSurface(brickSprite, &corner_top_right, window_surface, &dest);
+    dest.x = PLAYABLE_ZONE_WIDTH;
+    dest.y = PLAYABLE_ZONE_HEIGHT;
+    SDL_BlitSurface(brickSprite, &corner_bottom_right, window_surface, &dest);
+    for(int y = PLAYABLE_ZONE_HEIGHT_START; y < PLAYABLE_ZONE_HEIGHT; y += 48+32){
+        dest.x = 0;
+        dest.y = y;
+        SDL_BlitSurface(brickSprite, &big_tube_v, window_surface, &dest);
+        dest.x = PLAYABLE_ZONE_WIDTH;
+        SDL_BlitSurface(brickSprite, &big_tube_v, window_surface, &dest);
+
+        dest.x = 0;
+        dest.y = y+48;
+        if(dest.y < PLAYABLE_ZONE_HEIGHT) {
+            SDL_BlitSurface(brickSprite, &tube_v, window_surface, &dest);
+            dest.x = PLAYABLE_ZONE_WIDTH;
+            SDL_BlitSurface(brickSprite, &tube_v, window_surface, &dest);
+        }
+    }
+    for(int x = PLAYABLE_ZONE_WIDTH_START; x < PLAYABLE_ZONE_WIDTH; x += 32){
+        dest.x = x;
+        dest.y = 0;
+
+        if(x == PLAYABLE_ZONE_WIDTH_START+64 || x == PLAYABLE_ZONE_WIDTH_START+32*7+48) {
+            SDL_BlitSurface(brickSprite, &big_tube_h, window_surface, &dest);
+            x += 16;
+        }
+        else{
+            SDL_BlitSurface(brickSprite, &tube_h, window_surface, &dest);
+        }
+    }
 }
 
 void update_window() {

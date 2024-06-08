@@ -5,29 +5,16 @@
 
 #include "graphics.h"
 
+
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 16
 #define BRICKS_PER_ROW 13
 
 int brick_points;
 
-//Bricks
-SDL_Rect whiteBrick = {0, 0, 32, 16};
-SDL_Rect orangeBrick = {32, 0, 32, 16};
-SDL_Rect cyanBrick = {64, 0, 32, 16};
-SDL_Rect lightGreenBrick = {96, 0, 32, 16};
-SDL_Rect darkBlueBrick = {128, 0, 32, 16};
-SDL_Rect darkGreenBrick = {160, 0, 32, 16};
-SDL_Rect lightRedBrick = {0, 16, 32, 16};
-SDL_Rect blueBrick = {32, 16, 32, 16};
-SDL_Rect pinkBrick = {64, 16, 32, 16};
-SDL_Rect yellowBrick = {96, 16, 32, 16};
-SDL_Rect darkRedBrick = {128, 16, 32, 16};
-SDL_Rect darkCyanBrick = {160, 16, 32, 16};
-SDL_Rect defaultBrick = {0, 0, 0, 0};
-
-SDL_Rect get_brick_src_rect(int brick_number) {
+SDL_Rect get_brick_src_rect(int brick_number, int level) {
     SDL_Rect srcRect;
+    brick_points = 0;
     switch (brick_number) {
         case 1:
             srcRect = whiteBrick; // Brique blanche
@@ -79,7 +66,7 @@ SDL_Rect get_brick_src_rect(int brick_number) {
             break;
         case 20:
             srcRect = silverBrickStates[0]; // Brique argent
-            brick_points = 200;
+            brick_points = 100*level;
             break;
         case 30:
             srcRect = goldenBrickStates[0]; // Brique or
@@ -91,7 +78,7 @@ SDL_Rect get_brick_src_rect(int brick_number) {
     return srcRect;
 }
 
-void load_level(const char *filename, brick bricks[], int *brick_count) {
+void load_level(const char *filename, brick bricks[], int *brick_count, int level) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "Failed to open level file\n");
@@ -123,14 +110,24 @@ void load_level(const char *filename, brick bricks[], int *brick_count) {
 
         int brick_type;
         int brick_number;
+        int life_multiplier;
         if (sscanf(line, "%dx%d", &brick_type, &brick_number) == 2) {
-            SDL_Rect srcRect = get_brick_src_rect(brick_number);
+            SDL_Rect srcRect = get_brick_src_rect(brick_number, level);
             int brick_health;
             if(brick_type == 0){
                 brick_health = 1;
             }
             else if(brick_type == 1){
-                brick_health = 2;
+                if(level <= 8)
+                    life_multiplier = 2;
+                else if(level > 8 && level <= 16)
+                    life_multiplier = 3;
+                else if(level > 16 && level <= 24)
+                    life_multiplier = 4;
+                else
+                    life_multiplier = 5;
+
+                brick_health = life_multiplier;
             }
             else{
                 brick_health = -1;
