@@ -58,7 +58,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
                 }
 
                 // Reduce the brick's health
-                score += fmax(damage_brick(&bricks[i]), 0);
+                damage_brick(&bricks[i]);
                 break;
             }
         }

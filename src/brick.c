@@ -3,6 +3,7 @@
 //
 
 #include "brick.h"
+#include "game.h"
 
 static int timeAccumulator = 0;
 static int goldenBrickState = 0;
@@ -25,7 +26,7 @@ int damage_brick(brick *b) {
     }
     b->health = fmax(0, b->health - 1);
     if (b->health == 0) {
-        return b->points;
+        score += b->points;
     }
 }
 
