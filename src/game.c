@@ -6,10 +6,12 @@
 #include "extractFile.h"
 #include "graphics.h"
 #include "constant.h"
+#include "powerup.h"
 
 
 #define FPS 60
 int default_paddle_width = 64;
+
 
 void reset_game_components(game_components *gc);
 
@@ -42,6 +44,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
+        update_powerups(powerups, &powerup_count, &g->gc->p);
         render(g);
         prev = now;
         if (delta_t > 0) {

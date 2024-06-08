@@ -10,8 +10,11 @@
 #include "brick.h"
 #include "ball.h"
 #include "level.h"
+#include "powerup.h"
 
 int score;
+PowerUp powerups[MAX_POWERUPS];
+int powerup_count = 0;
 
 typedef struct {
     ball b;

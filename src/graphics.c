@@ -154,9 +154,11 @@ void update_window() {
     SDL_UpdateWindowSurface(window);
 }
 
-void draw_powerup(PowerUp *p) {
-    SDL_Rect dest = {p->x, p->y, p->w, p->h};
-    SDL_FillRect(window_surface, &dest, SDL_MapRGB(window_surface->format, 255,255,p->type * (255/2)));
+void draw_powerup(PowerUp *pu) {
+    if (pu->active) {
+        SDL_Rect dest = {pu->x, pu->y, pu->w, pu->h};
+        SDL_BlitSurface(brickSprite, &pu->srcRect, window_surface, &dest);
+    }
 }
 
 void draw_powerups(PowerUp *p, int n) {

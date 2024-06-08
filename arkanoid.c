@@ -40,8 +40,6 @@ paddle _paddle = {0};
 SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
-const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[0] = {powerup};
 
 void init()
 {

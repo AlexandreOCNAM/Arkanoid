@@ -25,6 +25,16 @@ extern SDL_Rect darkCyanBrick;
 extern SDL_Rect goldenBrickStates[6];
 extern SDL_Rect silverBrickStates[6];
 extern SDL_Rect defaultBrick;
+
+//Bonus
+extern SDL_Rect S_bonus_states[6];
+extern SDL_Rect C_bonus_states[6];
+extern SDL_Rect L_bonus_states[6];
+extern SDL_Rect E_bonus_states[6];
+extern SDL_Rect D_bonus_states[6];
+extern SDL_Rect B_bonus_states[6];
+extern SDL_Rect P_bonus_states[6];
+
 //Backgrounds
 extern SDL_Rect backgrounds[12];
 
