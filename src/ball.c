@@ -1,6 +1,5 @@
 #include "ball.h"
-#include "collisions.h"
-#include "game.h"
+
 
 #define MAX_SPEED 7
 #define ZONE_SIZE SCREEN_HEIGHT / 4
@@ -97,18 +96,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
     b->x += b->vx;
     b->y += b->vy;
 }
-void apply_ball_powerup(ball *b, PowerUp *p) {
-    switch (p->type) {
-        case 0:
-            b->vx = 5;
-            b->vy = 5;
-            break;
-        case 1:
-            b->vx = 10;
-            b->vy = 10;
-            break;
-    }
-}
+
 
 void reset_ball(ball *b) {
     b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
@@ -120,3 +108,16 @@ void reset_ball(ball *b) {
 void launch_ball(ball *b) {
     b->vy = -BALL_MAX_SPEED;
 }
+/*
+void apply_ball_powerup(ball *b, PowerUp *p) {
+    switch (p->type) {
+        case 0:
+            b->vx = 5;
+            b->vy = 5;
+            break;
+        case 1:
+            b->vx = 10;
+            b->vy = 10;
+            break;
+    }
+}*/

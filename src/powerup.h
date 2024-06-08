@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include "paddle.h"
 #include "constant.h"
+#include "spriteConstant.h"
 
 typedef enum {
     NONE,
@@ -25,9 +26,11 @@ typedef struct {
     PowerUpType type;
     SDL_Rect srcRect;
     int active;
+    int current_state;
 } PowerUp;
 
-PowerUp create_powerup(int x, int y);
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p);
+PowerUp create_powerup(int x, int y, PowerUpType type);
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t);
+void update_powerup_animation(PowerUp *pu, double delta_t);
 
 #endif //ARKANOID_POWERUP_H

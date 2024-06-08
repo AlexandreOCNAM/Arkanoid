@@ -155,15 +155,13 @@ void update_window() {
 }
 
 void draw_powerup(PowerUp *pu) {
-    if (pu->active) {
-        SDL_Rect dest = {pu->x, pu->y, pu->w, pu->h};
-        SDL_BlitSurface(brickSprite, &pu->srcRect, window_surface, &dest);
-    }
+    SDL_Rect dest = {pu->x, pu->y, pu->w, pu->h};
+    SDL_BlitSurface(brickSprite, &pu->srcRect, window_surface, &dest);
 }
 
 void draw_powerups(PowerUp *p, int n) {
     for (int i = 0; i < n; i++) {
-        if (p[i].active) {
+        if (p[i].active == 1) {
             draw_powerup(&p[i]);
         }
     }
@@ -186,17 +184,13 @@ void write_score(int score){
     destRect.x += 20;
     SDL_BlitSurface(textSprite, &E, window_surface, &destRect);
 
-    // Convertir le score en chaîne de caractères
     char scoreStr[10];
     sprintf(scoreStr, "%d", score);
 
-    // Position initiale pour blit
     int posX = 500;
 
-    // Pour chaque caractère dans la chaîne de score
     for (int i = 0; scoreStr[i] != '\0'; ++i) {
         SDL_Rect srcRect;
-        // Sélectionner le rectangle source correspondant au chiffre
         switch (scoreStr[i]) {
             case '0': srcRect = _0; break;
             case '1': srcRect = _1; break;
@@ -210,13 +204,10 @@ void write_score(int score){
             case '9': srcRect = _9; break;
         }
 
-        // Définir le rectangle de destination
         SDL_Rect destRectScore = {posX, 100, 32, 32};
 
-        // Blit le chiffre sur la surface de l'écran
         SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
 
-        // Avancer la position en x pour le prochain chiffre
         posX += 20;
     }
 }

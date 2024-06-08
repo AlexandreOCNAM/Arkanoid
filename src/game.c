@@ -11,7 +11,7 @@
 
 #define FPS 60
 int default_paddle_width = 64;
-
+int powerup_count = 0;
 
 void reset_game_components(game_components *gc);
 
@@ -31,7 +31,7 @@ void init_level(game *g, int level_nu) {
     g->level_number = level_nu;
     g->gc = malloc(sizeof(game_components));
     g->gc->b = create_ball();
-    if(level_nu ==1)
+    if(level_nu == 1)
         g->gc->p.w = default_paddle_width;
     g->gc->p = create_paddle(g->gc->p.w);
 }
@@ -44,7 +44,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, &g->gc->p);
+        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -111,6 +111,7 @@ void render(game *g) {
     draw_ball(&g->gc->b);
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
+    draw_powerups(powerups, powerup_count);
     write_score(score);
     update_window();
 }

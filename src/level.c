@@ -4,6 +4,7 @@
 
 #include "level.h"
 #include "extractFile.h"
+#include "game.h"
 
 void create_level(level *l, int level_number) {
     l->lives = 3;

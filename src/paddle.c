@@ -38,7 +38,7 @@ void strafe_paddle(paddle *p, int direction) {
     }
     p->x += p->vx;
 }
-
+/*
 void apply_powerup(paddle *p, int type) {
     if (type == 0) {
         p->w = 128;
@@ -49,7 +49,7 @@ void apply_powerup(paddle *p, int type) {
     else if (type == 2) {
         p->w = 256;
     }
-}
+}*/
 
 void reset_paddle(paddle *p, int paddle_width) {
     p->x = (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2;
