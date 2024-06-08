@@ -16,5 +16,5 @@ void strafe_paddle(paddle *p, int direction);
 void invert_paddle_velocity(paddle *p);
 void move_paddle(paddle *p);
 void apply_powerup(paddle *p, int type);
-void reset_paddle(paddle *p);
+void reset_paddle(paddle *p, int paddle_width);
 #endif //ARKANOID_PADDLE_H

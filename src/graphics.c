@@ -88,7 +88,8 @@ void blit_background() {
     const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
     const int window_height =  PLAYABLE_ZONE_HEIGHT;
-
+    SDL_Rect black = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
+    SDL_FillRect(window_surface, &black, SDL_MapRGB(window_surface->format, 0, 0, 0));
 
     for (int j = PLAYABLE_ZONE_HEIGHT_START; j < window_height; j += bg_height)
         for (int i = PLAYABLE_ZONE_WIDTH_START; i < window_width; i += bg_width)

@@ -100,7 +100,7 @@ void update(game *g) {
 
 void reset_game_components(game_components *gc) {
     reset_ball(&gc->b);
-    reset_paddle(&gc->p);
+    reset_paddle(&gc->p, gc->p.w);
 }
 
 void render(game *g) {
