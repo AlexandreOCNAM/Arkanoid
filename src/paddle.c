@@ -7,7 +7,7 @@
 
 paddle create_paddle(int paddle_width) {
     paddle result = {
-            (PLAYABLE_ZONE_WIDTH-paddle_width)/2, PLAYABLE_ZONE_HEIGHT -32, paddle_width, 16, 7, 0
+            (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2, PLAYABLE_ZONE_HEIGHT -32, paddle_width, 16, 7, 0
     };
     return result;
 }
@@ -52,7 +52,7 @@ void apply_powerup(paddle *p, int type) {
 }
 
 void reset_paddle(paddle *p, int paddle_width) {
-    p->x = PLAYABLE_ZONE_WIDTH-paddle_width)/2;
+    p->x = (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2;
     p->y = PLAYABLE_ZONE_HEIGHT - 32;
     p->w = paddle_width;
     p->h = 16;
