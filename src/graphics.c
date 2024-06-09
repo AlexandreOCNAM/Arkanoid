@@ -61,6 +61,13 @@ SDL_Surface* init_window()
     return SDL_GetWindowSurface(window);
 }
 
+
+void draw_balls(ball *b, int count) {
+    for (int i = 0; i < count; i++) {
+        draw_ball(&b[i]);
+    }
+}
+
 void draw_ball(ball *b) {
     SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }

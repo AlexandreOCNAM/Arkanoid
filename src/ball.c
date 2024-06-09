@@ -23,7 +23,11 @@ ball create_ball() {
     return result;
 }
 
-
+void move_balls(ball *balls, int balls_count, paddle *p, brick *bricks, int n){
+    for (int i = 0; i < balls_count; i++) {
+        move_ball(&balls[i], p, bricks, n);
+    }
+}
 
 void move_ball(ball *b, paddle *p, brick *bricks, int n) {
     if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
@@ -98,11 +102,11 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 }
 
 
-void reset_ball(ball *b) {
-    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
-    b->y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
-    b->vx = 0;
-    b->vy = 0;
+void reset_balls(ball *balls) {
+    balls[0].x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
+    balls[0].y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
+    balls[0].vx = 0;
+    balls[0].vy = 0;
 }
 
 void launch_ball(ball *b) {
@@ -113,5 +117,24 @@ void slow_ball(ball *b) {
     if(b->vx > 1 && b->vy > 1){
         b->vx -= 1;
         b->vy -= 1;
+    }
+}
+
+void split_ball(ball balls[], int *ball_count) {
+    if (*ball_count < MAX_BALLS) {
+        ball *original_ball = &balls[0];
+        ball *new_ball1 = &balls[*ball_count];
+        ball *new_ball2 = &balls[*ball_count + 1];
+
+        *new_ball1 = *original_ball;
+        *new_ball2 = *original_ball;
+
+        new_ball1->vx = original_ball->vx;
+        new_ball1->vy = -original_ball->vy;
+
+        new_ball2->vx = -original_ball->vx;
+        new_ball2->vy = original_ball->vy;
+
+        *ball_count += 2;
     }
 }

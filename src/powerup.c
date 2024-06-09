@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "powerup.h"
 #include "ball.h"
+#include "game.h"
 static int timeAccumulator = 0;
 
 
@@ -47,7 +48,7 @@ PowerUp create_powerup(int x, int y, PowerUpType type) {
     return result;
 }
 
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b) {
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b, int *balls_count) {
     for (int i = 0; i < *powerup_count; i++) {
         PowerUp *pu = &powerups[i];
         if (pu->active) {
@@ -57,6 +58,7 @@ void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double d
 
             if (SDL_HasIntersection(&paddle_rect, &powerup_rect)) {
                 pu->active = 0;
+                score += 1000;
                 switch (pu->type) {
                     case EXPAND:
                         printf("Has catched EXPAND");
@@ -77,6 +79,7 @@ void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double d
                         break;
                     case DIVIDE:
                         printf("Has catched DIVIDE");
+                        split_ball(b, balls_count);
                         break;
                     case CATCH:
                         printf("Has catched CATCH");

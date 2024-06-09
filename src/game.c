@@ -13,6 +13,8 @@
 int default_paddle_width = 64;
 int powerup_count = 0;
 
+
+
 void reset_game_components(game_components *gc);
 
 void init_game(game* g) {
@@ -30,7 +32,8 @@ void init_level(game *g, int level_nu) {
     create_level(g->l, level_nu);
     g->level_number = level_nu;
     g->gc = malloc(sizeof(game_components));
-    g->gc->b = create_ball();
+    g->gc->b[0] = create_ball();
+    g->gc->ball_count = 1;
     /*if(level_nu == 1)
         g->gc->p.w = default_paddle_width;*/
     g->gc->p = create_paddle(default_paddle_width);
@@ -44,7 +47,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b);
+        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b, &g->gc->ball_count);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -61,16 +64,16 @@ void handle_input(game* g) {
     if (keys[SDL_SCANCODE_ESCAPE]) {
         stop_game(g);
     }
-    if (keys[SDL_SCANCODE_SPACE]) {
+    if (keys[SDL_SCANCODE_SPACE] && g->l->is_started != 1) {
         g->l->is_started = 1;
         launch_ball(&g->gc->b);
     }
     if (g->l->is_started == 0) {
         if (keys[SDL_SCANCODE_LEFT]) {
-            g->gc->b.vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->b.vx, BALL_MAX_SPEED));
+            g->gc->b[0].vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->b[0].vx, BALL_MAX_SPEED));
         }
         else if (keys[SDL_SCANCODE_RIGHT]){
-            g->gc->b.vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->b.vx, BALL_MAX_SPEED));
+            g->gc->b[0].vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->b[0].vx, BALL_MAX_SPEED));
         }
     }
     else {
@@ -96,19 +99,21 @@ void update(game *g) {
             create_level(g->l, g->level_number);
         }
         else {
-            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks);
+            move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks);
         }
     }
 }
 
 void reset_game_components(game_components *gc) {
-    reset_ball(&gc->b);
+    reset_balls(&gc->b);
+    gc->ball_count = 1;
+    powerup_count = 0;
     reset_paddle(&gc->p, srcVaiss[0].w);
 }
 
 void render(game *g) {
     blit_background();
-    draw_ball(&g->gc->b);
+    draw_balls(&g->gc->b, g->gc->ball_count);
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
     draw_powerups(powerups, powerup_count);

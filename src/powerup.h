@@ -30,7 +30,7 @@ typedef struct {
 } PowerUp;
 
 PowerUp create_powerup(int x, int y, PowerUpType type);
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b);
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b, int *balls_count);
 void update_powerup_animation(PowerUp *pu, double delta_t);
 
 #endif //ARKANOID_POWERUP_H

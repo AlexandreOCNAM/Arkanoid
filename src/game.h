@@ -17,7 +17,8 @@ PowerUp powerups[MAX_POWERUPS];
 
 
 typedef struct {
-    ball b;
+    ball b[MAX_BALLS];
+    int ball_count;
     paddle p;
 } game_components;
 
