@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "collisions.h"
 
+
 /*
 void ball_powerup_collision(ball *b, PowerUp *p) {
     if (b->x + b->w >= p->x && b->x <= p->x + p->w && b->y + b->h >= p->y && b->y <= p->y + p->h) {

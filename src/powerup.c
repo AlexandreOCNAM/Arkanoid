@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "powerup.h"
+#include "ball.h"
 static int timeAccumulator = 0;
 
 
@@ -46,7 +47,7 @@ PowerUp create_powerup(int x, int y, PowerUpType type) {
     return result;
 }
 
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, ball *b) {
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b) {
     for (int i = 0; i < *powerup_count; i++) {
         PowerUp *pu = &powerups[i];
         if (pu->active) {

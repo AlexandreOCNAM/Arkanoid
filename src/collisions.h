@@ -9,6 +9,9 @@
 #include "paddle.h"
 #include "brick.h"
 
+// Pré-déclaration de la structure PowerUp si nécessaire
+struct PowerUp;
+
 void ball_powerup_collision(ball *b, PowerUp *p);
 void paddle_powerup_collision(paddle *p, PowerUp *pu);
 
