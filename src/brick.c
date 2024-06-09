@@ -3,14 +3,15 @@
 //
 
 #include "brick.h"
+#include "game.h"
 
 static int timeAccumulator = 0;
 static int goldenBrickState = 0;
 static int silverBrickState = 0;
 
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
-    brick->x = x;
-    brick->y = y;
+    brick->x = x + PLAYABLE_ZONE_WIDTH_START;
+    brick->y = y + PLAYABLE_ZONE_HEIGHT_START;
     brick->w = width + 0.49f;
     brick->h = height + 0.49f;
     brick->health = health;

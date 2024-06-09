@@ -9,10 +9,10 @@
 
 ball create_ball() {
     ball result = {
-        .x = 128 + 64,
-        .y = PLAYABLE_ZONE_HEIGHT - 16 - 24,
-        .w = 24,
-        .h = 24,
+        .x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
+        .y = PLAYABLE_ZONE_HEIGHT - 32 - 8,
+        .w = 8,
+        .h = 8,
         .vx = 0,
         .vy = 0,
         .rect = malloc(sizeof(SDL_Rect))
@@ -29,13 +29,13 @@ ball create_ball() {
 void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score, int* lives) {
 
 
-    if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
+    if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    else if (b->y < 0 ) {
+    if (b->y < PLAYABLE_ZONE_HEIGHT_START) {
         b->vy = -b->vy;
     }
-    else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+    else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h){
         reset_ball(b);
         reset_paddle(p);
         *lives -= 1;
@@ -48,17 +48,17 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score, int* lives)
                 b->y < bricks[i].y + bricks[i].h &&
                 b->y + b->h > bricks[i].y) {
 
-                // use SDL_IntersectRect to get the intersection of the ball and the brick
-                SDL_Rect intersection;
-                SDL_IntersectRect(b->rect, &bricks[i].srcRect, &intersection);
+                // Handle the collision
+                float top = fabs(b->y + b->h - bricks[i].y);
+                float bottom = fabs(bricks[i].y + bricks[i].h - b->y);
+                float left = fabs(b->x + b->w - bricks[i].x);
+                float right = fabs(bricks[i].x + bricks[i].w - b->x);
 
-                // Check if the intersection is horizontal or vertical or both
-                if (intersection.w > intersection.h) {
+                float min = fmin(fmin(fmin(top, bottom), left), right);
+
+                if (min == top || min == bottom) {
                     b->vy = -b->vy;
-                } else if (intersection.h > intersection.w) {
-                    b->vx = -b->vx;
                 } else {
-                    b->vy = -b->vy;
                     b->vx = -b->vx;
                 }
 
@@ -118,8 +118,8 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
 }
 
 void reset_ball(ball *b) {
-    b->x = 128 + 64;
-    b->y = PLAYABLE_ZONE_HEIGHT - 16 - 24;
+    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
+    b->y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
     b->vx = 0;
     b->vy = 0;
 }

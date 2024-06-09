@@ -28,6 +28,16 @@ extern SDL_Rect defaultBrick;
 //Backgrounds
 extern SDL_Rect backgrounds[12];
 
+//Tubes
+extern SDL_Rect tube_v;
+extern SDL_Rect tube_h;
+extern SDL_Rect big_tube_v;
+extern SDL_Rect big_tube_h;
+extern SDL_Rect corner_top_left;
+extern SDL_Rect corner_top_right;
+extern SDL_Rect corner_bottom_right;
+extern SDL_Rect corner_bottom_left;
+
 // Lettres de l'alphabet
 extern SDL_Rect A;
 extern SDL_Rect B;

@@ -13,7 +13,7 @@ void create_level(level *l, int level_number) {
     char path[50] = {0};
     sprintf(path, "../Levels/niveau%d.txt", level_number);
     printf("Loading level from %s\n", path);
-    load_level(path, l->bricks, &l->num_bricks);
+    load_level(path, l->bricks, &l->num_bricks, level_number);
 }
 
 int is_level_over(level *l) {
