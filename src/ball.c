@@ -118,7 +118,7 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
 }
 
 void reset_ball(ball *b) {
-    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
+    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
     b->y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
     b->vx = 0;
     b->vy = 0;
