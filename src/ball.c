@@ -1,6 +1,6 @@
 #include "ball.h"
 #include "collisions.h"
-#include "game.h"
+#include "constant.h"
 
 #define MAX_SPEED 7
 #define ZONE_SIZE SCREEN_HEIGHT / 4
@@ -26,14 +26,19 @@ ball create_ball() {
 
 
 
-void move_ball(ball *b, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score, int* lives) {
 
 
     if (b->x < 0 || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < 0 || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+    else if (b->y < 0 ) {
         b->vy = -b->vy;
+    }
+    else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+        reset_ball(b);
+        reset_paddle(p);
+        *lives -= 1;
     }
     // Check for collision with bricks
     for (int i = 0; i < n; i++) {
@@ -43,22 +48,22 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
                 b->y < bricks[i].y + bricks[i].h &&
                 b->y + b->h > bricks[i].y) {
 
-                // Handle the collision
-                float top = fabs(b->y + b->h - bricks[i].y);
-                float bottom = fabs(bricks[i].y + bricks[i].h - b->y);
-                float left = fabs(b->x + b->w - bricks[i].x);
-                float right = fabs(bricks[i].x + bricks[i].w - b->x);
+                // use SDL_IntersectRect to get the intersection of the ball and the brick
+                SDL_Rect intersection;
+                SDL_IntersectRect(b->rect, &bricks[i].srcRect, &intersection);
 
-                float min = fmin(fmin(fmin(top, bottom), left), right);
-
-                if (min == top || min == bottom) {
+                // Check if the intersection is horizontal or vertical or both
+                if (intersection.w > intersection.h) {
                     b->vy = -b->vy;
+                } else if (intersection.h > intersection.w) {
+                    b->vx = -b->vx;
                 } else {
+                    b->vy = -b->vy;
                     b->vx = -b->vx;
                 }
 
                 // Reduce the brick's health
-                score += fmax(damage_brick(&bricks[i]), 0);
+                *score += fmax(damage_brick(&bricks[i]), 0);
                 break;
             }
         }

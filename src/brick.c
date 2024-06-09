@@ -11,8 +11,8 @@ static int silverBrickState = 0;
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x;
     brick->y = y;
-    brick->w = width;
-    brick->h = height;
+    brick->w = width + 0.49f;
+    brick->h = height + 0.49f;
     brick->health = health;
     brick->points = points;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);

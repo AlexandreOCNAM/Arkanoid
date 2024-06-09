@@ -17,6 +17,10 @@ void create_level(level *l, int level_number) {
 }
 
 int is_level_over(level *l) {
+    if (l->lives <= 0) {
+        puts("Game over");
+        return -1;
+    }
     for (int i = 0; i < l->num_bricks; i++) {
         if (l->bricks[i].health == -1) {
             continue;
@@ -25,6 +29,7 @@ int is_level_over(level *l) {
             return 0;
         }
     }
+
     puts("Level over");
     return 1;
 }
