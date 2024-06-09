@@ -31,9 +31,9 @@ void init_level(game *g, int level_nu) {
     g->level_number = level_nu;
     g->gc = malloc(sizeof(game_components));
     g->gc->b = create_ball();
-    if(level_nu == 1)
-        g->gc->p.w = default_paddle_width;
-    g->gc->p = create_paddle(g->gc->p.w);
+    /*if(level_nu == 1)
+        g->gc->p.w = default_paddle_width;*/
+    g->gc->p = create_paddle(default_paddle_width);
 }
 
 _Noreturn void play_game(game* g) {
@@ -44,7 +44,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t);
+        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -103,7 +103,7 @@ void update(game *g) {
 
 void reset_game_components(game_components *gc) {
     reset_ball(&gc->b);
-    reset_paddle(&gc->p, gc->p.w);
+    reset_paddle(&gc->p, srcVaiss[0].w);
 }
 
 void render(game *g) {

@@ -67,7 +67,7 @@ void draw_ball(ball *b) {
 
 void draw_paddle(paddle *p) {
     SDL_Rect rect = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(brickSprite, &srcVaiss, window_surface, &rect);
+    SDL_BlitSurface(brickSprite, &p->srcRect, window_surface, &rect);
 }
 
 void draw_brick(brick *b) {

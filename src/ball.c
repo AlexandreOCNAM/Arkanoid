@@ -108,16 +108,10 @@ void reset_ball(ball *b) {
 void launch_ball(ball *b) {
     b->vy = -BALL_MAX_SPEED;
 }
-/*
-void apply_ball_powerup(ball *b, PowerUp *p) {
-    switch (p->type) {
-        case 0:
-            b->vx = 5;
-            b->vy = 5;
-            break;
-        case 1:
-            b->vx = 10;
-            b->vy = 10;
-            break;
+
+void slow_ball(ball *b) {
+    if(b->vx > 1 && b->vy > 1){
+        b->vx -= 1;
+        b->vy -= 1;
     }
-}*/
+}

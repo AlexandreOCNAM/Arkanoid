@@ -8,7 +8,7 @@
 
 extern SDL_Rect srcBg;
 extern SDL_Rect srcBall;
-extern SDL_Rect srcVaiss;
+extern SDL_Rect srcVaiss[8];
 
 extern SDL_Rect whiteBrick;
 extern SDL_Rect orangeBrick;

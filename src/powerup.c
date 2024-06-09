@@ -46,42 +46,44 @@ PowerUp create_powerup(int x, int y, PowerUpType type) {
     return result;
 }
 
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t) {
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, ball *b) {
     for (int i = 0; i < *powerup_count; i++) {
         PowerUp *pu = &powerups[i];
         if (pu->active) {
             pu->y += 2; // Descend le power-up
             SDL_Rect paddle_rect = {p->x, p->y, p->w, p->h};
             SDL_Rect powerup_rect = {pu->x, pu->y, pu->w, pu->h};
-/*
+
             if (SDL_HasIntersection(&paddle_rect, &powerup_rect)) {
                 pu->active = 0;
                 switch (pu->type) {
                     case EXPAND:
-                        p->w *= 2;
+                        printf("Has catched EXPAND");
+                        extend_paddle(p);
                         break;
                     case LASER:
-                        p->w /= 2;
+                        printf("Has catched LASER");
                         break;
                     case BREAK:
-                        // Passer au niveau suivant
+                        printf("Has catched BREAK");
                         break;
                     case PLAYER:
-                        // Ajouter une vie au joueur
+                        printf("Has catched PLAYER");
                         break;
                     case SLOW:
-                        // Augmenter la vitesse de la balle
+                        printf("Has catched SLOW");
+                        slow_ball(b);
                         break;
                     case DIVIDE:
-                        // Diviser la balle
+                        printf("Has catched DIVIDE");
                         break;
                     case CATCH:
-                        // Rendre la palette collante
+                        printf("Has catched CATCH");
                         break;
                     default:
                         break;
                 }
-            }*/
+            }
 
             if (pu->y > SCREEN_HEIGHT) {
                 pu->active = 0;

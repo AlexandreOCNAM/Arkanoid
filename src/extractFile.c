@@ -151,7 +151,7 @@ void load_level(const char *filename, brick bricks[], int *brick_count, int leve
 
 
                 (*brick_count)++;
-                printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
+                //printf("Placed brick of type '%dx%d' at (%d, %d), with PV = %d\n", brick_type, brick_number, x * BRICK_WIDTH, y * BRICK_HEIGHT, brick_health); // Message de débogage
             }
         }
 
@@ -167,9 +167,24 @@ void load_level(const char *filename, brick bricks[], int *brick_count, int leve
 
 PowerUpType assign_random_powerup() {
     int random_value = rand() % 100;
-    if (random_value < 10) { // 20% de chance d'avoir un powerup
-        int powerup_type = rand() % 7 + 1; // SLOW à PLAYER (1 à 7)
-        return (PowerUpType) powerup_type;
+    if (random_value < 20) { // 20% de chance d'avoir un powerup
+        int powerup_type_value = rand() % 100; // Utiliser une plage de 0 à 99 pour des probabilités précises
+
+        if (powerup_type_value < 16) { // 16% de chance pour SLOW
+            return SLOW;
+        } else if (powerup_type_value < 32) { // 16% de chance pour CATCH
+            return CATCH;
+        } else if (powerup_type_value < 48) { // 16% de chance pour EXPAND
+            return EXPAND;
+        } else if (powerup_type_value < 64) { // 16% de chance pour DIVIDE
+            return DIVIDE;
+        } else if (powerup_type_value < 80) { // 16% de chance pour LASER
+            return LASER;
+        } else if (powerup_type_value < 95) { // 15% de chance pour PLAYER
+            return PLAYER;
+        } else { // 5% de chance pour BREAK
+            return BREAK;
+        }
     }
     return NONE; // 80% de chance d'avoir NONE
 }

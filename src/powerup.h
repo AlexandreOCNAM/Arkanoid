@@ -8,6 +8,7 @@
 #include "paddle.h"
 #include "constant.h"
 #include "spriteConstant.h"
+#include "ball.h"
 
 typedef enum {
     NONE,
@@ -30,7 +31,7 @@ typedef struct {
 } PowerUp;
 
 PowerUp create_powerup(int x, int y, PowerUpType type);
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t);
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, ball *b);
 void update_powerup_animation(PowerUp *pu, double delta_t);
 
 #endif //ARKANOID_POWERUP_H

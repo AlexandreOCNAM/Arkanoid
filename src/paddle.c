@@ -3,12 +3,19 @@
 //
 
 #include "paddle.h"
-#include "constant.h"
+
+int paddle_type;
 
 paddle create_paddle(int paddle_width) {
     paddle result = {
-            (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2, PLAYABLE_ZONE_HEIGHT -32, paddle_width, 16, 7, 0
+            (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2,
+            PLAYABLE_ZONE_HEIGHT -32,
+            paddle_width,
+            16,
+            7,
+            0,
     };
+    result.srcRect = srcVaiss[0];
     return result;
 }
 
@@ -38,18 +45,14 @@ void strafe_paddle(paddle *p, int direction) {
     }
     p->x += p->vx;
 }
-/*
-void apply_powerup(paddle *p, int type) {
-    if (type == 0) {
-        p->w = 128;
-    }
-    else if (type == 1) {
-        p->w = 64;
-    }
-    else if (type == 2) {
-        p->w = 256;
-    }
-}*/
+
+void extend_paddle(paddle *p) {
+    paddle_type++;
+    p->srcRect = srcVaiss[paddle_type];
+    p->w = srcVaiss[paddle_type].w;
+}
+
+
 
 void reset_paddle(paddle *p, int paddle_width) {
     p->x = (PLAYABLE_ZONE_WIDTH_START+PLAYABLE_ZONE_WIDTH-paddle_width)/2;
@@ -58,4 +61,6 @@ void reset_paddle(paddle *p, int paddle_width) {
     p->h = 16;
     p->vx = 7;
     p->vy = 0;
+    p->srcRect = srcVaiss[0];
+    paddle_type = 0;
 }

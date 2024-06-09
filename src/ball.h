@@ -24,6 +24,7 @@ void handle_paddle_collision(ball *b, paddle *p);
 void handle_brick_collision(ball *b, brick *br);
 void reset_ball(ball *b);
 void launch_ball(ball *b);
+void slow_ball(ball *b);
 
 
 #endif
