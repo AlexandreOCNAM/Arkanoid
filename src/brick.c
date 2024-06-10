@@ -12,8 +12,8 @@ static int silverBrickState = 0;
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x + PLAYABLE_ZONE_WIDTH_START;
     brick->y = y + PLAYABLE_ZONE_HEIGHT_START;
-    brick->w = width;
-    brick->h = height;
+    brick->w = width + 0.49f;
+    brick->h = height + 0.49f;
     brick->health = health;
     brick->points = points;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);
@@ -26,7 +26,7 @@ int damage_brick(brick *b) {
     }
     b->health = fmax(0, b->health - 1);
     if (b->health == 0) {
-        score += b->points;
+        return b->points;
     }
 }
 

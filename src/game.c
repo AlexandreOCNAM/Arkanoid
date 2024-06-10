@@ -85,15 +85,19 @@ void handle_input(game* g) {
 
 void update(game *g) {
     if (g->l->is_started) {
-        if (is_level_over(g->l)) {
+        int end = is_level_over(g->l);
+        if (end == 1) {
             g->level_number += 1;
 
             reset_level(g->l);
             reset_game(g);
             create_level(g->l, g->level_number);
         }
+        else if (end == -1) {
+            end_game(g);
+        }
         else {
-            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks);
+            move_ball(&g->gc->b, &g->gc->p, g->l->bricks, g->l->num_bricks, &score, &g->l->lives);
         }
     }
 }
@@ -109,6 +113,7 @@ void render(game *g) {
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
     write_score(score);
+    write_lives(g->l->lives);
     update_window();
 }
 
@@ -119,6 +124,17 @@ void stop_game(game *g) {
 
 void reset_game(game *g) {
     reset_game_components(g->gc);
+    SDL_Delay(1000);
+    blit_background();
+    update_window();
+}
+
+void end_game(game *g) {
+    reset_game(g);
+    reset_level(g->l);
+    g->level_number = 1;
+    score = 0;
+    create_level(g->l, g->level_number);
     SDL_Delay(1000);
     blit_background();
     update_window();

@@ -52,10 +52,8 @@ void apply_powerup(paddle *p, int type) {
 }
 
 void reset_paddle(paddle *p) {
-    p->x = 128;
-    p->y = PLAYABLE_ZONE_HEIGHT - 16;
-    p->w = 128;
-    p->h = 32;
-    p->vx = 5;
+    p->x = (PLAYABLE_ZONE_WIDTH-p->w)/2,
+    p->y = PLAYABLE_ZONE_HEIGHT - 32;
+    p->vx = 6;
     p->vy = 0;
 }

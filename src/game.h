@@ -11,7 +11,7 @@
 #include "ball.h"
 #include "level.h"
 
-int score;
+static int score;
 
 typedef struct {
     ball b;
@@ -33,6 +33,7 @@ void render(game* g);
 void stop_game(game *g);
 void reset_game(game* g);
 void init_level(game *g, int level_nu);
+void end_game(game *g);
 
 
 

@@ -1,6 +1,6 @@
 #include "ball.h"
 #include "collisions.h"
-#include "game.h"
+#include "constant.h"
 
 #define MAX_SPEED 7
 #define ZONE_SIZE SCREEN_HEIGHT / 4
@@ -26,12 +26,19 @@ ball create_ball() {
 
 
 
-void move_ball(ball *b, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n, int* score, int* lives) {
+
+
     if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
         b->vx = -b->vx;
     }
-    if (b->y < PLAYABLE_ZONE_HEIGHT_START || b->y > PLAYABLE_ZONE_HEIGHT - b->h) {
+    if (b->y < PLAYABLE_ZONE_HEIGHT_START) {
         b->vy = -b->vy;
+    }
+    else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h){
+        reset_ball(b);
+        reset_paddle(p);
+        *lives -= 1;
     }
     // Check for collision with bricks
     for (int i = 0; i < n; i++) {
@@ -56,7 +63,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
                 }
 
                 // Reduce the brick's health
-                damage_brick(&bricks[i]);
+                *score += fmax(damage_brick(&bricks[i]), 0);
                 break;
             }
         }
@@ -111,7 +118,7 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
 }
 
 void reset_ball(ball *b) {
-    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
+    b->x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
     b->y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
     b->vx = 0;
     b->vy = 0;

@@ -72,7 +72,7 @@ void draw_paddle(paddle *p) {
 
 void draw_brick(brick *b) {
     SDL_Rect rect = get_brick_rect(b);
-    SDL_BlitSurface(brickSprite, &rect, window_surface, &(SDL_Rect){b->x, b->y, b->w, b->h});
+    SDL_BlitSurface(brickSprite, &rect, window_surface, &(SDL_Rect){b->x, b->y, b->w+1, b->h+1});
 }
 
 void draw_bricks(brick *b, int n) {
@@ -209,6 +209,58 @@ void write_score(int score){
 
         // Définir le rectangle de destination
         SDL_Rect destRectScore = {posX, 100, 32, 32};
+
+        // Blit le chiffre sur la surface de l'écran
+        SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
+
+        // Avancer la position en x pour le prochain chiffre
+        posX += 20;
+    }
+}
+
+void write_lives(int lives){
+    SDL_Rect destRect;
+    destRect.x = 500;
+    destRect.y = 150;
+    destRect.w = 32;
+    destRect.h = 32;
+
+    SDL_BlitSurface(textSprite, &L, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &I, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &V, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &E, window_surface, &destRect);
+    destRect.x += 20;
+    SDL_BlitSurface(textSprite, &S, window_surface, &destRect);
+
+    // Convertir le score en chaîne de caractères
+    char livesStr[10];
+    sprintf(livesStr, "%d", lives);
+
+    // Position initiale pour blit
+    int posX = 500;
+
+    // Pour chaque caractère dans la chaîne de score
+    for (int i = 0; livesStr[i] != '\0'; ++i) {
+        SDL_Rect srcRect;
+        // Sélectionner le rectangle source correspondant au chiffre
+        switch (livesStr[i]) {
+            case '0': srcRect = _0; break;
+            case '1': srcRect = _1; break;
+            case '2': srcRect = _2; break;
+            case '3': srcRect = _3; break;
+            case '4': srcRect = _4; break;
+            case '5': srcRect = _5; break;
+            case '6': srcRect = _6; break;
+            case '7': srcRect = _7; break;
+            case '8': srcRect = _8; break;
+            case '9': srcRect = _9; break;
+        }
+
+        // Définir le rectangle de destination
+        SDL_Rect destRectScore = {posX, 200, 32, 32};
 
         // Blit le chiffre sur la surface de l'écran
         SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
