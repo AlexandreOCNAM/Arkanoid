@@ -62,6 +62,7 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
     free(balls);
     balls = malloc(sizeof(ball*) * count);
     memcpy(balls, new_balls, sizeof(ball*) * count);
+    free(new_balls);
     if (*balls_count == 0){
         l->is_playing = 0;
         l->is_started = 0;
