@@ -12,8 +12,8 @@ static int silverBrickState = 0;
 void create_brick(brick *brick, int x, int y, int width, int height, int health, int points) {
     brick->x = x + PLAYABLE_ZONE_WIDTH_START;
     brick->y = y + PLAYABLE_ZONE_HEIGHT_START;
-    brick->w = width;
-    brick->h = height;
+    brick->w = width + 0.49f;
+    brick->h = height + 0.49f;
     brick->health = health;
     brick->points = points;
     //printf("Created brick at (%d, %d) with health %d\n", x, y, health);
@@ -53,6 +53,9 @@ int is_brick_breakable(brick *b) {
 void update_bricks(double delta_t) {
     if(delta_t > 0)
         timeAccumulator += delta_t*1000;
+
+
+    // Animer toutes les 5 secondes
     if (timeAccumulator >= 5000) {
         int frame = (int)((timeAccumulator - 5000) / 100) % 6;
 

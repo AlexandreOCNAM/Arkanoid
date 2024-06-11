@@ -6,6 +6,7 @@
 #include "powerup.h"
 #include "ball.h"
 #include "game.h"
+
 static int timeAccumulator = 0;
 
 
@@ -48,7 +49,7 @@ PowerUp create_powerup(int x, int y, PowerUpType type) {
     return result;
 }
 
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b, int *balls_count) {
+void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b, int *balls_count, int *lives) {
     for (int i = 0; i < *powerup_count; i++) {
         PowerUp *pu = &powerups[i];
         if (pu->active) {
@@ -71,11 +72,14 @@ void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double d
                         printf("Has catched BREAK");
                         break;
                     case PLAYER:
+                        lives += 1;
                         printf("Has catched PLAYER");
                         break;
                     case SLOW:
                         printf("Has catched SLOW");
-                        slow_ball(b);
+                        for(int j = 0; j == balls_count; j++) {
+                            slow_ball(b);
+                        }
                         break;
                     case DIVIDE:
                         printf("Has catched DIVIDE");

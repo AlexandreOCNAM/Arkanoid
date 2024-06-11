@@ -47,7 +47,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b, &g->gc->ball_count);
+        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b, &g->gc->ball_count, &g->l->lives);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -64,9 +64,11 @@ void handle_input(game* g) {
     if (keys[SDL_SCANCODE_ESCAPE]) {
         stop_game(g);
     }
-    if (keys[SDL_SCANCODE_SPACE] && g->l->is_started != 1) {
+    if (keys[SDL_SCANCODE_SPACE]) {
+    //if (keys[SDL_SCANCODE_SPACE]) {
         g->l->is_started = 1;
-        launch_ball(&g->gc->b);
+        g->l->is_playing = 1;
+        launch_ball(&g->gc->b[0]);
     }
     if (g->l->is_started == 0) {
         if (keys[SDL_SCANCODE_LEFT]) {
@@ -77,10 +79,10 @@ void handle_input(game* g) {
         }
     }
     else {
-        if (keys[SDL_SCANCODE_LEFT]) {
+        if (keys[SDL_SCANCODE_LEFT] && g->l->is_playing) {
             // collision of the paddle with the left wall
             strafe_paddle(&g->gc->p, 0);
-        } else if (keys[SDL_SCANCODE_RIGHT]) {
+        } else if (keys[SDL_SCANCODE_RIGHT] && g->l->is_playing) {
             // collision of the paddle with the right wall
             strafe_paddle(&g->gc->p, 1);
         } else {
@@ -91,21 +93,25 @@ void handle_input(game* g) {
 
 void update(game *g) {
     if (g->l->is_started) {
-        if (is_level_over(g->l)) {
+        int end = is_level_over(g->l);
+        if (end == 1) {
             g->level_number += 1;
 
             reset_level(g->l);
             reset_game(g);
             create_level(g->l, g->level_number);
         }
+        else if (end == -1) {
+            end_game(g);
+        }
         else {
-            move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks);
+            move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
         }
     }
 }
 
 void reset_game_components(game_components *gc) {
-    reset_balls(&gc->b);
+    reset_balls(gc->b, gc->ball_count);
     gc->ball_count = 1;
     powerup_count = 0;
     reset_paddle(&gc->p, srcVaiss[0].w);
@@ -118,6 +124,7 @@ void render(game *g) {
     draw_bricks(g->l->bricks, g->l->num_bricks);
     draw_powerups(powerups, powerup_count);
     write_score(score);
+    write_lives(g->l->lives);
     update_window();
 }
 
@@ -128,6 +135,17 @@ void stop_game(game *g) {
 
 void reset_game(game *g) {
     reset_game_components(g->gc);
+    SDL_Delay(1000);
+    blit_background();
+    update_window();
+}
+
+void end_game(game *g) {
+    reset_game(g);
+    reset_level(g->l);
+    g->level_number = 1;
+    score = 0;
+    create_level(g->l, g->level_number);
     SDL_Delay(1000);
     blit_background();
     update_window();

@@ -167,7 +167,7 @@ void load_level(const char *filename, brick bricks[], int *brick_count, int leve
 
 PowerUpType assign_random_powerup() {
     int random_value = rand() % 100;
-    if (random_value < 10) { // 20% de chance d'avoir un powerup
+    if (random_value < 50) { // 20% de chance d'avoir un powerup
         int powerup_type_value = rand() % 100; // Utiliser une plage de 0 à 99 pour des probabilités précises
 
         if (powerup_type_value < 16) { // 16% de chance pour SLOW
