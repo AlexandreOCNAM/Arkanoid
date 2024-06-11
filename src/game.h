@@ -38,7 +38,7 @@ void stop_game(game *g);
 void reset_game(game* g);
 void init_level(game *g, int level_nu);
 void end_game(game *g);
-
+void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, game_components *gc, level *l);
 
 
 #endif //ARKANOID_GAME_H

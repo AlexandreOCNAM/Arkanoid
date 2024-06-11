@@ -47,7 +47,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, &g->gc->p, delta_t, &g->gc->b, &g->gc->ball_count, &g->l->lives);
+        update_powerups(powerups, &powerup_count, delta_t, g->gc,&g->l->lives);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -68,7 +68,8 @@ void handle_input(game* g) {
     //if (keys[SDL_SCANCODE_SPACE]) {
         g->l->is_started = 1;
         g->l->is_playing = 1;
-        launch_ball(&g->gc->b[0]);
+        if(g->gc->b[0].is_catch == 1)
+            launch_ball(&g->gc->b[0]);
     }
     if (g->l->is_started == 0) {
         if (keys[SDL_SCANCODE_LEFT]) {
@@ -105,7 +106,9 @@ void update(game *g) {
             end_game(g);
         }
         else {
-            move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
+            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
+            if(all_killed == 1)
+                powerup_count = 0;
         }
     }
 }
@@ -149,4 +152,62 @@ void end_game(game *g) {
     SDL_Delay(1000);
     blit_background();
     update_window();
+}
+
+
+void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, game_components *gc, level *l) {
+    for (int i = 0; i < *powerup_count; i++) {
+        PowerUp *pu = &powerups[i];
+        if (pu->active) {
+            pu->y += 2; // Descend le power-up
+            SDL_Rect paddle_rect = {gc->p.x, gc->p.y, gc->p.w, gc->p.h};
+            SDL_Rect powerup_rect = {pu->x, pu->y, pu->w, pu->h};
+
+            if (SDL_HasIntersection(&paddle_rect, &powerup_rect)) {
+                pu->active = 0;
+                score += 1000;
+                switch (pu->type) {
+                    case EXPAND:
+                        printf("Has catched EXPAND");
+                        extend_paddle(&gc->p);
+                        break;
+                    case LASER:
+                        printf("Has catched LASER");
+                        break;
+                    case BREAK:
+                        for (int i = 0; i < l->num_bricks; i++) {
+                            l->bricks[i].health = 0;
+                        }
+                        printf("Has catched BREAK");
+                        break;
+                    case PLAYER:
+                        add_life(l);
+                        printf("Has catched PLAYER");
+                        break;
+                    case SLOW:
+                        printf("Has catched SLOW");
+                        for(int j = 0; j == gc->ball_count; j++){
+                            set_ball_speed(&gc->b[j], 1, 1);
+                        }
+                        break;
+                    case DIVIDE:
+                        printf("Has catched DIVIDE");
+                        split_ball(gc->b, &gc->ball_count);
+                        break;
+                    case CATCH:
+                        printf("Has catched CATCH");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (pu->y > SCREEN_HEIGHT) {
+                pu->active = 0;
+            }
+
+            update_powerup_animation(pu, delta_t);
+
+        }
+    }
 }

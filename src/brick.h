@@ -8,6 +8,7 @@
 #include "powerup.h"
 #include <SDL2/SDL.h>
 #include "spriteConstant.h"
+
 extern int powerup_count;
 
 typedef struct {

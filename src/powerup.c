@@ -4,8 +4,6 @@
 
 #include <stdlib.h>
 #include "powerup.h"
-#include "ball.h"
-#include "game.h"
 
 static int timeAccumulator = 0;
 
@@ -49,66 +47,13 @@ PowerUp create_powerup(int x, int y, PowerUpType type) {
     return result;
 }
 
-void update_powerups(PowerUp powerups[], int *powerup_count, paddle *p, double delta_t, struct ball *b, int *balls_count, int *lives) {
-    for (int i = 0; i < *powerup_count; i++) {
-        PowerUp *pu = &powerups[i];
-        if (pu->active) {
-            pu->y += 2; // Descend le power-up
-            SDL_Rect paddle_rect = {p->x, p->y, p->w, p->h};
-            SDL_Rect powerup_rect = {pu->x, pu->y, pu->w, pu->h};
-
-            if (SDL_HasIntersection(&paddle_rect, &powerup_rect)) {
-                pu->active = 0;
-                score += 1000;
-                switch (pu->type) {
-                    case EXPAND:
-                        printf("Has catched EXPAND");
-                        extend_paddle(p);
-                        break;
-                    case LASER:
-                        printf("Has catched LASER");
-                        break;
-                    case BREAK:
-                        printf("Has catched BREAK");
-                        break;
-                    case PLAYER:
-                        lives += 1;
-                        printf("Has catched PLAYER");
-                        break;
-                    case SLOW:
-                        printf("Has catched SLOW");
-                        for(int j = 0; j == balls_count; j++) {
-                            slow_ball(b);
-                        }
-                        break;
-                    case DIVIDE:
-                        printf("Has catched DIVIDE");
-                        split_ball(b, balls_count);
-                        break;
-                    case CATCH:
-                        printf("Has catched CATCH");
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (pu->y > SCREEN_HEIGHT) {
-                pu->active = 0;
-            }
-
-            update_powerup_animation(pu, delta_t);
-        }
-    }
-}
-
 
 void update_powerup_animation(PowerUp *pu, double delta_t) {
     if(delta_t > 0)
         timeAccumulator += delta_t*1000;
 
-    if (pu->active) {
-        pu->current_state = (int)(timeAccumulator / 200) % 6;
+    if(pu->active) {
+        pu->current_state = (int) (timeAccumulator / 200) % 6;
         switch (pu->type) {
             case EXPAND:
                 pu->srcRect = E_bonus_states[pu->current_state];

@@ -15,7 +15,8 @@ ball create_ball() {
         .vx = 0,
         .vy = 0,
         .rect = malloc(sizeof(SDL_Rect)),
-        .active = 1
+        .active = 1,
+        .is_catch = 1,
     };
     result.rect->x = result.x;
     result.rect->y = result.y;
@@ -24,23 +25,24 @@ ball create_ball() {
     return result;
 }
 
-void move_balls(ball *balls, int balls_count, paddle *p, brick *bricks, int n, level *l){
+int move_balls(ball *balls, int balls_count, paddle *p, brick *bricks, int n, level *l){
     int all_killed = 0;
     for (int i = 0; i < balls_count; i++) {
-        all_killed += move_ball(&balls[i], p, bricks, n, &l);
+        all_killed += move_ball(&balls[i], p, bricks, n);
         if(all_killed == balls_count) {
             reset_balls(&balls[i], balls_count);
             reset_paddle(p, srcVaiss[0].w);
             l->is_playing = 0;
             l->lives -= 1;
+            return 1;
         }
         else{
-
+            return 0;
         }
     }
 }
 
-int move_ball(ball *b, paddle *p, brick *bricks, int n, level *l) {
+int move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
     int killed = 0;
     if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
@@ -136,6 +138,11 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
     }
 }
 
+void set_ball_speed(ball *b, int vx, int vy){
+    b->vx = vx;
+    b->vy = vy;
+}
+
 
 void reset_balls(ball *balls, int ball_count) {
     balls[0].x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
@@ -151,16 +158,12 @@ void reset_balls(ball *balls, int ball_count) {
 }
 
 void launch_ball(ball *b) {
-    if(b->active)
+    if(b->active) {
         b->vy = -BALL_MAX_SPEED;
+        b->is_catch = 1;
+    }
 }
 
-void slow_ball(ball *ball) {
-        if (ball->vx > 1 && ball->vy > 1) {
-            ball->vx = 1;
-            ball->vy = 1;
-        }
-}
 
 void split_ball(ball balls[], int *ball_count) {
     if (*ball_count < MAX_BALLS) {
@@ -179,9 +182,13 @@ void split_ball(ball balls[], int *ball_count) {
 
         new_ball1->vx = original_ball->vx;
         new_ball1->vy = -original_ball->vy;
+        new_ball1->active = 1;
+        new_ball1->is_catch = 0;
 
         new_ball2->vx = -original_ball->vx;
         new_ball2->vy = original_ball->vy;
+        new_ball2->active = 1;
+        new_ball2->is_catch = 0;
 
         *ball_count += 2;
     }

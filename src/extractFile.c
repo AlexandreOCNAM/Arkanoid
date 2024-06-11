@@ -170,19 +170,19 @@ PowerUpType assign_random_powerup() {
     if (random_value < 50) { // 20% de chance d'avoir un powerup
         int powerup_type_value = rand() % 100; // Utiliser une plage de 0 à 99 pour des probabilités précises
 
-        if (powerup_type_value < 16) { // 16% de chance pour SLOW
+        if (powerup_type_value < 20) { // 16% de chance pour SLOW
             return SLOW;
-        } else if (powerup_type_value < 32) { // 16% de chance pour CATCH
+        } else if (powerup_type_value < 40) { // 16% de chance pour CATCH
             return CATCH;
-        } else if (powerup_type_value < 48) { // 16% de chance pour EXPAND
+        } else if (powerup_type_value < 60) { // 16% de chance pour EXPAND
             return EXPAND;
-        } else if (powerup_type_value < 64) { // 16% de chance pour DIVIDE
+        } else if (powerup_type_value < 80) { // 16% de chance pour DIVIDE
             return DIVIDE;
-        } else if (powerup_type_value < 80) { // 16% de chance pour LASER
+        } else if (powerup_type_value < 87) { // 16% de chance pour LASER
             return LASER;
-        } else if (powerup_type_value < 95) { // 15% de chance pour PLAYER
+        } else if (powerup_type_value < 99) { // 15% de chance pour PLAYER
             return PLAYER;
-        } else { // 5% de chance pour BREAK
+        } else { // 1% de chance pour BREAK
             return BREAK;
         }
     }
