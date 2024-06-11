@@ -37,5 +37,6 @@ void update_droid(droid *d);
 void update_droids(droid *droids, int droid_count, brick *bricks, int brick_count);
 void move_droid(droid *d, brick *bricks, int brick_count);
 void damage_droid(droid *d);
+void reset_droids(droid *droids, int droid_count);
 
 #endif //ARKANOID_DROID_H

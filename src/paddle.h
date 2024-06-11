@@ -15,6 +15,7 @@ typedef struct {
     int vx, vy;
     SDL_Rect srcRect;
     int has_laser;
+    int catch_ball;
 } paddle;
 
 paddle create_paddle(int paddle_width);

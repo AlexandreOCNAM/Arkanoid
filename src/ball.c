@@ -45,24 +45,17 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
             move_ball(balls[i], p, bricks, n, droids, droid_count);
         }
     }
-    int count = 0;
     for (int i=0; i< *balls_count; i++){
-        if (balls[i]->active == 1){
-            count++;
+        if(balls[i]->active == 0){
+            printf("Ball to remove: %d\n", i);
+            // shift the balls array
+            for (int j=i; j< *balls_count-1; j++){
+                balls[j] = balls[j+1];
+                printf("Ball %d shifted with %d, old active: %d -> new active: %d\n", j, j+1, balls[j]->active, balls[j+1]->active);
+            }
+            *balls_count -= 1;
         }
     }
-    ball ** new_balls = malloc(sizeof(ball*) * count);
-    int j = 0;
-    for (int i=0; i< *balls_count; i++){
-        if (balls[i]->active == 1){
-            new_balls[j] = balls[i];
-            j++;
-        }
-    }
-    free(balls);
-    balls = malloc(sizeof(ball*) * count);
-    memcpy(balls, new_balls, sizeof(ball*) * count);
-    free(new_balls);
     if (*balls_count == 0){
         l->is_playing = 0;
         l->is_started = 0;
@@ -75,6 +68,11 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
 }
 
 void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droid_count) {
+    if (b->is_catch){
+        b->x = p->x + p->w/2 - b->w/2;
+        b->y = p->y - b->h;
+        return;
+    }
 
     if(b->active == 1) {
         int killed = 0;
@@ -150,6 +148,7 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droi
             b->y < p->y + p->h &&
             b->y + b->h > p->y) {
 
+
             float top = fabs(b->y + b->h - p->y);
             float bottom = fabs(p->y + p->h - b->y);
             float left = fabs(b->x + b->w - p->x);
@@ -176,6 +175,11 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droi
             if ((p->vx < 0 && b->vx > 0) || (p->vx > 0 && b->vx < 0)) {
                 b->vx = -b->vx;
             }
+            if (p->catch_ball){
+                b->is_catch = 1;
+                return;
+            }
+
         }
         b->x += b->vx;
         b->y += b->vy;
@@ -213,7 +217,7 @@ void reset_balls(ball **balls, int *ball_count) {
 void launch_ball(ball *b) {
     if(b->active) {
         b->vy = -BALL_MAX_SPEED;
-        b->is_catch = 1;
+        b->is_catch = 0;
     }
 }
 

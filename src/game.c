@@ -49,7 +49,7 @@ void init_level(game *g, int level_nu) {
     g->gc->laser_count = 0;
 
     for (int i= 0 ; i < MAX_DROIDS; i++) {
-        create_droid(&g->gc->droids[i], rand()% PLAYABLE_ZONE_WIDTH_START, rand()% PLAYABLE_ZONE_HEIGHT);
+        create_droid(&g->gc->droids[i], rand()% PLAYABLE_ZONE_WIDTH_START, rand()% PLAYABLE_ZONE_HEIGHT/2);
     }
 }
 
@@ -79,17 +79,20 @@ void handle_input(game* g) {
         stop_game(g);
     }
     if (keys[SDL_SCANCODE_SPACE]) {
-    //if (keys[SDL_SCANCODE_SPACE]) {
+        //if (keys[SDL_SCANCODE_SPACE]) {
         g->l->is_started = 1;
         g->l->is_playing = 1;
-        if(g->gc->balls[0]->is_catch == 1)
+        if (g->gc->balls[0]->is_catch == 1)
+        {
             launch_ball(g->gc->balls[0]);
+            g->gc->p.catch_ball = 0;
+        }
     }
-    if (g->l->is_playing == 0) {
+    if (g->l->is_playing == 0 && g->gc->balls[0]->is_catch == 1) {
         if (keys[SDL_SCANCODE_LEFT]) {
             g->gc->balls[0]->vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->balls[0]->vx, BALL_MAX_SPEED));
         }
-        else if (keys[SDL_SCANCODE_RIGHT]){
+        else if (keys[SDL_SCANCODE_RIGHT] && g->gc->balls[0]->is_catch == 1) {
             g->gc->balls[0]->vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->balls[0]->vx, BALL_MAX_SPEED));
         }
     }
@@ -129,29 +132,27 @@ void fire_laser(laser lasers[10], int *pInt, paddle *ptr) {
 }
 
 void update(game *g) {
-    if (g->l->is_started) {
-        int end = is_level_over(g->l);
-        if (end == 1) {
-            g->level_number += 1;
+    int end = is_level_over(g->l);
+    if (end == 1) {
+        g->level_number += 1;
 
-            reset_level(g->l);
-            reset_game(g);
-            create_level(g->l, g->level_number);
-        }
-        else if (end == -1) {
-            end_game(g);
-        }
-        else {
-            int b_left = move_balls(g->gc->balls, &g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l, g->gc->droids, MAX_DROIDS);
+        reset_level(g->l);
+        reset_game(g);
+        create_level(g->l, g->level_number);
+    }
+    else if (end == -1) {
+        end_game(g);
+    }
+    if (g->l->is_playing == 1) {
+        int b_left = move_balls(g->gc->balls, &g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l, g->gc->droids, MAX_DROIDS);
 //            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
-            if(b_left == 0)
-                powerup_count = 0;
-            if (active_lasers(g->gc->lasers, &g->gc->laser_count)) {
-                update_lasers(g->gc->lasers, &g->gc->laser_count, g->l->bricks, &g->l->num_bricks);
-            }
-            update_droids(g->gc->droids, MAX_DROIDS, g->l->bricks, g->l->num_bricks);
+        if(b_left == 0)
+            powerup_count = 0;
+        if (active_lasers(g->gc->lasers, &g->gc->laser_count)) {
+            update_lasers(g->gc->lasers, &g->gc->laser_count, g->l->bricks, &g->l->num_bricks);
         }
     }
+    update_droids(g->gc->droids, MAX_DROIDS, g->l->bricks, g->l->num_bricks);
 }
 
 void reset_game_components(game_components *gc) {
@@ -159,6 +160,7 @@ void reset_game_components(game_components *gc) {
     gc->ball_count = 1;
     powerup_count = 0;
     reset_paddle(&gc->p, srcVaiss[0].w);
+    reset_droids(gc->droids, MAX_DROIDS);
 }
 
 void render(game *g) {
@@ -241,6 +243,7 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                         break;
                     case CATCH:
                         printf("Has catched CATCH");
+                        gc->balls[0]->is_catch = 1;
                         break;
                     default:
                         break;
