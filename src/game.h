@@ -11,12 +11,14 @@
 #include "ball.h"
 #include "level.h"
 #include "laser.h"
+#include "droid.h"
 
 
 extern int score;
 extern PowerUp powerups[MAX_POWERUPS];
 
 #define MAX_LASERS 10  // Maximum number of lasers
+#define MAX_DROIDS 10
 
 typedef struct {
     ball **balls;
@@ -24,6 +26,7 @@ typedef struct {
     paddle p;
     laser lasers[MAX_LASERS];  // Array of lasers
     int laser_count;  // Number of active lasers
+    droid droids[MAX_DROIDS];
 } game_components;
 
 typedef struct {

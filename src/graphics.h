@@ -12,6 +12,7 @@
 #include "constant.h"
 #include "spriteConstant.h"
 #include "laser.h"
+#include "droid.h"
 
 extern SDL_Window *window;
 extern SDL_Surface *window_surface;
@@ -35,6 +36,8 @@ void draw_powerup(PowerUp *p);
 void draw_powerups(PowerUp *p, int n);
 void draw_lasers(laser *l, int n);
 void draw_laser(laser *l);
+void draw_droid(droid *d);
+void draw_droids(droid *d, int n);
 void write_score(int score);
 void write_lives(int lives);
 void update_window();

@@ -25,7 +25,7 @@ void create_ball(ball *b) {
     *b = result;
 }
 
-int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l){
+int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l, droid *droids, int droid_count) {
 //    int all_killed = 0;
 //    for (int i = 0; i < balls_count; i++) {
 //        all_killed += move_ball(&balls[i], p, bricks, n);
@@ -42,7 +42,7 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
 //    }
     for (int i=0; i < *balls_count; i++){
         if(balls[i]->active == 1){
-            move_ball(balls[i], p, bricks, n);
+            move_ball(balls[i], p, bricks, n, droids, droid_count);
         }
     }
     for (int i=0; i< *balls_count; i++){
@@ -67,20 +67,20 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
     return 1;
 }
 
-void move_ball(ball *b, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droid_count) {
 
-    int killed = 0;
-    if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
-        b->vx = -b->vx;
-    }
-    if (b->y < PLAYABLE_ZONE_HEIGHT_START) {
-        b->vy = -b->vy;
-    }
-    else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h){
-        b->active = 0;
-    }
-    // Check for collision with bricks
     if(b->active == 1) {
+        int killed = 0;
+        if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
+            b->vx = -b->vx;
+        }
+        if (b->y < PLAYABLE_ZONE_HEIGHT_START) {
+            b->vy = -b->vy;
+        }
+        else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h){
+            b->active = 0;
+        }
+
         for (int i = 0; i < n; i++) {
             if (bricks[i].health > 0 || bricks[i].health == -1) {
                 if (b->x < bricks[i].x + bricks[i].w &&
@@ -104,6 +104,34 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
                     // Reduce the brick's health
                     damage_brick(&bricks[i]);
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < droid_count; i++) {
+            if (droids[i].health > 0 && droids[i].active == 1) {
+                if (b->x < droids[i].x + droids[i].w &&
+                    b->x + b->w > droids[i].x &&
+                    b->y < droids[i].y + droids[i].h &&
+                    b->y + b->h > droids[i].y) {
+
+                    // Handle the collision
+                    float top = fabs(b->y + b->h - droids[i].y);
+                    float bottom = fabs(droids[i].y + droids[i].h - b->y);
+                    float left = fabs(b->x + b->w - droids[i].x);
+                    float right = fabs(droids[i].x + droids[i].w - b->x);
+
+                    float min = fmin(fmin(fmin(top, bottom), left), right);
+
+                    if (min == top || min == bottom) {
+                        b->vy = -b->vy;
+                    } else {
+                        b->vx = -b->vx;
+                    }
+
+                    // Reduce the brick's health
+                    damage_droid(&droids[i]);
                     break;
                 }
             }

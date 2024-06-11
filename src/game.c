@@ -47,6 +47,10 @@ void init_level(game *g, int level_nu) {
         g->gc->p.w = default_paddle_width;*/
     g->gc->p = create_paddle(default_paddle_width);
     g->gc->laser_count = 0;
+
+    for (int i= 0 ; i < MAX_DROIDS; i++) {
+        create_droid(&g->gc->droids[i], rand()% PLAYABLE_ZONE_WIDTH_START, rand()% PLAYABLE_ZONE_HEIGHT);
+    }
 }
 
 _Noreturn void play_game(game* g) {
@@ -138,13 +142,14 @@ void update(game *g) {
             end_game(g);
         }
         else {
-            int b_left = move_balls(g->gc->balls, &g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
+            int b_left = move_balls(g->gc->balls, &g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l, g->gc->droids, MAX_DROIDS);
 //            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
             if(b_left == 0)
                 powerup_count = 0;
             if (active_lasers(g->gc->lasers, &g->gc->laser_count)) {
                 update_lasers(g->gc->lasers, &g->gc->laser_count, g->l->bricks, &g->l->num_bricks);
             }
+            update_droids(g->gc->droids, MAX_DROIDS, g->l->bricks, g->l->num_bricks);
         }
     }
 }
@@ -163,6 +168,7 @@ void render(game *g) {
     draw_bricks(g->l->bricks, g->l->num_bricks);
     draw_powerups(powerups, powerup_count);
     draw_lasers(g->gc->lasers, g->gc->laser_count);
+    draw_droids(g->gc->droids, MAX_DROIDS);
     write_score(score);
     write_lives(g->l->lives);
     update_window();

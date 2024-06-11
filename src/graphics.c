@@ -286,3 +286,15 @@ void draw_laser(laser *l) {
     // blit a red rectangle
     SDL_FillRect(window_surface, &(SDL_Rect){l->x, l->y, l->w, l->h}, SDL_MapRGB(window_surface->format, 255, 0, 0));
 }
+
+void draw_droid(droid *d) {
+    SDL_BlitSurface(brickSprite, &d->srcRect, window_surface, &(SDL_Rect){d->x, d->y, 0, 0});
+}
+
+void draw_droids(droid *d, int n) {
+    for (int i = 0; i < n; i++) {
+        if (d[i].active == 1) {
+            draw_droid(&d[i]);
+        }
+    }
+}

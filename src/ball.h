@@ -6,6 +6,7 @@
 #include "paddle.h"
 #include "constant.h"
 #include "level.h"
+#include "droid.h"
 
 #define BALL_MAX_SPEED 7
 
@@ -20,8 +21,8 @@ typedef struct {
 } ball;
 
 void create_ball(ball *b);
-int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l);
-void move_ball(ball *b, paddle *p, brick *bricks, int n);
+int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l, droid *droids, int droid_count);
+void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droid_count);
 void set_ball_speed(ball *b, int vx, int vy);
 void apply_ball_powerup(ball *b, PowerUp *p);
 int is_colliding(ball *b, SDL_Rect *r);
