@@ -223,7 +223,7 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                         for (int k = 0; k < l->num_bricks; k++) {
                             l->bricks[k].health = 0;
                         }
-                        printf("Has catched BREAK");
+                        printf("Has catched BREAK\n");
                         break;
                     case PLAYER:
                         add_life(l);

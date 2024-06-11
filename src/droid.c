@@ -134,7 +134,6 @@ void update_droids(droid *droids, int droid_count, brick *bricks, int brick_coun
 }
 
 void move_droid(droid *d, brick *bricks, int brick_count) {
-    puts("droid moved");
     d->x += d->vx;
     d->y += d->vy;
     if (d->x < PLAYABLE_ZONE_WIDTH_START) {

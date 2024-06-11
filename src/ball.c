@@ -45,17 +45,23 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
             move_ball(balls[i], p, bricks, n, droids, droid_count);
         }
     }
+    int count = 0;
     for (int i=0; i< *balls_count; i++){
-        if(balls[i]->active == 0){
-            printf("Ball to remove: %d\n", i);
-            // shift the balls array
-            for (int j=i; j< *balls_count-1; j++){
-                balls[j] = balls[j+1];
-                printf("Ball %d shifted with %d, old active: %d -> new active: %d\n", j, j+1, balls[j]->active, balls[j+1]->active);
-            }
-            *balls_count -= 1;
+        if (balls[i]->active == 1){
+            count++;
         }
     }
+    ball ** new_balls = malloc(sizeof(ball*) * count);
+    int j = 0;
+    for (int i=0; i< *balls_count; i++){
+        if (balls[i]->active == 1){
+            new_balls[j] = balls[i];
+            j++;
+        }
+    }
+    free(balls);
+    balls = malloc(sizeof(ball*) * count);
+    memcpy(balls, new_balls, sizeof(ball*) * count);
     if (*balls_count == 0){
         l->is_playing = 0;
         l->is_started = 0;
