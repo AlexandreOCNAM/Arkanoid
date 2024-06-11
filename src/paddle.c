@@ -14,6 +14,7 @@ paddle create_paddle(int paddle_width) {
             16,
             7,
             0,
+            .has_laser = 0
     };
     result.srcRect = srcVaiss[0];
     return result;
@@ -47,9 +48,11 @@ void strafe_paddle(paddle *p, int direction) {
 }
 
 void extend_paddle(paddle *p) {
-    paddle_type++;
-    p->srcRect = srcVaiss[paddle_type];
-    p->w = srcVaiss[paddle_type].w;
+    if(paddle_type < 6) {
+        paddle_type++;
+        p->srcRect = srcVaiss[paddle_type];
+        p->w = srcVaiss[paddle_type].w;
+    }
 }
 
 

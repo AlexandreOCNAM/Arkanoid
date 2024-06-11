@@ -10,16 +10,20 @@
 #include "brick.h"
 #include "ball.h"
 #include "level.h"
+#include "laser.h"
 
 
 extern int score;
 extern PowerUp powerups[MAX_POWERUPS];
 
+#define MAX_LASERS 10  // Maximum number of lasers
 
 typedef struct {
     ball **balls;
     int ball_count;
     paddle p;
+    laser lasers[MAX_LASERS];  // Array of lasers
+    int laser_count;  // Number of active lasers
 } game_components;
 
 typedef struct {

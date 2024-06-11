@@ -74,14 +74,11 @@ void draw_ball(ball *b) {
     if (b == NULL) {
         return;
     }
-    printf("Drawing ball at %d, %d\n", b->x, b->y);
     SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
-    printf("Ball drawn\n");
 }
 
 void draw_paddle(paddle *p) {
-    SDL_Rect rect = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(brickSprite, &p->srcRect, window_surface, &rect);
+    SDL_BlitSurface(brickSprite, &p->srcRect, window_surface, &(SDL_Rect){p->x, p->y, 0, 0});
 }
 
 void draw_brick(brick *b) {
@@ -276,4 +273,16 @@ void write_lives(int lives){
         // Avancer la position en x pour le prochain chiffre
         posX += 20;
     }
+}
+
+void draw_lasers(laser *l, int n) {
+    for (int i = 0; i < n; i++) {
+        if (l[i].active == 1)
+            draw_laser(&l[i]);
+    }
+}
+
+void draw_laser(laser *l) {
+    // blit a red rectangle
+    SDL_FillRect(window_surface, &(SDL_Rect){l->x, l->y, l->w, l->h}, SDL_MapRGB(window_surface->format, 255, 0, 0));
 }

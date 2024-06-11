@@ -7,16 +7,22 @@
 #include "graphics.h"
 #include "constant.h"
 #include "powerup.h"
+#include "laser.h"
+#include <time.h>
 
 
 #define FPS 60
 int default_paddle_width = 64;
 int powerup_count = 0;
-
+static time_t last_laser_time = 0;
 int score = 0;
 PowerUp powerups[MAX_POWERUPS];
 
 void reset_game_components(game_components *gc);
+
+void fire_laser(laser lasers[10], int *pInt, paddle *ptr);
+
+void move_lasers(laser lasers[10], int *pInt, brick *bricks, const int *n);
 
 void init_game(game* g) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
@@ -40,6 +46,7 @@ void init_level(game *g, int level_nu) {
     /*if(level_nu == 1)
         g->gc->p.w = default_paddle_width;*/
     g->gc->p = create_paddle(default_paddle_width);
+    g->gc->laser_count = 0;
 }
 
 _Noreturn void play_game(game* g) {
@@ -92,7 +99,29 @@ void handle_input(game* g) {
         } else {
             g->gc->p.vx = 0;
         }
+        if (keys[SDL_SCANCODE_LCTRL] && g->gc->p.has_laser) {
+            if (g->gc->laser_count < MAX_LASERS) {
+                fire_laser(g->gc->lasers, &g->gc->laser_count, &g->gc->p);
+            }
+        }
+        if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_T] && g->gc->p.has_laser) {
+            g->gc->p.has_laser = 1;
+        }
+        if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_R] ){
+            fire_laser(g->gc->lasers, &g->gc->laser_count, &g->gc->p);
+        }
     }
+}
+
+void fire_laser(laser lasers[10], int *pInt, paddle *ptr) {
+    // Prevents the player from firing lasers too quickly, only one laser per second
+    if (time(NULL) - last_laser_time < 1) {
+        return;
+    }
+    create_laser(&lasers[*pInt], ptr->x + ptr->w / 2, ptr->y);
+    ptr->has_laser = 0;
+    *pInt += 1;
+    last_laser_time = time(NULL);
 }
 
 void update(game *g) {
@@ -113,6 +142,9 @@ void update(game *g) {
 //            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
             if(b_left == 0)
                 powerup_count = 0;
+            if (active_lasers(g->gc->lasers, &g->gc->laser_count)) {
+                update_lasers(g->gc->lasers, &g->gc->laser_count, g->l->bricks, &g->l->num_bricks);
+            }
         }
     }
 }
@@ -130,6 +162,7 @@ void render(game *g) {
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
     draw_powerups(powerups, powerup_count);
+    draw_lasers(g->gc->lasers, g->gc->laser_count);
     write_score(score);
     write_lives(g->l->lives);
     update_window();
@@ -178,10 +211,11 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                         break;
                     case LASER:
                         printf("Has catched LASER");
+                        gc->p.has_laser = 1;
                         break;
                     case BREAK:
-                        for (int i = 0; i < l->num_bricks; i++) {
-                            l->bricks[i].health = 0;
+                        for (int k = 0; k < l->num_bricks; k++) {
+                            l->bricks[k].health = 0;
                         }
                         printf("Has catched BREAK");
                         break;
@@ -198,7 +232,6 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                     case DIVIDE:
                         printf("Has catched DIVIDE\n");
                         split_balls(gc->balls, &gc->ball_count);
-                        printf("Ball count: %d\n", gc->ball_count);
                         break;
                     case CATCH:
                         printf("Has catched CATCH");

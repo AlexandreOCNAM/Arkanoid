@@ -51,22 +51,19 @@ int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, 
             // shift the balls array
             for (int j=i; j< *balls_count-1; j++){
                 balls[j] = balls[j+1];
-                printf("Ball %d shifted with %d, old active: %d -> new active: %d\n", i, i+1, balls[i]->active, balls[i+1]->active);
+                printf("Ball %d shifted with %d, old active: %d -> new active: %d\n", j, j+1, balls[j]->active, balls[j+1]->active);
             }
             *balls_count -= 1;
         }
     }
-    printf("%d balls left\n", *balls_count);
     if (*balls_count == 0){
         l->is_playing = 0;
         l->is_started = 0;
         l->lives -= 1;
         reset_balls(balls, balls_count);
         *p = create_paddle(p->w);
-        puts("balls reset");
         return 0;
     }
-    puts("balls moved");
     return 1;
 }
 
@@ -148,7 +145,6 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n) {
         b->x += b->vx;
         b->y += b->vy;
     }
-    return killed;
 }
 
 
@@ -199,5 +195,4 @@ void split_balls(ball** balls, int *ball_count) {
     *ball_count *= 2;
     memcpy(balls, new_balls, sizeof(ball*) * (*ball_count));
     free(new_balls);
-    puts("balls splitted");
 }
