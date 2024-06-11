@@ -13,7 +13,8 @@
 int default_paddle_width = 64;
 int powerup_count = 0;
 
-
+int score = 0;
+PowerUp powerups[MAX_POWERUPS];
 
 void reset_game_components(game_components *gc);
 
@@ -32,7 +33,9 @@ void init_level(game *g, int level_nu) {
     create_level(g->l, level_nu);
     g->level_number = level_nu;
     g->gc = malloc(sizeof(game_components));
-    g->gc->b[0] = create_ball();
+    g->gc->balls = malloc(sizeof(ball *));
+    g->gc->balls[0] = malloc(sizeof(ball));
+    create_ball(g->gc->balls[0]);
     g->gc->ball_count = 1;
     /*if(level_nu == 1)
         g->gc->p.w = default_paddle_width;*/
@@ -47,7 +50,7 @@ _Noreturn void play_game(game* g) {
         now = SDL_GetPerformanceCounter();
         double delta_t = 1.0 / FPS - (double) (now - prev) / (double) SDL_GetPerformanceFrequency();
         update_bricks(delta_t);
-        update_powerups(powerups, &powerup_count, delta_t, g->gc,&g->l->lives);
+        update_powerups(powerups, &powerup_count, delta_t, g->gc, (level *) &g->l->lives);
         render(g);
         prev = now;
         if (delta_t > 0) {
@@ -68,15 +71,15 @@ void handle_input(game* g) {
     //if (keys[SDL_SCANCODE_SPACE]) {
         g->l->is_started = 1;
         g->l->is_playing = 1;
-        if(g->gc->b[0].is_catch == 1)
-            launch_ball(&g->gc->b[0]);
+        if(g->gc->balls[0]->is_catch == 1)
+            launch_ball(g->gc->balls[0]);
     }
-    if (g->l->is_started == 0) {
+    if (g->l->is_playing == 0) {
         if (keys[SDL_SCANCODE_LEFT]) {
-            g->gc->b[0].vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->b[0].vx, BALL_MAX_SPEED));
+            g->gc->balls[0]->vx = fmax(-BALL_MAX_SPEED, fmin(--g->gc->balls[0]->vx, BALL_MAX_SPEED));
         }
         else if (keys[SDL_SCANCODE_RIGHT]){
-            g->gc->b[0].vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->b[0].vx, BALL_MAX_SPEED));
+            g->gc->balls[0]->vx = fmax(-BALL_MAX_SPEED, fmin(++g->gc->balls[0]->vx, BALL_MAX_SPEED));
         }
     }
     else {
@@ -106,15 +109,16 @@ void update(game *g) {
             end_game(g);
         }
         else {
-            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
-            if(all_killed == 1)
+            int b_left = move_balls(g->gc->balls, &g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
+//            int all_killed = move_balls(&g->gc->b, g->gc->ball_count, &g->gc->p, g->l->bricks, g->l->num_bricks, g->l);
+            if(b_left == 0)
                 powerup_count = 0;
         }
     }
 }
 
 void reset_game_components(game_components *gc) {
-    reset_balls(gc->b, gc->ball_count);
+    reset_balls(gc->balls, &gc->ball_count);
     gc->ball_count = 1;
     powerup_count = 0;
     reset_paddle(&gc->p, srcVaiss[0].w);
@@ -122,7 +126,7 @@ void reset_game_components(game_components *gc) {
 
 void render(game *g) {
     blit_background();
-    draw_balls(&g->gc->b, g->gc->ball_count);
+    draw_balls(g->gc->balls, g->gc->ball_count);
     draw_paddle(&g->gc->p);
     draw_bricks(g->l->bricks, g->l->num_bricks);
     draw_powerups(powerups, powerup_count);
@@ -138,6 +142,7 @@ void stop_game(game *g) {
 
 void reset_game(game *g) {
     reset_game_components(g->gc);
+    g->l->is_started = 0;
     SDL_Delay(1000);
     blit_background();
     update_window();
@@ -187,12 +192,13 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                     case SLOW:
                         printf("Has catched SLOW");
                         for(int j = 0; j == gc->ball_count; j++){
-                            set_ball_speed(&gc->b[j], 1, 1);
+                            set_ball_speed(gc->balls[j], gc->balls[j]->vx/2, gc->balls[j]->vy/2);
                         }
                         break;
                     case DIVIDE:
-                        printf("Has catched DIVIDE");
-                        split_ball(gc->b, &gc->ball_count);
+                        printf("Has catched DIVIDE\n");
+                        split_balls(gc->balls, &gc->ball_count);
+                        printf("Ball count: %d\n", gc->ball_count);
                         break;
                     case CATCH:
                         printf("Has catched CATCH");

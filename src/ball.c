@@ -6,7 +6,7 @@
 
 
 
-ball create_ball() {
+void create_ball(ball *b) {
     ball result = {
         .x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
         .y = PLAYABLE_ZONE_HEIGHT - 32 - 8,
@@ -22,27 +22,55 @@ ball create_ball() {
     result.rect->y = result.y;
     result.rect->w = result.w;
     result.rect->h = result.h;
-    return result;
+    *b = result;
 }
 
-int move_balls(ball *balls, int balls_count, paddle *p, brick *bricks, int n, level *l){
-    int all_killed = 0;
-    for (int i = 0; i < balls_count; i++) {
-        all_killed += move_ball(&balls[i], p, bricks, n);
-        if(all_killed == balls_count) {
-            reset_balls(&balls[i], balls_count);
-            reset_paddle(p, srcVaiss[0].w);
-            l->is_playing = 0;
-            l->lives -= 1;
-            return 1;
-        }
-        else{
-            return 0;
+int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l){
+//    int all_killed = 0;
+//    for (int i = 0; i < balls_count; i++) {
+//        all_killed += move_ball(&balls[i], p, bricks, n);
+//        if(all_killed == balls_count) {
+//            reset_balls(&balls[i], balls_count);
+//            reset_paddle(p, srcVaiss[0].w);
+//            l->is_playing = 0;
+//            l->lives -= 1;
+//            return 1;
+//        }
+//        else{
+//            return 0;
+//        }
+//    }
+    for (int i=0; i < *balls_count; i++){
+        if(balls[i]->active == 1){
+            move_ball(balls[i], p, bricks, n);
         }
     }
+    for (int i=0; i< *balls_count; i++){
+        if(balls[i]->active == 0){
+            printf("Ball to remove: %d\n", i);
+            // shift the balls array
+            for (int j=i; j< *balls_count-1; j++){
+                balls[j] = balls[j+1];
+                printf("Ball %d shifted with %d, old active: %d -> new active: %d\n", i, i+1, balls[i]->active, balls[i+1]->active);
+            }
+            *balls_count -= 1;
+        }
+    }
+    printf("%d balls left\n", *balls_count);
+    if (*balls_count == 0){
+        l->is_playing = 0;
+        l->is_started = 0;
+        l->lives -= 1;
+        reset_balls(balls, balls_count);
+        *p = create_paddle(p->w);
+        puts("balls reset");
+        return 0;
+    }
+    puts("balls moved");
+    return 1;
 }
 
-int move_ball(ball *b, paddle *p, brick *bricks, int n) {
+void move_ball(ball *b, paddle *p, brick *bricks, int n) {
 
     int killed = 0;
     if (b->x < PLAYABLE_ZONE_WIDTH_START || b->x > PLAYABLE_ZONE_WIDTH - b->w) {
@@ -52,7 +80,6 @@ int move_ball(ball *b, paddle *p, brick *bricks, int n) {
         b->vy = -b->vy;
     }
     else if (b->y > PLAYABLE_ZONE_HEIGHT - b->h){
-        killed = 1;
         b->active = 0;
     }
     // Check for collision with bricks
@@ -144,17 +171,12 @@ void set_ball_speed(ball *b, int vx, int vy){
 }
 
 
-void reset_balls(ball *balls, int ball_count) {
-    balls[0].x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2;
-    balls[0].y = PLAYABLE_ZONE_HEIGHT - 32 - 8;
-    balls[0].vx = 0;
-    balls[0].vy = 0;
-    balls[0].active = 1;
-    for(int i = 1; i == ball_count; i++){
-        balls[i].active = 0;
-        balls[i].vx = 0;
-        balls[i].vy = 0;;
-    }
+void reset_balls(ball **balls, int *ball_count) {
+    free(balls);
+    balls = malloc(sizeof(ball*));
+    *ball_count = 1;
+    balls[0] = malloc(sizeof(ball));
+    create_ball(balls[0]);
 }
 
 void launch_ball(ball *b) {
@@ -165,31 +187,17 @@ void launch_ball(ball *b) {
 }
 
 
-void split_ball(ball balls[], int *ball_count) {
-    if (*ball_count < MAX_BALLS) {
-        int i = 0;
-        while(balls[i].active != 1){
-            i++;
-        }
-
-        ball *original_ball = &balls[i];
-
-        ball *new_ball1 = &balls[*ball_count];
-        ball *new_ball2 = &balls[*ball_count + 1];
-
-        *new_ball1 = *original_ball;
-        *new_ball2 = *original_ball;
-
-        new_ball1->vx = original_ball->vx;
-        new_ball1->vy = -original_ball->vy;
-        new_ball1->active = 1;
-        new_ball1->is_catch = 0;
-
-        new_ball2->vx = -original_ball->vx;
-        new_ball2->vy = original_ball->vy;
-        new_ball2->active = 1;
-        new_ball2->is_catch = 0;
-
-        *ball_count += 2;
+void split_balls(ball** balls, int *ball_count) {
+    ball **new_balls = malloc(sizeof(ball*) * (*ball_count * 2));
+    for (int i=0; i< *ball_count; i++){
+        new_balls[i] = malloc(sizeof(ball));
+        memcpy(new_balls[i], balls[i], sizeof(ball));
+        new_balls[i+*ball_count] = malloc(sizeof(ball));
+        memcpy(new_balls[i+*ball_count], balls[i], sizeof(ball));
+        new_balls[i+*ball_count]->vx = -balls[i]->vx;
     }
+    *ball_count *= 2;
+    memcpy(balls, new_balls, sizeof(ball*) * (*ball_count));
+    free(new_balls);
+    puts("balls splitted");
 }

@@ -62,15 +62,21 @@ SDL_Surface* init_window()
 }
 
 
-void draw_balls(ball *b, int count) {
+void draw_balls(ball **b, int count) {
     for (int i = 0; i < count; i++) {
-        draw_ball(&b[i]);
+        if (b[i]->active == 1) {
+            draw_ball(b[i]);
+        }
     }
 }
 
 void draw_ball(ball *b) {
-    if(b->active)
-        SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
+    if (b == NULL) {
+        return;
+    }
+    printf("Drawing ball at %d, %d\n", b->x, b->y);
+    SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
+    printf("Ball drawn\n");
 }
 
 void draw_paddle(paddle *p) {

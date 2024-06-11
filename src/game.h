@@ -12,12 +12,12 @@
 #include "level.h"
 
 
-int score;
-PowerUp powerups[MAX_POWERUPS];
+extern int score;
+extern PowerUp powerups[MAX_POWERUPS];
 
 
 typedef struct {
-    ball b[MAX_BALLS];
+    ball **balls;
     int ball_count;
     paddle p;
 } game_components;

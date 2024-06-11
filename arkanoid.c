@@ -16,7 +16,7 @@ const int FPS = 60.0;
 //  double vx;
 //  double vy;
 //} ball;
-extern int powerup_count;
+
 ball _ball = {0};
 SDL_Surface *BrickSprite = NULL;
 
@@ -57,7 +57,7 @@ void init()
   //             1.4
   //         }
   // };
-  _ball = create_ball();
+//  _ball = create_ball();
 //  ball.x = win_surf->w / 2;
 //  ball.y = win_surf->h / 2;
 //  ball.v.x = 1.0;
