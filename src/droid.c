@@ -119,7 +119,7 @@ void update_droid(droid *d) {
 void update_droids(droid *droids, int droid_count, brick *bricks, int brick_count) {
     // update droids every 1/60th of a second
     time_t now = time(NULL);
-    if (now - last_droid_update > 1) {
+    if (now - last_droid_update >=0 ) {
         last_droid_update = now;
         for (int i = 0; i < droid_count; i++) {
             if (droids[i].active == 1) {
