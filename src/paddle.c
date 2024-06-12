@@ -12,7 +12,7 @@ paddle create_paddle(int paddle_width) {
             PLAYABLE_ZONE_HEIGHT -32,
             paddle_width,
             16,
-            7,
+            9,
             0,
             .has_laser = 0
     };
@@ -30,10 +30,10 @@ void invert_paddle_velocity(paddle *p) {
 
 void strafe_paddle(paddle *p, int direction) {
     if (direction == 0) {
-        p->vx = -5;
+        p->vx = -7;
     }
     else if (direction == 1) {
-        p->vx = 5;
+        p->vx = 7;
     }
     else {
         p->vx = 0;

@@ -31,5 +31,6 @@ void handle_brick_collision(ball *b, brick *br);
 void reset_balls(ball **balls, int *ball_count);
 void launch_ball(ball *b);
 void split_balls(ball **balls, int *ball_count);
+void reset_ball_speed(ball *b);
 
 #endif

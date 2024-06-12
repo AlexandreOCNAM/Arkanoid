@@ -10,8 +10,8 @@ void create_ball(ball *b) {
     ball result = {
         .x = (PLAYABLE_ZONE_WIDTH_START + PLAYABLE_ZONE_WIDTH-8)/2,
         .y = PLAYABLE_ZONE_HEIGHT - 32 - 8,
-        .w = 8,
-        .h = 8,
+        .w = 8.99f,
+        .h = 8.99,
         .vx = 0,
         .vy = 0,
         .rect = malloc(sizeof(SDL_Rect)),
@@ -26,20 +26,7 @@ void create_ball(ball *b) {
 }
 
 int move_balls(ball **balls, int *balls_count, paddle *p, brick *bricks, int n, level *l, droid *droids, int droid_count) {
-//    int all_killed = 0;
-//    for (int i = 0; i < balls_count; i++) {
-//        all_killed += move_ball(&balls[i], p, bricks, n);
-//        if(all_killed == balls_count) {
-//            reset_balls(&balls[i], balls_count);
-//            reset_paddle(p, srcVaiss[0].w);
-//            l->is_playing = 0;
-//            l->lives -= 1;
-//            return 1;
-//        }
-//        else{
-//            return 0;
-//        }
-//    }
+
     for (int i=0; i < *balls_count; i++){
         if(balls[i]->active == 1){
             move_ball(balls[i], p, bricks, n, droids, droid_count);
@@ -93,23 +80,36 @@ void move_ball(ball *b, paddle *p, brick *bricks, int n, droid *droids, int droi
                     b->y < bricks[i].y + bricks[i].h &&
                     b->y + b->h > bricks[i].y) {
 
-                    // Handle the collision
-                    float top = fabs(b->y + b->h - bricks[i].y);
-                    float bottom = fabs(bricks[i].y + bricks[i].h - b->y);
-                    float left = fabs(b->x + b->w - bricks[i].x);
-                    float right = fabs(bricks[i].x + bricks[i].w - b->x);
+                    // Calculate the closest point on the AABB to the circle's center
+                    float closestX = fmax(bricks[i].x, fmin(b->x, bricks[i].x + bricks[i].w));
+                    float closestY = fmax(bricks[i].y, fmin(b->y, bricks[i].y + bricks[i].h));
 
-                    float min = fmin(fmin(fmin(top, bottom), left), right);
+                    // Calculate the distance between the circle's center and this point
+                    float distanceX = b->x - closestX;
+                    float distanceY = b->y - closestY;
+                    float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
 
-                    if (min == top || min == bottom) {
-                        b->vy = -b->vy;
-                    } else {
-                        b->vx = -b->vx;
+                    // If the distance is less than the circle's radius, there is a collision
+                    if (distanceSquared < (b->w / 2 * b->w / 2)) {
+                        // collision detected!
+                        // Determine if it's a corner or side collision
+                        if (closestX == bricks[i].x || closestX == bricks[i].x + bricks[i].w ||
+                            closestY == bricks[i].y || closestY == bricks[i].y + bricks[i].h) {
+                            // It's a corner collision
+                            b->vx = -b->vx;
+                            b->vy = -b->vy;
+                        } else {
+                            // It's a side collision
+                            if (distanceX < distanceY) {
+                                b->vx = -b->vx;
+                            } else {
+                                b->vy = -b->vy;
+                            }
+                        }
+
+                        damage_brick(&bricks[i]);
+                        return;
                     }
-
-                    // Reduce the brick's health
-                    damage_brick(&bricks[i]);
-                    break;
                 }
             }
         }
@@ -201,8 +201,8 @@ void apply_ball_powerup(ball *b, PowerUp *p) {
 }
 
 void set_ball_speed(ball *b, int vx, int vy){
-    b->vx = vx;
-    b->vy = vy;
+    b->vx = fmax(1, vx);
+    b->vy = fmax(1, vy);
 }
 
 

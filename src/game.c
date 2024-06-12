@@ -15,6 +15,7 @@
 int default_paddle_width = 64;
 int powerup_count = 0;
 static time_t last_laser_time = 0;
+static time_t last_slow_time = 0;
 int score = 0;
 PowerUp powerups[MAX_POWERUPS];
 
@@ -208,7 +209,6 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
             pu->y += 2; // Descend le power-up
             SDL_Rect paddle_rect = {gc->p.x, gc->p.y, gc->p.w, gc->p.h};
             SDL_Rect powerup_rect = {pu->x, pu->y, pu->w, pu->h};
-
             if (SDL_HasIntersection(&paddle_rect, &powerup_rect)) {
                 pu->active = 0;
                 score += 1000;
@@ -233,9 +233,10 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
                         break;
                     case SLOW:
                         printf("Has catched SLOW");
-                        for(int j = 0; j == gc->ball_count; j++){
-                            set_ball_speed(gc->balls[j], gc->balls[j]->vx/2, gc->balls[j]->vy/2);
-                        }
+//                        for(int j = 0; j < gc->ball_count; j++){
+//                            set_ball_speed(gc->balls[j], gc->balls[j]->vx/2.0f, gc->balls[j]->vy/2.0f);
+//                            last_slow_time = time(NULL);
+//                        }
                         break;
                     case DIVIDE:
                         printf("Has catched DIVIDE\n");
@@ -255,7 +256,6 @@ void update_powerups(PowerUp powerups[], int *powerup_count, double delta_t, gam
             }
 
             update_powerup_animation(pu, delta_t);
-
         }
     }
 }
