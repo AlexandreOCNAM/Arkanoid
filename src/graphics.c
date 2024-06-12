@@ -61,13 +61,24 @@ SDL_Surface* init_window()
     return SDL_GetWindowSurface(window);
 }
 
+
+void draw_balls(ball **b, int count) {
+    for (int i = 0; i < count; i++) {
+        if (b[i]->active == 1) {
+            draw_ball(b[i]);
+        }
+    }
+}
+
 void draw_ball(ball *b) {
+    if (b == NULL) {
+        return;
+    }
     SDL_BlitSurface(brickSprite, &srcBall, window_surface, &(SDL_Rect){b->x, b->y, 0, 0});
 }
 
 void draw_paddle(paddle *p) {
-    SDL_Rect rect = {p->x, p->y, p->w, p->h};
-    SDL_BlitSurface(brickSprite, &srcVaiss, window_surface, &rect);
+    SDL_BlitSurface(brickSprite, &p->srcRect, window_surface, &(SDL_Rect){p->x, p->y, 0, 0});
 }
 
 void draw_brick(brick *b) {
@@ -88,7 +99,8 @@ void blit_background() {
     const int bg_height = backgrounds[background].h;
     const int window_width = PLAYABLE_ZONE_WIDTH;
     const int window_height =  PLAYABLE_ZONE_HEIGHT;
-
+    SDL_Rect black = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};  // x, y, width, height
+    SDL_FillRect(window_surface, &black, SDL_MapRGB(window_surface->format, 0, 0, 0));
 
     for (int j = PLAYABLE_ZONE_HEIGHT_START; j < window_height; j += bg_height)
         for (int i = PLAYABLE_ZONE_WIDTH_START; i < window_width; i += bg_width)
@@ -153,14 +165,14 @@ void update_window() {
     SDL_UpdateWindowSurface(window);
 }
 
-void draw_powerup(PowerUp *p) {
-    SDL_Rect dest = {p->x, p->y, p->w, p->h};
-    SDL_FillRect(window_surface, &dest, SDL_MapRGB(window_surface->format, 255,255,p->type * (255/2)));
+void draw_powerup(PowerUp *pu) {
+    SDL_Rect dest = {pu->x, pu->y, pu->w, pu->h};
+    SDL_BlitSurface(brickSprite, &pu->srcRect, window_surface, &dest);
 }
 
 void draw_powerups(PowerUp *p, int n) {
     for (int i = 0; i < n; i++) {
-        if (p[i].active) {
+        if (p[i].active == 1) {
             draw_powerup(&p[i]);
         }
     }
@@ -183,17 +195,13 @@ void write_score(int score){
     destRect.x += 20;
     SDL_BlitSurface(textSprite, &E, window_surface, &destRect);
 
-    // Convertir le score en chaîne de caractères
     char scoreStr[10];
     sprintf(scoreStr, "%d", score);
 
-    // Position initiale pour blit
     int posX = 500;
 
-    // Pour chaque caractère dans la chaîne de score
     for (int i = 0; scoreStr[i] != '\0'; ++i) {
         SDL_Rect srcRect;
-        // Sélectionner le rectangle source correspondant au chiffre
         switch (scoreStr[i]) {
             case '0': srcRect = _0; break;
             case '1': srcRect = _1; break;
@@ -207,13 +215,10 @@ void write_score(int score){
             case '9': srcRect = _9; break;
         }
 
-        // Définir le rectangle de destination
         SDL_Rect destRectScore = {posX, 100, 32, 32};
 
-        // Blit le chiffre sur la surface de l'écran
         SDL_BlitSurface(textSprite, &srcRect, window_surface, &destRectScore);
 
-        // Avancer la position en x pour le prochain chiffre
         posX += 20;
     }
 }
@@ -267,5 +272,29 @@ void write_lives(int lives){
 
         // Avancer la position en x pour le prochain chiffre
         posX += 20;
+    }
+}
+
+void draw_lasers(laser *l, int n) {
+    for (int i = 0; i < n; i++) {
+        if (l[i].active == 1)
+            draw_laser(&l[i]);
+    }
+}
+
+void draw_laser(laser *l) {
+    // blit a red rectangle
+    SDL_FillRect(window_surface, &(SDL_Rect){l->x, l->y, l->w, l->h}, SDL_MapRGB(window_surface->format, 255, 0, 0));
+}
+
+void draw_droid(droid *d) {
+    SDL_BlitSurface(brickSprite, &d->srcRect, window_surface, &(SDL_Rect){d->x, d->y, 0, 0});
+}
+
+void draw_droids(droid *d, int n) {
+    for (int i = 0; i < n; i++) {
+        if (d[i].active == 1) {
+            draw_droid(&d[i]);
+        }
     }
 }

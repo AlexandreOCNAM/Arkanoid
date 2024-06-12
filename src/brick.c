@@ -26,7 +26,19 @@ int damage_brick(brick *b) {
     }
     b->health = fmax(0, b->health - 1);
     if (b->health == 0) {
-        return b->points;
+        score += b->points;
+        if (b->powerup.type != NONE) {
+            //printf("Power-Up initialized : %d\n", b->powerup.type);
+            PowerUp *pu = &powerups[powerup_count];
+            pu->type = b->powerup.type;
+            pu->x = b->x;
+            pu->y = b->y;
+            pu->w = b->w;
+            pu->h = b->h;
+            pu->srcRect = b->powerup.srcRect;
+            pu->active = 1;
+            (powerup_count)++;
+        }
     }
 }
 
@@ -45,7 +57,7 @@ void update_bricks(double delta_t) {
 
     // Animer toutes les 5 secondes
     if (timeAccumulator >= 5000) {
-        int frame = (int)((timeAccumulator - 5000) / 100) % 6;  // 6 états, changer toutes les 200 ms
+        int frame = (int)((timeAccumulator - 5000) / 100) % 6;
 
         goldenBrickState = frame;
         silverBrickState = frame;

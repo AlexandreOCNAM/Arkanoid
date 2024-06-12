@@ -12,7 +12,8 @@
 #define PLAYABLE_ZONE_WIDTH 432
 #define PLAYABLE_ZONE_HEIGHT 624
 
-#define MAX_POWERUPS 10
+#define MAX_POWERUPS 256
+#define MAX_BALLS 50
 
 #include <SDL2/SDL.h>
 

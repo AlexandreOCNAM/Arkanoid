@@ -27,6 +27,7 @@ SDL_Surface *brickSprite = NULL;
 
 
 
+
 Uint64 prev, now; // timers
 double delta_t;   // durée frame en ms
 int x_vault;
@@ -40,8 +41,6 @@ paddle _paddle = {0};
 SDL_Surface *win_surf = NULL;
 brick bricks[500];
 int brick_count = 0;
-const PowerUp powerup = {100, 100, 100, 30, 1, 0};
-PowerUp powerups[0] = {powerup};
 
 void init()
 {
@@ -59,7 +58,7 @@ void init()
   //             1.4
   //         }
   // };
-  _ball = create_ball();
+//  _ball = create_ball();
 //  ball.x = win_surf->w / 2;
 //  ball.y = win_surf->h / 2;
 //  ball.v.x = 1.0;

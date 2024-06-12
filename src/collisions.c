@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "collisions.h"
 
+
+/*
 void ball_powerup_collision(ball *b, PowerUp *p) {
     if (b->x + b->w >= p->x && b->x <= p->x + p->w && b->y + b->h >= p->y && b->y <= p->y + p->h) {
         p->active = 0;
@@ -14,7 +16,7 @@ void ball_powerup_collision(ball *b, PowerUp *p) {
         b->vy = -b->vy;
     }
 //    move_ball(b);
-}
+}*/
 
 void ball_brick_collision(ball *b, brick *bricks, int n) {
     for (int i = 0; i < n; i++) {
@@ -50,6 +52,7 @@ void ball_paddle_collision(ball *b, paddle *p) {
     }
 }
 
+/*
 void paddle_powerup_collision(paddle *p, PowerUp *pu) {
     if (p->x + p->w >= pu->x && p->x <= pu->x + pu->w && p->y + p->h >= pu->y && p->y <= pu->y + pu->h) {
         pu->active = 0;
@@ -58,4 +61,4 @@ void paddle_powerup_collision(paddle *p, PowerUp *pu) {
     else if (p->x > 600 - p->w) {
         p->x = 600 - p->w;
     }
-}
+}*/
